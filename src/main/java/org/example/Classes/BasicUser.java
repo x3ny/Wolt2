@@ -1,5 +1,6 @@
 package org.example.Classes;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,19 +11,34 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table (name = "basic_users")
 
 public class BasicUser {
+    @Id
     private int id;
+    @Column(nullable = false, length = 100)
     private String username;
+    @Column(nullable = false, length = 100)
     private String login;
+    @Column(length = 150)
     private String email;
+    @Column(nullable = false, length = 255)
     private String password;
+
     private String firstName;
     private String lastName;
     private String phoneNumber;
+
     private LocalDateTime dateCreated;
     private LocalDateTime lastLogin;
     private boolean active;
+
+    @PrePersist
+    public void prePersist(){
+        this.dateCreated = LocalDateTime.now();
+        this.active = true;
+    }
 
     public BasicUser(int id, String username, String login, String email, String password,
                      String firstName, String lastName, String phoneNumber) {

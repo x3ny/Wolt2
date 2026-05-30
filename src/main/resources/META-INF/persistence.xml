@@ -1,11 +1,18 @@
 <persistence
-        version="2.1"
-        xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+        version="3.1"
+        xmlns="https://jakarta.ee/xml/ns/persistence"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
-    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+        xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+        https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd">
 
     <persistence-unit name = "eternal_blue2">
+        <class>org.example.Classes.Chat</class>
+        <class>org.example.Classes.Cuisine</class>
+        <class>org.example.Classes.Driver</class>
+        <class>org.example.Classes.FoodOrder</class>
+        <class>org.example.Classes.Restaurant</class>
+        <class>org.example.Classes.User</class>
+
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="jakarta.persistence.jdbc.url"
