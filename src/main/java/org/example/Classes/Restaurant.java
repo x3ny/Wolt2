@@ -1,11 +1,13 @@
 package org.example.Classes;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 @Getter
 @Setter
+@NoArgsConstructor
 
 public class Restaurant {
     private int id;
@@ -25,5 +27,16 @@ public class Restaurant {
     private int estimatedDeliveryMinutes;
      */
 
-
+    public Restaurant(int id, String name, String description, String phoneNumber, String email, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.cuisineId = cuisineId;
+        this.open = open;
+        this.rating = rating;
+        this.dateCreated = dateCreated;
+    }
 }

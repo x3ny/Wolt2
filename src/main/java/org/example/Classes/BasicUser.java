@@ -1,6 +1,7 @@
 package org.example.Classes;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 
 public class BasicUser {
     private int id;
@@ -21,11 +23,6 @@ public class BasicUser {
     private LocalDateTime dateCreated;
     private LocalDateTime lastLogin;
     private boolean active;
-
-    public BasicUser() {
-        this.dateCreated = LocalDateTime.now();
-        this.active = true;
-    }
 
     public BasicUser(int id, String username, String login, String email, String password,
                      String firstName, String lastName, String phoneNumber) {
