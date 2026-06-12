@@ -14,16 +14,6 @@ import java.time.LocalDateTime;
 @Table (name = "users")
 
 public class User extends BasicUser{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(nullable = false, unique = true, length = 100)
-    private String username;
-    @Column(nullable = false, unique = true, length = 150)
-    private String email;
-    @Column(nullable = false, length = 255)
-    private String password;
-
 
     private boolean canCreateUsers;
     private boolean canUpdateUsers;

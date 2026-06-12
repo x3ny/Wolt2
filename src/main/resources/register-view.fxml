@@ -6,21 +6,27 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="280.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RegisterController">
+<AnchorPane prefHeight="378.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RegisterController">
    <children>
-      <Label layoutX="45.0" layoutY="43.0" text="Username:" />
-      <TextField fx:id="usernameField" layoutX="170.0" layoutY="39.0" promptText="Username" />
+      <Label layoutX="46.0" layoutY="144.0" text="Username:" />
+      <TextField fx:id="usernameField" layoutX="170.0" layoutY="140.0" promptText="Username" />
 
-      <Label layoutX="45.0" layoutY="83.0" text="Email:" />
-      <TextField fx:id="emailField" layoutX="170.0" layoutY="79.0" promptText="Email" />
+      <Label layoutX="45.0" layoutY="181.0" text="Email:" />
+      <TextField fx:id="emailField" layoutX="170.0" layoutY="177.0" promptText="Email" />
 
-      <Label layoutX="45.0" layoutY="123.0" text="Password:" />
-      <PasswordField fx:id="passwordField" layoutX="170.0" layoutY="119.0" promptText="Password" />
+      <Label layoutX="47.0" layoutY="221.0" text="Password:" />
+      <PasswordField fx:id="passwordField" layoutX="170.0" layoutY="217.0" promptText="Password" />
 
-      <Label layoutX="45.0" layoutY="163.0" text="Confirm password:" />
-      <PasswordField fx:id="confirmPasswordField" layoutX="170.0" layoutY="159.0" promptText="Confirm password" />
+      <Label layoutX="45.0" layoutY="263.0" text="Confirm password:" />
+      <PasswordField fx:id="confirmPasswordField" layoutX="170.0" layoutY="259.0" promptText="Confirm password" />
 
-      <Button fx:id="registerButton" layoutX="170.0" layoutY="205.0" mnemonicParsing="false" onAction="#register" text="Register" />
-      <Label fx:id="messageLabel" layoutX="170.0" layoutY="242.0" />
+      <Button fx:id="registerButton" layoutX="170.0" layoutY="305.0" mnemonicParsing="false" onAction="#register" text="Register" />
+      <Label fx:id="messageLabel" layoutX="259.0" layoutY="309.0" prefHeight="17.0" prefWidth="71.0" />
+      <TextField fx:id="phoneNumberField" layoutX="170.0" layoutY="101.0" promptText="Phone number" />
+      <TextField fx:id="lastNameField" layoutX="170.0" layoutY="60.0" promptText="Last name" />
+      <TextField fx:id="firstNameField" layoutX="170.0" layoutY="24.0" promptText="First name" />
+      <Label layoutX="46.0" layoutY="105.0" text="Phone number:" />
+      <Label layoutX="48.0" layoutY="64.0" text="Last name:" />
+      <Label layoutX="46.0" layoutY="28.0" text="First name:" />
    </children>
 </AnchorPane>

@@ -16,6 +16,7 @@ import java.util.Objects;
 @MappedSuperclass
 public class BasicUser {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false, length = 100)
     private String username;

@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -13,6 +14,14 @@ import org.example.Classes.User;
 import org.example.Database.GenericHibernate;
 
 public class RegisterController {
+    @FXML
+    private Button registerButton;
+    @FXML
+    private TextField phoneNumberField;
+    @FXML
+    private TextField lastNameField;
+    @FXML
+    private TextField firstNameField;
     @Setter
     private EntityManagerFactory entityManagerFactory;
 
@@ -34,6 +43,9 @@ public class RegisterController {
 
     @FXML
     private void register() {
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        String phoneNumber = phoneNumberField.getText().trim();
         String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
@@ -42,7 +54,10 @@ public class RegisterController {
         if (username.isBlank()
                 || email.isBlank()
                 || password.isBlank()
-                || confirmPassword.isBlank()) {
+                || confirmPassword.isBlank()
+                || firstName.isBlank()
+                || lastName.isBlank()
+                || phoneNumber.isBlank()) {
             messageLabel.setText("Please fill in all fields.");
             return;
         }
@@ -53,6 +68,9 @@ public class RegisterController {
         }
 
         User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhoneNumber(phoneNumber);
         user.setUsername(username);
         user.setLogin(username);
         user.setEmail(email);
@@ -71,6 +89,9 @@ public class RegisterController {
 
 
     private void clearForm() {
+        firstNameField.clear();
+        lastNameField.clear();
+        phoneNumberField.clear();
         usernameField.clear();
         emailField.clear();
         passwordField.clear();
