@@ -30,6 +30,7 @@ public class User extends BasicUser{
     private boolean canViewUsers;
     private LocalDateTime dateCreated;
 
+
     public User(boolean canCreateUsers, boolean canUpdateUsers, boolean canDeleteUsers, boolean canViewUsers) {
         this.canCreateUsers = canCreateUsers;
         this.canUpdateUsers = canUpdateUsers;
@@ -56,4 +57,5 @@ public class User extends BasicUser{
     public void prePersist(){
         this.dateCreated = LocalDateTime.now();
     }
+
 }

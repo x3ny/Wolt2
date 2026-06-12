@@ -19,6 +19,8 @@ public class RegisterApplication extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/register-view.fxml"));
         Parent root = loader.load();
+        RegisterController controller = loader.getController();
+        controller.setEntityManagerFactory(entityManagerFactory);
 
         stage.setTitle("Register");
         stage.setScene(new Scene(root, 400, 280));

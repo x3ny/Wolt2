@@ -34,6 +34,7 @@ public class BasicUser {
     private LocalDateTime lastLogin;
     private boolean active;
 
+
     @PrePersist
     public void prePersist(){
         this.dateCreated = LocalDateTime.now();
