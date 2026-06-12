@@ -255,7 +255,7 @@ public class RegisterController {
             GenericHibernate<User> userHibernate = new GenericHibernate<>(entityManagerFactory, User.class);
             userHibernate.create(user);
             clearForm();
-            messageLabel.setText("User registered successfully");
+            messageLabel.setText("User registered successfully !");
         } catch (RuntimeException exception){
             exception.printStackTrace();
             //messageLabel.setText("Could not register user. Username or email may already exist");
