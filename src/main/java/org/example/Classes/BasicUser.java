@@ -11,9 +11,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@Table (name = "basic_users")
+//@Entity
 
+@MappedSuperclass
 public class BasicUser {
     @Id
     private int id;

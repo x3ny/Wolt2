@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import lombok.Setter;
 import org.example.Classes.User;
+import org.example.Database.GenericHibernate;
 
 public class RegisterController {
     @Setter
@@ -29,6 +30,7 @@ public class RegisterController {
 
     @FXML
     private Label messageLabel;
+
 
     @FXML
     private void register() {
@@ -52,39 +54,21 @@ public class RegisterController {
 
         User user = new User();
         user.setUsername(username);
+        user.setLogin(username);
         user.setEmail(email);
         user.setPassword(password);
 
-        if (saveUser(user)) {
-            clearForm();
-            messageLabel.setText("User registered successfully.");
-        }
-    }
-
-    private boolean saveUser(User user) {
-        if (entityManagerFactory == null) {
-            messageLabel.setText("Database is not initialized.");
-            return false;
-        }
-
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-
         try {
-            transaction.begin();
-            entityManager.persist(user);
-            transaction.commit();
-            return true;
-        } catch (PersistenceException exception) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            messageLabel.setText("Could not register user. Username or email may already exist.");
-            return false;
-        } finally {
-            entityManager.close();
+            GenericHibernate<User> userHibernate = new GenericHibernate<>(entityManagerFactory, User.class);
+            userHibernate.create(user);
+            clearForm();
+            messageLabel.setText("User registered successfully");
+        } catch (RuntimeException exception){
+            exception.printStackTrace();
+            messageLabel.setText("Could not register user. Username or email may already exist");
         }
     }
+
 
     private void clearForm() {
         usernameField.clear();
