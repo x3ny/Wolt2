@@ -23,7 +23,7 @@ public class RegisterApplication extends Application {
         controller.setEntityManagerFactory(entityManagerFactory);
 
         stage.setTitle("Register");
-        stage.setScene(new Scene(root, 400, 350));
+        stage.setScene(new Scene(root, 750, 450));
         stage.show();
     }
 

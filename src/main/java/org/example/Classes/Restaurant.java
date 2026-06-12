@@ -16,6 +16,10 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false, length = 100)
+    private String username;
+    @Column(nullable = false, length = 150)
+    private String password;
     @Column(nullable = false, length = 150)
     private String name;
     @Column(length = 1000)
@@ -38,8 +42,10 @@ public class Restaurant {
     private int estimatedDeliveryMinutes;
      */
 
-    public Restaurant(int id, String name, String description, String phoneNumber, String email, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
+    public Restaurant(int id, String username, String password, String name, String description, String phoneNumber, String email, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
         this.id = id;
+        this.username = username;
+        this.password = password;
         this.name = name;
         this.description = description;
         this.phoneNumber = phoneNumber;

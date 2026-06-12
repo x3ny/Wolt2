@@ -17,8 +17,11 @@ public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private int userId;
+    @Column(nullable = false, length = 100)
+    private String username;
+    @Column(nullable = false, length = 150)
+    private String password;
     @Column(nullable = false, length = 100)
     private String firstName;
     @Column(nullable = false, length = 100)
@@ -46,8 +49,10 @@ public class Driver {
         this.dateCreated = dateCreated;
     }
 
-    public Driver(int userId, String firstName, String lastName, String phoneNumber, String email, VehicleType vehicleType, String vehiclePlateNumber, LocalDateTime dateCreated){
+    public Driver(int userId, String username, String password, String firstName, String lastName, String phoneNumber, String email, VehicleType vehicleType, String vehiclePlateNumber, LocalDateTime dateCreated){
         this. userId = userId;
+        this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
