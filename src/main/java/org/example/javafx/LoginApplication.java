@@ -105,6 +105,15 @@ public class LoginApplication extends Application {
 
             showAlert(Alert.AlertType.INFORMATION, "Login successful", "Welcome, " + user.getUsername() + "!");
 
+            if (user.isCanViewUsers()) {
+                try {
+                    openAdminPanel();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Could not open admin panel", "Please try again.");
+                }
+            }
+
         } catch (NoResultException exception){
             showAlert(Alert.AlertType.ERROR, "Login failed", "Invalid username or password.");
         } catch (RuntimeException exception){
@@ -113,6 +122,19 @@ public class LoginApplication extends Application {
         }
 
 
+    }
+
+    private void openAdminPanel() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/admin-panel-view.fxml"));
+        Parent root = loader.load();
+
+        AdminPanelController controller = loader.getController();
+        controller.setEntityManagerFactory(entityManagerFactory);
+        controller.loadUsers();
+
+        Stage stage = (Stage) LoginButton.getScene().getWindow();
+        stage.setTitle("Admin panel");
+        stage.setScene(new Scene(root, 900, 520));
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message){
