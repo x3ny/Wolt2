@@ -179,4 +179,71 @@ public class AdminPanelController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    public void editUser(ActionEvent actionEvent) {
+        User selectedUser = usersTable.getSelectionModel().getSelectedItem();
+        Driver selectedDriver = driversTable.getSelectionModel().getSelectedItem();
+        Restaurant selectedRestaurant = restaurantsTable.getSelectionModel().getSelectedItem();
+
+        String selectedType;
+
+        if(selectedUser != null){
+            selectedType = "USER";
+        }else if(selectedDriver != null){
+            selectedType = "DRIVER";
+        }else if(selectedRestaurant != null){
+            selectedType = "RESTAURANT";
+        }else {
+            selectedType = "NONE";
+        }
+
+        switch (selectedType) {
+            case "USER":
+            System.out.println("Selected user: " + selectedUser.getUsername());
+            break;
+
+            case "DRIVER":
+            System.out.println("Selected driver: " + selectedDriver.getUsername());
+            break;
+
+            case "RESTAURANT":
+            System.out.println("Selected restaurant: " + selectedRestaurant.getUsername());
+            break;
+
+            default:
+            showAlert(Alert.AlertType.ERROR, "Selected user", "Please select a user.");
+            return;
+        }
+
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/register-view.fxml"));
+            Parent root = loader.load();
+
+            RegisterController controller = loader.getController();
+
+            switch (selectedType) {
+                case "USER" -> {
+                    controller.setEntityManagerFactory(entityManagerFactory);
+                    controller.setUserToEdit(selectedUser);
+                }
+                case "DRIVER" -> {
+                    controller.setEntityManagerFactory(entityManagerFactory);
+                    controller.setDriverToEdit(selectedDriver);
+                }
+                case "RESTAURANT" -> {
+                    controller.setEntityManagerFactory(entityManagerFactory);
+                    controller.setRestaurantToEdit(selectedRestaurant);
+                }
+            }
+
+
+            Stage stage = (Stage) usersTable.getScene().getWindow();
+            stage.setTitle("Edit user");
+            stage.setScene(new Scene(root,750,450));
+        } catch (IOException exception){
+            exception.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Could not load user", "Please try again.");
+        }
+    }
 }
