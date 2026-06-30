@@ -10,7 +10,9 @@
    <children>
       <Label layoutX="24.0" layoutY="20.0" text="Admin panel" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
       <Label fx:id="usersCountLabel" layoutX="24.0" layoutY="58.0" text="Users: 0" />
+      <Button layoutX="712.0" layoutY="48.0" mnemonicParsing="false" onAction="#deleteUser" prefWidth="80.0" text="Delete" />
       <Button layoutX="804.0" layoutY="48.0" mnemonicParsing="false" onAction="#refreshUsers" prefWidth="72.0" text="Refresh" />
+      <Button layoutX="612.0" layoutY="48.0" mnemonicParsing="false" onAction="#addUser" prefWidth="72.0" text="Add user" />
 
       <TableView fx:id="usersTable" layoutX="24.0" layoutY="88.0" prefHeight="400.0" prefWidth="852.0">
          <columns>

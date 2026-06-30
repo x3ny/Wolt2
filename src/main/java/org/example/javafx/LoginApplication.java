@@ -84,6 +84,8 @@ public class LoginApplication extends Application {
                     User.class
             );
 
+
+
             query.setParameter("login", username);
             query.setParameter("password", password);
 
@@ -132,9 +134,9 @@ public class LoginApplication extends Application {
         controller.setEntityManagerFactory(entityManagerFactory);
         controller.loadUsers();
 
-        Stage stage = (Stage) LoginButton.getScene().getWindow();
-        stage.setTitle("Admin panel");
-        stage.setScene(new Scene(root, 900, 520));
+        Stage stage = (Stage) RegisterButton.getScene().getWindow();
+        stage.setTitle("Register");
+        stage.setScene(new Scene(root, 900, 600));
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message){
@@ -143,6 +145,7 @@ public class LoginApplication extends Application {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+
     }
 
 }
