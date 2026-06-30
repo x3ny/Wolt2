@@ -53,6 +53,25 @@ public class AdminPanelController {
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         activeColumn.setCellValueFactory(new PropertyValueFactory<>("active"));
         adminColumn.setCellValueFactory(new PropertyValueFactory<>("canViewUsers"));
+
+        driverIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        driverUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        driverFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        driverLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        driverPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        driverEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        driverVehicleTypeColumn.setCellValueFactory(new PropertyValueFactory<>("vehicleType"));
+        driverVehiclePlateColumn.setCellValueFactory(new PropertyValueFactory<>("vehiclePlateNumber"));
+
+        restaurantIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        restaurantUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        restaurantNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        restaurantPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        restaurantEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        restaurantsAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        restaurantOpenColumn.setCellValueFactory(new PropertyValueFactory<>("open"));
+        restaurantRatingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+
     }
 
     public void loadUsers() {
