@@ -3,6 +3,7 @@ package org.example.javafx;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,11 +12,54 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import lombok.Setter;
+import org.example.Classes.Driver;
+import org.example.Classes.Restaurant;
 import org.example.Classes.User;
+import org.example.Classes.VehicleType;
 
 import java.io.IOException;
 
 public class AdminPanelController {
+    @FXML
+    public Label driversCountLabel;
+    @FXML
+    public TableView<Driver> driversTable;
+    @FXML
+    public TableColumn<Driver, Integer> driverIdColumn;
+    @FXML
+    public TableColumn<Driver, String> driverUsernameColumn;
+    @FXML
+    public TableColumn<Driver, String> driverFirstNameColumn;
+    @FXML
+    public TableColumn<Driver, String> driverLastNameColumn;
+    @FXML
+    public TableColumn<Driver, String> driverPhoneColumn;
+    @FXML
+    public TableColumn<Driver, String> driverEmailColumn;
+    @FXML
+    public TableColumn<Driver, VehicleType> driverVehicleTypeColumn;
+    @FXML
+    public TableColumn<Driver, String> driverVehiclePlateColumn;
+    @FXML
+    public Label restaurantsCountLabel;
+    @FXML
+    public TableView<Restaurant> restaurantsTable;
+    @FXML
+    public TableColumn<Restaurant, Integer> restaurantIdColumn;
+    @FXML
+    public TableColumn<Restaurant, String> restaurantUsernameColumn;
+    @FXML
+    public TableColumn<Restaurant, String> restaurantNameColumn;
+    @FXML
+    public TableColumn<Restaurant, String> restaurantPhoneColumn;
+    @FXML
+    public TableColumn<Restaurant, String> restaurantEmailColumn;
+    @FXML
+    public TableColumn<Restaurant, String> restaurantsAddressColumn;
+    @FXML
+    public TableColumn<Restaurant, Boolean> restaurantOpenColumn;
+    @FXML
+    public TableColumn<Restaurant, Double> restaurantRatingColumn;
     @FXML
     private TableView<User> usersTable;
     @FXML
@@ -91,11 +135,53 @@ public class AdminPanelController {
             exception.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Could not load users", "Please try again.");
         }
+        loadDrivers();
+        loadRestaurants();
+    }
+
+    public void loadDrivers() {
+        if (entityManagerFactory == null) {
+            return;
+        }
+
+        try (var entityManager = entityManagerFactory.createEntityManager()) {
+            ObservableList<Driver> drivers = FXCollections.observableArrayList(
+                    entityManager.createQuery("SELECT driver FROM Driver driver ORDER BY driver.id", Driver.class)
+                            .getResultList()
+            );
+
+            driversTable.setItems(drivers);
+            driversCountLabel.setText("Drivers: " + drivers.size());
+        } catch (RuntimeException exception) {
+            exception.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Could not load drivers", "Please try again.");
+        }
+    }
+
+    public void loadRestaurants() {
+        if (entityManagerFactory == null) {
+            return;
+        }
+
+        try (var entityManager = entityManagerFactory.createEntityManager()) {
+            ObservableList<Restaurant> restaurants = FXCollections.observableArrayList(
+                    entityManager.createQuery("SELECT restaurant FROM Restaurant restaurant ORDER BY restaurant.id", Restaurant.class)
+                            .getResultList()
+            );
+
+            restaurantsTable.setItems(restaurants);
+            restaurantsCountLabel.setText("Restaurants: " + restaurants.size());
+        } catch (RuntimeException exception) {
+            exception.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Could not load restaurants", "Please try again.");
+        }
     }
 
     @FXML
     private void refreshUsers() {
         loadUsers();
+        loadRestaurants();
+        loadDrivers();
     }
 
     @FXML
@@ -130,46 +216,28 @@ public class AdminPanelController {
         }
 
         User user = usersTable.getSelectionModel().getSelectedItem();
+        Driver driver = driversTable.getSelectionModel().getSelectedItem();
+        Restaurant restaurant = restaurantsTable.getSelectionModel().getSelectedItem();
 
-        if(user == null){
-            showAlert(Alert.AlertType.ERROR, "Select a user", "Please select a user.");
-            return;
+        String selectedType;
+
+        if(user != null){
+            selectedType = "USER";
+        }else if(driver != null){
+            selectedType = "DRIVER";
+        }else if(restaurant != null){
+            selectedType = "RESTAURANT";
+        }else {
+            selectedType = "NONE";
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Delete User");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Delete user: "  + user.getUsername());
-
-        if(confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK){
-            return;
+        switch (selectedType) {
+            case "USER" -> deleteSelectedUser(user);
+            case "DRIVER" -> deleteSelectedDriver(driver);
+            case "RESTAURANT" -> deleteSelectedRestaurant(restaurant);
+            default -> showAlert(Alert.AlertType.ERROR, "Select item" , "Please select a user, driver or restaurant.");
         }
 
-        try (var entityManager = entityManagerFactory.createEntityManager()) {
-            var transaction = entityManager.getTransaction();
-            try{
-                transaction.begin();
-                User userToDelete = entityManager.find(User.class, user.getId());
-                if(userToDelete == null){
-                    transaction.rollback();
-                    showAlert(Alert.AlertType.ERROR, "Could not delete user", "The selected user no longer exists.");
-                    loadUsers();
-                    return;
-                }
-
-                entityManager.remove(userToDelete);
-                transaction.commit();
-                usersTable.getItems().remove(user);
-                usersCountLabel.setText("Users: " + usersTable.getItems().size());
-            } catch (RuntimeException exception) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                exception.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Could not delete user", "Please try again.");
-            }
-
-        }
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
@@ -246,4 +314,124 @@ public class AdminPanelController {
             showAlert(Alert.AlertType.ERROR, "Could not load user", "Please try again.");
         }
     }
+    private void deleteSelectedUser(User user){
+        Alert confirm  = new  Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete user");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Delete user: " + user.getUsername());
+
+        if(confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK){
+            return;
+        }
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+
+                User userToDelete = entityManager.find(User.class, user.getId());
+
+                if(userToDelete == null){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Could not delete user", "Please try again.");
+                    loadUsers();
+                    return;
+                }
+
+                entityManager.remove(userToDelete);
+                transaction.commit();
+
+                usersTable.getItems().remove(user);
+                usersCountLabel.setText("Users: " + usersTable.getItems().size());
+            }catch(RuntimeException exception){
+                if(transaction.isActive()) {
+                    transaction.rollback();
+                }
+
+                exception.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Could not delete", "Please try again.");
+            }
+        }
+
+    }
+
+    private void deleteSelectedDriver(Driver driver){
+        Alert confirm  = new  Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete driver");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Delete driver: " + driver.getUsername());
+
+        if(confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK){
+            return;
+        }
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+
+                Driver driverToDelete = entityManager.find(Driver.class, driver.getId());
+
+                if(driverToDelete == null){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Could not delete driver", "Please try again.");
+                    loadDrivers();
+                    return;
+                }
+
+                entityManager.remove(driverToDelete);
+                transaction.commit();
+
+                driversTable.getItems().remove(driver);
+                driversCountLabel.setText("Drivers: " + driversTable.getItems().size());
+            }catch(RuntimeException exception){
+                if(transaction.isActive()) {
+                    transaction.rollback();
+                }
+
+                exception.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Could not delete", "Please try again.");
+            }
+        }
+
+    }
+
+    private void deleteSelectedRestaurant(Restaurant restaurant){
+        Alert confirm  = new  Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete restaurant");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Delete restaurant: " + restaurant.getUsername());
+
+        if(confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK){
+            return;
+        }
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+
+                Restaurant restaurantToDelete = entityManager.find(Restaurant.class, restaurant.getId());
+
+                if(restaurantToDelete == null){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Could not delete restaurant", "Please try again.");
+                    loadRestaurants();
+                    return;
+                }
+
+                entityManager.remove(restaurantToDelete);
+                transaction.commit();
+
+                restaurantsTable.getItems().remove(restaurant);
+                restaurantsCountLabel.setText("Restaurants: " + restaurantsTable.getItems().size());
+            }catch(RuntimeException exception){
+                if(transaction.isActive()) {
+                    transaction.rollback();
+                }
+
+                exception.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Could not delete", "Please try again.");
+            }
+        }
+
+    }
+
 }

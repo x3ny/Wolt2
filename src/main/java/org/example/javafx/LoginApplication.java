@@ -133,10 +133,12 @@ public class LoginApplication extends Application {
         AdminPanelController controller = loader.getController();
         controller.setEntityManagerFactory(entityManagerFactory);
         controller.loadUsers();
+        controller.loadDrivers();
+        controller.loadRestaurants();
 
         Stage stage = (Stage) RegisterButton.getScene().getWindow();
-        stage.setTitle("Register");
-        stage.setScene(new Scene(root, 900, 600));
+        stage.setTitle("Admin panel");
+        stage.setScene(new Scene(root, 900, 900));
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message){

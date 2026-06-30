@@ -6,15 +6,16 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="520.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.AdminPanelController">
+<AnchorPane prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.AdminPanelController">
    <children>
       <Label layoutX="24.0" layoutY="20.0" text="Admin panel" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
       <Label fx:id="usersCountLabel" layoutX="24.0" layoutY="58.0" text="Users: 0" />
       <Button layoutX="712.0" layoutY="48.0" mnemonicParsing="false" onAction="#deleteUser" prefWidth="80.0" text="Delete" />
       <Button layoutX="804.0" layoutY="48.0" mnemonicParsing="false" onAction="#refreshUsers" prefWidth="72.0" text="Refresh" />
       <Button layoutX="612.0" layoutY="48.0" mnemonicParsing="false" onAction="#addUser" prefWidth="72.0" text="Add user" />
+      <Button layoutX="520.0" layoutY="48.0" mnemonicParsing="false" onAction="#editUser" prefWidth="72.0" text="Edit" />
 
-      <TableView fx:id="usersTable" layoutX="24.0" layoutY="88.0" prefHeight="400.0" prefWidth="852.0">
+      <TableView fx:id="usersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="852.0">
          <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
             <TableColumn fx:id="usernameColumn" prefWidth="120.0" text="Username" />
@@ -25,6 +26,35 @@
             <TableColumn fx:id="phoneNumberColumn" prefWidth="120.0" text="Phone" />
             <TableColumn fx:id="activeColumn" prefWidth="70.0" text="Active" />
             <TableColumn fx:id="adminColumn" prefWidth="95.0" text="Admin" />
+         </columns>
+      </TableView>
+
+      <Label fx:id="driversCountLabel" layoutX="24.0" layoutY="335.0" text="Drivers: 0"/>
+
+      <TableView fx:id="driversTable" layoutX="24.0" layoutY="365.0" prefHeight="210.0" prefWidth="852.0">
+         <columns>
+            <TableColumn fx:id="driverIdColumn" prefWidth="55.0" text="ID" />
+            <TableColumn fx:id="driverUsernameColumn" prefWidth="120.0" text="Username" />
+            <TableColumn fx:id="driverFirstNameColumn" prefWidth="110.0" text="First name" />
+            <TableColumn fx:id="driverLastNameColumn" prefWidth="165.0" text="Last name" />
+            <TableColumn fx:id="driverPhoneColumn" prefWidth="105.0" text="Phone" />
+            <TableColumn fx:id="driverEmailColumn" prefWidth="105.0" text="Email" />
+            <TableColumn fx:id="driverVehicleTypeColumn" prefWidth="120.0" text="Vehicle" />
+            <TableColumn fx:id="driverVehiclePlateColumn" prefWidth="70.0" text="Plate" />
+         </columns>
+      </TableView>
+
+       <Label fx:id="restaurantsCountLabel" layoutX="24.0" layoutY="592.0" text="Restaurants: 0"/>
+      <TableView fx:id="restaurantsTable" layoutX="24.0" layoutY="662.0" prefHeight="230.0" prefWidth="852.0">
+         <columns>
+            <TableColumn fx:id="restaurantIdColumn" prefWidth="55.0" text="ID" />
+            <TableColumn fx:id="restaurantUsernameColumn" prefWidth="120.0" text="Username" />
+            <TableColumn fx:id="restaurantNameColumn" prefWidth="110.0" text="Name" />
+            <TableColumn fx:id="restaurantPhoneColumn" prefWidth="165.0" text="Phone" />
+            <TableColumn fx:id="restaurantEmailColumn" prefWidth="105.0" text="Email" />
+            <TableColumn fx:id="restaurantsAddressColumn" prefWidth="105.0" text="Address" />
+            <TableColumn fx:id="restaurantOpenColumn" prefWidth="120.0" text="Open" />
+            <TableColumn fx:id="restaurantRatingColumn" prefWidth="70.0" text="Rating" />
          </columns>
       </TableView>
    </children>

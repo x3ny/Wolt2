@@ -57,21 +57,20 @@ public class RegisterController {
     private TextField firstNameField;
     @Setter
     private EntityManagerFactory entityManagerFactory;
-
     @FXML
     private TextField usernameField;
-
     @FXML
     private TextField emailField;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private PasswordField confirmPasswordField;
-
     @FXML
     private Label messageLabel;
+
+    private User userToEdit;
+    private Driver driverToEdit;
+    private Restaurant restaurantToEdit;
 
     @FXML
     private void initialize(){
@@ -261,7 +260,6 @@ public class RegisterController {
             //messageLabel.setText("Could not register user. Username or email may already exist");
         }
     }
-
 
     private void clearForm() {
         firstNameField.clear();
