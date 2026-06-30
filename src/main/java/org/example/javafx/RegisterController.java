@@ -272,4 +272,67 @@ public class RegisterController {
         passwordField.clear();
         confirmPasswordField.clear();
     }
+
+    public void setUser() {
+
+    }
+
+    public void setUserToEdit(User user) {
+        this.userToEdit = user;
+        usernameField.setText(user.getUsername());
+        emailField.setText(user.getEmail());
+        firstNameField.setText(user.getFirstName());
+        lastNameField.setText(user.getLastName());
+        phoneNumberField.setText(user.getPhoneNumber());
+        passwordField.setText(user.getPassword());
+        confirmPasswordField.setText(user.getPassword());
+
+        if(user.isCanCreateUsers()){
+            adminRadioButton.setSelected(true);
+        }else{
+            userRadioButton.setSelected(true);
+        }
+
+        updateVisibleFields();
+        registerButton.setText("Save");
+
+    }
+
+    public void setDriverToEdit(Driver driver) {
+        this.driverToEdit = driver;
+        usernameField.setText(driver.getUsername());
+        emailField.setText(driver.getEmail());
+        firstNameField.setText(driver.getFirstName());
+        lastNameField.setText(driver.getLastName());
+        phoneNumberField.setText(driver.getPhoneNumber());
+        passwordField.setText(driver.getPassword());
+        confirmPasswordField.setText(driver.getPassword());
+        vehiclePlateNumberField.setText(driver.getVehiclePlateNumber());
+        vehicleTypeComboBox.setValue(driver.getVehicleType());
+
+
+        driverRadioButton.setSelected(true);
+
+        updateVisibleFields();
+        registerButton.setText("Save");
+
+    }
+
+    public void setRestaurantToEdit(Restaurant restaurant) {
+        this.restaurantToEdit = restaurant;
+        usernameField.setText(restaurant.getUsername());
+        emailField.setText(restaurant.getEmail());
+        phoneNumberField.setText(restaurant.getPhoneNumber());
+        passwordField.setText(restaurant.getPassword());
+        confirmPasswordField.setText(restaurant.getPassword());
+        restaurantDescriptionField.setText(restaurant.getDescription());
+        restaurantAddressField.setText(restaurant.getAddress());
+        restaurantNameField.setText(restaurant.getName());
+
+        restaurantRadioButton.setSelected(true);
+
+        updateVisibleFields();
+        registerButton.setText("Save");
+
+    }
 }
