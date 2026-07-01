@@ -21,8 +21,6 @@ public class BasicUser {
     @Column(nullable = false, unique = true, length = 100)
     private String username;
     @Column(nullable = false, unique = true,  length = 100)
-    private String login;
-    @Column(length = 150, unique = true, nullable = false)
     private String email;
     @Column(nullable = false, length = 255)
     private String password;
@@ -42,11 +40,10 @@ public class BasicUser {
         this.active = true;
     }
 
-    public BasicUser(int id, String username, String login, String email, String password,
+    public BasicUser(int id, String username, String email, String password,
                      String firstName, String lastName, String phoneNumber) {
         this.id = id;
         this.username = username;
-        this.login = login;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -56,12 +53,11 @@ public class BasicUser {
         this.active = true;
     }
 
-    public BasicUser(int id, String username, String login, String email, String password,
+    public BasicUser(int id, String username, String email, String password,
                      String firstName, String lastName, String phoneNumber,
                      LocalDateTime dateCreated, LocalDateTime lastLogin, boolean active) {
         this.id = id;
         this.username = username;
-        this.login = login;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -78,7 +74,6 @@ public class BasicUser {
         return "BasicUser{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

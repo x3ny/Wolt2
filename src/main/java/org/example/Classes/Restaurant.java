@@ -12,22 +12,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "restaurants")
 
-public class Restaurant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(nullable = false, length = 100)
-    private String username;
+public class Restaurant extends BasicUser {
     @Column(nullable = false, length = 150)
-    private String password;
-    @Column(nullable = false, length = 150)
-    private String name;
+    private String restaurantName;
     @Column(length = 1000)
     private String description;
-    @Column(length = 30)
-    private String phoneNumber;
-    @Column(length = 150)
-    private String email;
     @Column(nullable = false, length = 255)
     private String address;
     @Column(nullable = false)
@@ -41,15 +30,10 @@ public class Restaurant {
     private double deliveryFee;
     private int estimatedDeliveryMinutes;
      */
-
-    public Restaurant(int id, String username, String password, String name, String description, String phoneNumber, String email, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.name = name;
+    public Restaurant(int id, String username, String email, String password, String firstName, String lastName, String phoneNumber, String restaurantName, String description, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
+        super(id, username, email, password, firstName, lastName, phoneNumber);
+        this.restaurantName = restaurantName;
         this.description = description;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
         this.address = address;
         this.cuisineId = cuisineId;
         this.open = open;
@@ -57,20 +41,4 @@ public class Restaurant {
         this.dateCreated = dateCreated;
     }
 
-    public Restaurant(String name, String description, String phoneNumber, String email, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
-        this.name = name;
-        this.description = description;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.cuisineId = cuisineId;
-        this.open = open;
-        this.rating = rating;
-        this.dateCreated = dateCreated;
-    }
-
-    @PrePersist
-    public void prePersist(){
-        this.dateCreated = LocalDateTime.now();
-    }
 }

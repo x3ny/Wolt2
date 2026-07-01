@@ -80,7 +80,7 @@ public class LoginApplication extends Application {
 
         try(var entityManager = entityManagerFactory.createEntityManager()) {
             TypedQuery<User> query = entityManager.createQuery(
-                    "SELECT user FROM User user WHERE user.login = :login AND user.password = :password ",
+                    "SELECT user FROM User user WHERE user.username = :login AND user.password = :password ",
                     User.class
             );
 

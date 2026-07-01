@@ -7,10 +7,7 @@ import jakarta.persistence.PersistenceException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import lombok.Setter;
-import org.example.Classes.Driver;
-import org.example.Classes.Restaurant;
-import org.example.Classes.User;
-import org.example.Classes.VehicleType;
+import org.example.Classes.*;
 import org.example.Database.GenericHibernate;
 
 public class RegisterController {
@@ -68,7 +65,7 @@ public class RegisterController {
     @FXML
     private Label messageLabel;
 
-    private User userToEdit;
+    private BasicUser userToEdit;
     private Driver driverToEdit;
     private Restaurant restaurantToEdit;
 
@@ -178,6 +175,8 @@ public class RegisterController {
                     confirmPassword.isBlank() ||
                     username.isBlank() ||
                     vehiclePlateNumber.isBlank()
+                    //vehicleType != null
+
             ){
                 messageLabel.setText("Please fill in all fields.");
                 return;
@@ -208,40 +207,51 @@ public class RegisterController {
         user.setLastName(lastName);
         user.setPhoneNumber(phoneNumber);
         user.setUsername(username);
-        user.setLogin(username);
         user.setEmail(email);
         user.setPassword(password);
 
+
+        //Creating restaurant  user
         if(restaurantRadioButton.isSelected()){
             Restaurant restaurant = new Restaurant();
             restaurant.setAddress(restaurantAddress);
             restaurant.setEmail(email);
-            restaurant.setName(restaurantName);
+            restaurant.setRestaurantName(restaurantName);
             restaurant.setDescription(restaurantDescription);
             restaurant.setPhoneNumber(phoneNumber);
             restaurant.setUsername(username);
             restaurant.setPassword(username);
 
+            if(restaurantToEdit != null && restaurantFieldsAreSame()){
+                messageLabel.setText("Restaurant already exists.");
+            }
+
             GenericHibernate<Restaurant> restaurantHibernate = new GenericHibernate<>(entityManagerFactory, Restaurant.class);
             restaurantHibernate.create(restaurant);
             clearForm();
-        } //creating restaurant user
+        }
+
+        //Creating driver user
 
         if(driverRadioButton.isSelected()){
             Driver driver = new Driver();
             driver.setEmail(email);
             driver.setFirstName(firstName);
-            driver.setLastName(lastName);
             driver.setUsername(username);
+            driver.setLastName(lastName);
             driver.setPassword(password);
             driver.setPhoneNumber(phoneNumber);
             driver.setVehiclePlateNumber(vehiclePlateNumber);
             driver.setVehicleType(vehicleType);
 
+            if(driverToEdit != null && driverFieldsAreSame()){
+                messageLabel.setText("Driver already exists.");
+            }
+
             GenericHibernate<Driver> driverHibernate = new GenericHibernate<>(entityManagerFactory, Driver.class);
             driverHibernate.create(driver);
             clearForm();
-        } //creating driver user
+        }
 
         if(adminRadioButton.isSelected()){
             user.setCanCreateUsers(true);
@@ -251,6 +261,9 @@ public class RegisterController {
         }
 
         try {
+            if(userToEdit != null && userFieldsAreSame()){
+                messageLabel.setText("User already exists.");
+            }
             GenericHibernate<User> userHibernate = new GenericHibernate<>(entityManagerFactory, User.class);
             userHibernate.create(user);
             clearForm();
@@ -259,7 +272,7 @@ public class RegisterController {
             exception.printStackTrace();
             //messageLabel.setText("Could not register user. Username or email may already exist");
         }
-    }
+    } //creating users
 
     private void clearForm() {
         firstNameField.clear();
@@ -273,29 +286,19 @@ public class RegisterController {
         restaurantNameField.clear();
         restaurantDescriptionField.clear();
         vehiclePlateNumberField.clear();
-        vehicleTypeComboBox.getItems().clear();
+        vehicleTypeComboBox.setValue(null);
     }
 
     public void setUserToEdit(User user) {
         userToEdit = user;
 
-
-        if(userToEdit != null){
-            user.setUsername(userToEdit.getUsername());
-            user.setEmail(userToEdit.getEmail());
-            user.setLogin(userToEdit.getLogin());
-            user.setFirstName(userToEdit.getFirstName());
-            user.setLastName(userToEdit.getLastName());
-            user.setPhoneNumber(String.valueOf(userToEdit.getPhoneNumber()));
-            user.setPassword(userToEdit.getPassword());
-            confirmPasswordField.setText(user.getPassword());
-        }
-
-
-        GenericHibernate<User> userHibernate = new GenericHibernate<>(entityManagerFactory, User.class);
-        userHibernate.update(userToEdit);
-       // System.out.println(userToEdit.getFirstName(), userToEdit.getUsername(), );
-
+        firstNameField.setText(user.getFirstName());
+        lastNameField.setText(user.getLastName());
+        phoneNumberField.setText(user.getPhoneNumber());
+        usernameField.setText(user.getUsername());
+        emailField.setText(user.getEmail());
+        passwordField.setText(user.getPassword());
+        confirmPasswordField.setText(user.getPassword());
 
         if(user.isCanCreateUsers()){
             adminRadioButton.setSelected(true);
@@ -312,28 +315,16 @@ public class RegisterController {
 
         driverToEdit = driver;
 
-        if(userToEdit != null){
-            user.setUsername(userToEdit.getUsername());
-            user.setEmail(userToEdit.getEmail());
-            user.setLogin(userToEdit.getLogin());
-            user.setFirstName(userToEdit.getFirstName());
-            user.setLastName(userToEdit.getLastName());
-            user.setPhoneNumber(String.valueOf(userToEdit.getPhoneNumber()));
-            user.setPassword(userToEdit.getPassword());
-            confirmPasswordField.setText(user.getPassword());
-        }
-
-        this.driverToEdit = driver;
         usernameField.setText(driver.getUsername());
-        emailField.setText(driver.getEmail());
+        passwordField.setText(driver.getPassword());
+        confirmPasswordField.setText(driver.getPassword());
         firstNameField.setText(driver.getFirstName());
         lastNameField.setText(driver.getLastName());
         phoneNumberField.setText(driver.getPhoneNumber());
-        passwordField.setText(driver.getPassword());
-        confirmPasswordField.setText(driver.getPassword());
+        emailField.setText(driver.getEmail());
         vehiclePlateNumberField.setText(driver.getVehiclePlateNumber());
+        vehicleTypeComboBox.getItems().setAll(VehicleType.values());
         vehicleTypeComboBox.setValue(driver.getVehicleType());
-
 
         driverRadioButton.setSelected(true);
 
@@ -343,7 +334,8 @@ public class RegisterController {
     }
 
     public void setRestaurantToEdit(Restaurant restaurant) {
-        this.restaurantToEdit = restaurant;
+        restaurantToEdit = restaurant;
+
         usernameField.setText(restaurant.getUsername());
         emailField.setText(restaurant.getEmail());
         phoneNumberField.setText(restaurant.getPhoneNumber());
@@ -351,12 +343,28 @@ public class RegisterController {
         confirmPasswordField.setText(restaurant.getPassword());
         restaurantDescriptionField.setText(restaurant.getDescription());
         restaurantAddressField.setText(restaurant.getAddress());
-        restaurantNameField.setText(restaurant.getName());
+        restaurantNameField.setText(restaurant.getRestaurantName());
+
 
         restaurantRadioButton.setSelected(true);
 
         updateVisibleFields();
         registerButton.setText("Save");
 
+    }
+
+    private boolean driverFieldsAreSame(){
+        return driverToEdit.getUsername().equals(usernameField.getText().trim()) &&
+                driverToEdit.getEmail().equals(emailField.getText().trim());
+    }
+
+    private boolean restaurantFieldsAreSame(){
+        return restaurantToEdit.getUsername().equals(usernameField.getText().trim()) &&
+                restaurantToEdit.getEmail().equals(emailField.getText().trim());
+    }
+
+    private boolean userFieldsAreSame(){
+        return userToEdit.getUsername().equals(usernameField.getText().trim()) &&
+                userToEdit.getEmail().equals(emailField.getText().trim());
     }
 }

@@ -29,16 +29,16 @@ public class User extends BasicUser{
         this.canViewUsers = canViewUsers;
     }
 
-    public User(int id, String username, String login, String email, String password, String firstName, String lastName, String phoneNumber, boolean canCreateUsers, boolean canUpdateUsers, boolean canDeleteUsers, boolean canViewUsers) {
-        super(id, username, login, email, password, firstName, lastName, phoneNumber);
+    public User(int id, String username, String email, String password, String firstName, String lastName, String phoneNumber, boolean canCreateUsers, boolean canUpdateUsers, boolean canDeleteUsers, boolean canViewUsers) {
+        super(id, username, email, password, firstName, lastName, phoneNumber);
         this.canCreateUsers = canCreateUsers;
         this.canUpdateUsers = canUpdateUsers;
         this.canDeleteUsers = canDeleteUsers;
         this.canViewUsers = canViewUsers;
     }
 
-    public User(int id, String username, String login, String email, String password, String firstName, String lastName, String phoneNumber, LocalDateTime dateCreated, LocalDateTime lastLogin, boolean active, boolean canCreateUsers, boolean canUpdateUsers, boolean canDeleteUsers, boolean canViewUsers) {
-        super(id, username, login, email, password, firstName, lastName, phoneNumber, dateCreated, lastLogin, active);
+    public User(int id, String username, String email, String password, String firstName, String lastName, String phoneNumber, LocalDateTime dateCreated, LocalDateTime lastLogin, boolean active, boolean canCreateUsers, boolean canUpdateUsers, boolean canDeleteUsers, boolean canViewUsers) {
+        super(id, username, email, password, firstName, lastName, phoneNumber, dateCreated, lastLogin, active);
         this.canCreateUsers = canCreateUsers;
         this.canUpdateUsers = canUpdateUsers;
         this.canDeleteUsers = canDeleteUsers;

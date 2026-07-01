@@ -125,7 +125,21 @@ public class AdminPanelController {
 
         try (var entityManager = entityManagerFactory.createEntityManager()) {
             ObservableList<User> users = FXCollections.observableArrayList(
-                    entityManager.createQuery("SELECT user FROM User user ORDER BY user.id", User.class)
+                    entityManager.createQuery("""
+                            SELECT user
+                            FROM User user
+                            WHERE NOT EXISTS (
+                                SELECT driver
+                                FROM Driver driver
+                                WHERE driver.username = user.username
+                            )
+                            AND NOT EXISTS (
+                                SELECT restaurant
+                                FROM Restaurant restaurant
+                                WHERE restaurant.username = user.username
+                            )
+                            ORDER BY user.id
+                            """, User.class)
                             .getResultList()
             );
 
