@@ -269,21 +269,33 @@ public class RegisterController {
         emailField.clear();
         passwordField.clear();
         confirmPasswordField.clear();
-    }
-
-    public void setUser() {
-
+        restaurantAddressField.clear();
+        restaurantNameField.clear();
+        restaurantDescriptionField.clear();
+        vehiclePlateNumberField.clear();
+        vehicleTypeComboBox.getItems().clear();
     }
 
     public void setUserToEdit(User user) {
-        this.userToEdit = user;
-        usernameField.setText(user.getUsername());
-        emailField.setText(user.getEmail());
-        firstNameField.setText(user.getFirstName());
-        lastNameField.setText(user.getLastName());
-        phoneNumberField.setText(user.getPhoneNumber());
-        passwordField.setText(user.getPassword());
-        confirmPasswordField.setText(user.getPassword());
+        userToEdit = user;
+
+
+        if(userToEdit != null){
+            user.setUsername(userToEdit.getUsername());
+            user.setEmail(userToEdit.getEmail());
+            user.setLogin(userToEdit.getLogin());
+            user.setFirstName(userToEdit.getFirstName());
+            user.setLastName(userToEdit.getLastName());
+            user.setPhoneNumber(String.valueOf(userToEdit.getPhoneNumber()));
+            user.setPassword(userToEdit.getPassword());
+            confirmPasswordField.setText(user.getPassword());
+        }
+
+
+        GenericHibernate<User> userHibernate = new GenericHibernate<>(entityManagerFactory, User.class);
+        userHibernate.update(userToEdit);
+       // System.out.println(userToEdit.getFirstName(), userToEdit.getUsername(), );
+
 
         if(user.isCanCreateUsers()){
             adminRadioButton.setSelected(true);
@@ -297,6 +309,20 @@ public class RegisterController {
     }
 
     public void setDriverToEdit(Driver driver) {
+
+        driverToEdit = driver;
+
+        if(userToEdit != null){
+            user.setUsername(userToEdit.getUsername());
+            user.setEmail(userToEdit.getEmail());
+            user.setLogin(userToEdit.getLogin());
+            user.setFirstName(userToEdit.getFirstName());
+            user.setLastName(userToEdit.getLastName());
+            user.setPhoneNumber(String.valueOf(userToEdit.getPhoneNumber()));
+            user.setPassword(userToEdit.getPassword());
+            confirmPasswordField.setText(user.getPassword());
+        }
+
         this.driverToEdit = driver;
         usernameField.setText(driver.getUsername());
         emailField.setText(driver.getEmail());

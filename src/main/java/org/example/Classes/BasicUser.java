@@ -18,11 +18,11 @@ public class BasicUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, unique = true, length = 100)
     private String username;
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, unique = true,  length = 100)
     private String login;
-    @Column(length = 150)
+    @Column(length = 150, unique = true, nullable = false)
     private String email;
     @Column(nullable = false, length = 255)
     private String password;

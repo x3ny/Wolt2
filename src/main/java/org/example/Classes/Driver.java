@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table (name = "drivers")
 
-public class Driver {
+public class Driver extends BasicUser{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
