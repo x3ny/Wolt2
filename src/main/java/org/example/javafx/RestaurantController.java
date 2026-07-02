@@ -14,6 +14,7 @@ import org.example.Classes.OrderStatus;
 import org.example.Classes.Restaurant;
 
 public class RestaurantController {
+    public Button deleteOrder;
     @FXML
     private TextField customerIdField;
     @FXML
@@ -184,5 +185,100 @@ public class RestaurantController {
         totalPriceTextField.clear();
         paidCheckBox.setSelected(false);
 
+    }
+
+    @FXML
+    private void cancelSelectedOrder(ActionEvent actionEvent) {
+        updateSelectedOrderStatus(OrderStatus.CANCELED);
+    }
+    @FXML
+    private void markSelectedOrderDelivered(ActionEvent actionEvent) {
+        updateSelectedOrderStatus(OrderStatus.DELIVERED);
+    }
+    @FXML
+    private void markSelectedOrderPreparing(ActionEvent actionEvent) {
+        updateSelectedOrderStatus(OrderStatus.PREPARING);
+    }
+    @FXML
+    private void acceptSelectedOrder(ActionEvent actionEvent) {
+        updateSelectedOrderStatus(OrderStatus.ACCEPTED);
+    }
+
+    private void updateSelectedOrderStatus(OrderStatus orderStatus) {
+
+        FoodOrder selectedOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
+
+        if(selectedOrder == null){
+            showAlert(Alert.AlertType.ERROR, "Select an order", "Please select an order");
+            return;
+        }
+
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+                FoodOrder orderToUpdate = entityManager.find(FoodOrder.class, selectedOrder.getId());
+                if(orderToUpdate == null){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Order not found", "The selected order does not exist");
+                    loadOrders();
+                    return;
+                }
+                if (orderToUpdate.getRestaurantId() != currentRestaurant.getId()) {
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Access denied", "This order does not belong to your restaurant");
+                    loadOrders();
+                    return;
+                }
+
+                orderToUpdate.setStatus(orderStatus);
+                transaction.commit();
+                loadOrders();
+            }catch (RuntimeException e){
+                if(transaction.isActive()){
+                    transaction.rollback();
+                }
+                throw e;
+            }
+
+
+        } catch (RuntimeException e){
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR,"Could not update order", "Please try again");
+        }
+
+    }
+
+    public void deleteOrder(ActionEvent actionEvent) {
+        FoodOrder selectedOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
+
+        if(selectedOrder == null){
+            showAlert(Alert.AlertType.WARNING, "Select an order", "Please select an order");
+            return;
+        }
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+
+                FoodOrder orderToDelete = entityManager.find(FoodOrder.class, selectedOrder.getId());
+
+                if(orderToDelete == null){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Order not found", "The selected order does not exist");
+                    return;
+                }
+
+                entityManager.remove(orderToDelete);
+                transaction.commit();
+                loadOrders();
+
+
+            }catch (RuntimeException e){
+                if(transaction.isActive()){
+                    transaction.rollback();
+                }
+            }
+        }
     }
 }
