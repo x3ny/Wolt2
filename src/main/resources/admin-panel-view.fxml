@@ -19,7 +19,6 @@
          <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
             <TableColumn fx:id="usernameColumn" prefWidth="120.0" text="Username" />
-            <TableColumn fx:id="loginColumn" prefWidth="110.0" text="Login" />
             <TableColumn fx:id="emailColumn" prefWidth="165.0" text="Email" />
             <TableColumn fx:id="firstNameColumn" prefWidth="105.0" text="First name" />
             <TableColumn fx:id="lastNameColumn" prefWidth="105.0" text="Last name" />

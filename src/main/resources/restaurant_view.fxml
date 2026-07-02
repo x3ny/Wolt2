@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="499.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
+
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="852.0">
+        <columns>
+            <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
+            <TableColumn fx:id="customerIdColumn" prefWidth="120.0" text="CustomerId" />
+            <TableColumn fx:id="restaurantIdColumn" prefWidth="165.0" text="RestaurantId" />
+            <TableColumn fx:id="driverIdColumn" prefWidth="105.0" text="DriverId" />
+            <TableColumn fx:id="deliveryAddressColumn" prefWidth="105.0" text="Delivery address" />
+            <TableColumn fx:id="orderStatusColumn" prefWidth="120.0" text="Order status" />
+            <TableColumn fx:id="totalPriceColumn" prefWidth="70.0" text="Total price" />
+            <TableColumn fx:id="paymentMethodColumn" prefWidth="95.0" text="Payment method" />
+            <TableColumn fx:id="paidColumn" prefWidth="95.0" text="Paid" />
+        </columns>
+    </TableView>
+   <TextField fx:id="customerIdField" layoutX="24.0" layoutY="361.0" promptText="Customer ID" />
+   <TextField fx:id="driverIdField" layoutX="205.0" layoutY="361.0" promptText="Driver ID" />
+   <TextField fx:id="deliveryAddressTextField" layoutX="375.0" layoutY="361.0" promptText="Delivery Address" />
+   <TextField fx:id="totalPriceTextField" layoutX="547.0" layoutY="361.0" promptText="Total Price" />
+   <TextField fx:id="paymentMethodTextField" layoutX="715.0" layoutY="361.0" promptText="Payment Method" />
+   <Button fx:id="createOrderButton" layoutX="122.0" layoutY="426.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
+   <CheckBox fx:id="paidCheckBox" layoutX="24.0" layoutY="430.0" mnemonicParsing="false" text="Paid" />
+
+</AnchorPane>

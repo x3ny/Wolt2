@@ -16,6 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.Setter;
+import org.example.Classes.Restaurant;
 import org.example.Classes.User;
 
 import java.io.IOException;
@@ -78,7 +79,27 @@ public class LoginApplication extends Application {
             return;
         }
 
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            TypedQuery<Restaurant> restaurantQuery = entityManager.createQuery(
+                    "SELECT restaurant FROM Restaurant restaurant WHERE restaurant.username = :login AND restaurant.password = :password ",
+                    Restaurant.class);
+
+            restaurantQuery.setParameter("login", username);
+            restaurantQuery.setParameter("password", password);
+
+            Restaurant restaurant = restaurantQuery.getSingleResult();
+            openRestaurantPanel(restaurant);
+            return;
+        } catch (NoResultException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "Login Failed");
+            return;
+        }
+
         try(var entityManager = entityManagerFactory.createEntityManager()) {
+
+
             TypedQuery<User> query = entityManager.createQuery(
                     "SELECT user FROM User user WHERE user.username = :login AND user.password = :password ",
                     User.class
@@ -138,6 +159,19 @@ public class LoginApplication extends Application {
 
         Stage stage = (Stage) RegisterButton.getScene().getWindow();
         stage.setTitle("Admin panel");
+        stage.setScene(new Scene(root, 900, 900));
+    }
+
+    private void openRestaurantPanel(Restaurant restaurant) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/restaurant_view.fxml"));
+        Parent root = loader.load();
+
+        RestaurantController controller = loader.getController();
+        controller.setEntityManagerFactory(entityManagerFactory);
+        controller.setCurrentRestaurant(restaurant);
+
+        Stage stage = (Stage) RegisterButton.getScene().getWindow();
+        stage.setTitle("Restaurant panel");
         stage.setScene(new Scene(root, 900, 900));
     }
 

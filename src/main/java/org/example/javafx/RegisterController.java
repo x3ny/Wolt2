@@ -10,7 +10,16 @@ import lombok.Setter;
 import org.example.Classes.*;
 import org.example.Database.GenericHibernate;
 
+import java.util.regex.Pattern;
+
 public class RegisterController {
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    );
+    private static final Pattern PHONE_PATTERN = Pattern.compile(
+            "^\\+?[0-9]{7,15}$"
+    );
+
     @FXML
     private Label lastNameFieldLabel;
     @FXML
@@ -173,9 +182,7 @@ public class RegisterController {
                     email.isBlank() ||
                     password.isBlank() ||
                     confirmPassword.isBlank() ||
-                    username.isBlank() ||
                     vehiclePlateNumber.isBlank()
-                    //vehicleType != null
 
             ){
                 messageLabel.setText("Please fill in all fields.");
@@ -197,21 +204,22 @@ public class RegisterController {
             }
         }
 
+        if (!EMAIL_PATTERN.matcher(email).matches()) {
+            messageLabel.setText("Please enter a valid email address.");
+            return;
+        }
+
+        if (!PHONE_PATTERN.matcher(phoneNumber).matches()) {
+            messageLabel.setText("Please enter a valid phone number.");
+            return;
+        }
+
         if (!password.equals(confirmPassword)) {
             messageLabel.setText("Passwords do not match.");
             return;
         }
 
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setPhoneNumber(phoneNumber);
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
-
-
-        //Creating restaurant  user
+        //CREATING RESTAURANT
         if(restaurantRadioButton.isSelected()){
             Restaurant restaurant = new Restaurant();
             restaurant.setAddress(restaurantAddress);
@@ -220,18 +228,21 @@ public class RegisterController {
             restaurant.setDescription(restaurantDescription);
             restaurant.setPhoneNumber(phoneNumber);
             restaurant.setUsername(username);
-            restaurant.setPassword(username);
+            restaurant.setPassword(password);
 
             if(restaurantToEdit != null && restaurantFieldsAreSame()){
                 messageLabel.setText("Restaurant already exists.");
+                return;
             }
 
             GenericHibernate<Restaurant> restaurantHibernate = new GenericHibernate<>(entityManagerFactory, Restaurant.class);
             restaurantHibernate.create(restaurant);
             clearForm();
+            messageLabel.setText("Restaurant registered successfully.");
+            return;
         }
 
-        //Creating driver user
+        //CREATING DRIVER
 
         if(driverRadioButton.isSelected()){
             Driver driver = new Driver();
@@ -246,12 +257,23 @@ public class RegisterController {
 
             if(driverToEdit != null && driverFieldsAreSame()){
                 messageLabel.setText("Driver already exists.");
+                return;
             }
 
             GenericHibernate<Driver> driverHibernate = new GenericHibernate<>(entityManagerFactory, Driver.class);
             driverHibernate.create(driver);
             clearForm();
+            messageLabel.setText("Driver registered successfully.");
+            return;
         }
+
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhoneNumber(phoneNumber);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
 
         if(adminRadioButton.isSelected()){
             user.setCanCreateUsers(true);
@@ -259,6 +281,8 @@ public class RegisterController {
             user.setCanUpdateUsers(true);
             user.setCanViewUsers(true);
         }
+
+        //CREATING USER
 
         try {
             if(userToEdit != null && userFieldsAreSame()){
@@ -272,7 +296,7 @@ public class RegisterController {
             exception.printStackTrace();
             //messageLabel.setText("Could not register user. Username or email may already exist");
         }
-    } //creating users
+    }
 
     private void clearForm() {
         firstNameField.clear();

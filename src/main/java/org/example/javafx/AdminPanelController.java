@@ -90,7 +90,6 @@ public class AdminPanelController {
     private void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        loginColumn.setCellValueFactory(new PropertyValueFactory<>("login"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -134,7 +133,7 @@ public class AdminPanelController {
                                 WHERE driver.username = user.username
                             )
                             AND NOT EXISTS (
-                                SELECT restaurant
+                                SELECT restaurant 
                                 FROM Restaurant restaurant
                                 WHERE restaurant.username = user.username
                             )
