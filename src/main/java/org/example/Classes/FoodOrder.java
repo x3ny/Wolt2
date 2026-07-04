@@ -78,7 +78,7 @@ public class FoodOrder {
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd ' ' HH:mm:ss");
         return "FoodOrder{" +
                 "dateCreated=" + formatter.format(dateCreated) +
                 '}';

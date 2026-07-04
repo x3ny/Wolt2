@@ -134,7 +134,25 @@ public class RestaurantController {
             int driverId = parseDriverId(driverIdText);
             double totalPrice = Double.parseDouble(totalPriceText);
 
-            checkBuissenesLogic(driverId, customerId, totalPrice, deliveryAddressText);
+            if(!isCustomerIdValid(customerId)){
+                showAlert(Alert.AlertType.ERROR, "Invalid Customer Id" , "Customer Id must be greater than 0");
+                return;
+            }
+
+            if(!isDriverIdValid(driverId)){
+                showAlert(Alert.AlertType.ERROR, "Invalid Driver Id" , "Driver Id must be greater than 0");
+                return;
+            }
+
+            if(!isPriceValid(totalPrice)){
+                showAlert(Alert.AlertType.ERROR, "Invalid Total Price" , "Total Price must be greater than 0");
+                return;
+            }
+
+            if(!isAddressValid(deliveryAddressText)){
+                showAlert(Alert.AlertType.ERROR, "Invalid Delivery Address length" , "Delivery Address length must be at least 10 characters");
+                return;
+            }
 
             FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText,paymentMethodText,paidCheckBox.isSelected());
 
@@ -253,24 +271,20 @@ public class RestaurantController {
 
     }
 
-    private void checkBuissenesLogic(int driverId, int customerId, double price , String address ){
-        if(customerId < 0 ){
-            showAlert(Alert.AlertType.ERROR, "Customer Id cannot be a negative number" , "Customer Id cannot be negative");
-        }
+    private boolean isCustomerIdValid(int customerId){
+        return customerId > 0;
+    }
 
-        if(driverId < 0 ){
-            showAlert(Alert.AlertType.ERROR , "Driver Id cannot be a negative number" , "Driver Id cannot be negative");
-        }
+    private boolean isDriverIdValid(int driverId){
+        return driverId > 0;
+    }
 
-        if(price < 0){
-            showAlert(Alert.AlertType.ERROR, "Total price is negative" , "Total price must be greater than 0");
-            return;
-        }
+    private boolean isPriceValid(double price){
+        return price > 0;
+    }
 
-        if(address.length() < 10){
-            showAlert(Alert.AlertType.ERROR, "Delivery address length is too short " , "Delivery address length is too short");
-        }
-
+    private boolean isAddressValid(String address){
+        return address.length() >= 10;
     }
 
     private int parseCustomerId(String customerIdText){
@@ -322,6 +336,7 @@ public class RestaurantController {
                 }
                 entityManager.remove(orderToDelete);
                 transaction.commit();
+                showAlert(Alert.AlertType.INFORMATION, "Order deleted", "Order deleted successfully");
                 loadOrders();
 
 
