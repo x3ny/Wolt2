@@ -121,18 +121,12 @@ public class RestaurantController {
         }
 
         try {
-            int customerId = Integer.parseInt(customerIdText);
-            int driverId = Integer.parseInt(driverIdText);
-            double totalPrice = Double.parseDouble(totalPriceText);
 
-            FoodOrder foodOrder = new FoodOrder();
-            foodOrder.setCustomerId(customerId);
-            foodOrder.setRestaurantId(currentRestaurant.getId());
-            foodOrder.setDriverId(driverId);
-            foodOrder.setDeliveryAddress(deliveryAddressText);
-            foodOrder.setPaymentMethod(paymentMethodText);
-            foodOrder.setTotalPrice(totalPrice);
-            foodOrder.setPaid(paidCheckBox.isSelected());
+            int customerId = parseCustomerId(customerIdText);
+            int driverId = parseDriverId(driverIdText);
+            double totalPrice = Double.parseDouble(totalPriceText);
+            FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText,paymentMethodText,paidCheckBox.isSelected());
+            //foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText,paymentMethodText,paidCheckBox.isSelected());
 
             saveOrder(foodOrder);
             clearOrderForm();
@@ -249,6 +243,27 @@ public class RestaurantController {
 
     }
 
+    private int parseCustomerId(String customerIdText){
+        return Integer.parseInt(customerIdText);
+    }
+
+    private int parseDriverId(String driverIdText){
+        return Integer.parseInt(driverIdText);
+    }
+
+    private FoodOrder createFoodOrder(int customerId, int driverId, double totalPrice, String deliveryAddress, String paymentMethod, boolean  paid){
+            FoodOrder foodOrder = new FoodOrder();
+            foodOrder.setCustomerId(customerId);
+            foodOrder.setDriverId(driverId);
+            foodOrder.setTotalPrice(totalPrice);
+            foodOrder.setDeliveryAddress(deliveryAddress);
+            foodOrder.setPaymentMethod(paymentMethod);
+            foodOrder.setPaid(paid);
+            foodOrder.setRestaurantId(currentRestaurant.getId());
+
+            return foodOrder;
+    }
+
     public void deleteOrder(ActionEvent actionEvent) {
         FoodOrder selectedOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
 
@@ -269,6 +284,12 @@ public class RestaurantController {
                     return;
                 }
 
+                if(orderToDelete.getRestaurantId() != currentRestaurant.getId()){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Access denied", "This order does not belong to your restaurant");
+                    loadOrders();
+                    return;
+                }
                 entityManager.remove(orderToDelete);
                 transaction.commit();
                 loadOrders();
@@ -278,6 +299,7 @@ public class RestaurantController {
                 if(transaction.isActive()){
                     transaction.rollback();
                 }
+                throw e;
             }
         }
     }

@@ -63,6 +63,9 @@ public class FoodOrder {
         this.deliveredAt = deliveredAt;
     }
 
+    public FoodOrder(FoodOrder foodOrder) {
+    }
+
     @PrePersist
     public void prePersist(){
         this.dateCreated = LocalDateTime.now();

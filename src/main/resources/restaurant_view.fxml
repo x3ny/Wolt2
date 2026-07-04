@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="499.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
-    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="852.0">
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="950.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
             <TableColumn fx:id="customerIdColumn" prefWidth="120.0" text="CustomerId" />
@@ -29,5 +29,10 @@
    <TextField fx:id="paymentMethodTextField" layoutX="715.0" layoutY="361.0" promptText="Payment Method" />
    <Button fx:id="createOrderButton" layoutX="122.0" layoutY="426.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
    <CheckBox fx:id="paidCheckBox" layoutX="24.0" layoutY="430.0" mnemonicParsing="false" text="Paid" />
+   <Button layoutX="270.0" layoutY="30.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="Cancel" />
+   <Button layoutX="188.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="Delivered" />
+   <Button layoutX="99.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="Preparing" />
+   <Button layoutX="24.0" layoutY="30.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="Accept" />
+   <Button layoutX="790.0" layoutY="30.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
 
 </AnchorPane>
