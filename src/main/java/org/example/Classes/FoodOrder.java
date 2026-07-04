@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -72,5 +73,14 @@ public class FoodOrder {
         if(this.status == null){
             this.status = OrderStatus.CREATED;
         }
+    }
+
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return "FoodOrder{" +
+                "dateCreated=" + formatter.format(dateCreated) +
+                '}';
     }
 }

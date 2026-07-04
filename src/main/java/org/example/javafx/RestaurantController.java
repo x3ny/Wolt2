@@ -1,6 +1,5 @@
 package org.example.javafx;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,8 +12,14 @@ import org.example.Classes.FoodOrder;
 import org.example.Classes.OrderStatus;
 import org.example.Classes.Restaurant;
 
+import java.time.LocalDateTime;
+
 public class RestaurantController {
     public Button deleteOrder;
+    @FXML
+    public Label currentRestaurantLabel;
+    @FXML
+    private TableColumn <FoodOrder, LocalDateTime> dateCreated;
     @FXML
     private TextField customerIdField;
     @FXML
@@ -72,6 +77,8 @@ public class RestaurantController {
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
         paidColumn.setCellValueFactory(new PropertyValueFactory<>("paid"));
+        dateCreated.setCellValueFactory(new  PropertyValueFactory<>("dateCreated"));
+
     }
 
     public void loadOrders() {
@@ -91,6 +98,7 @@ public class RestaurantController {
         
         """, FoodOrder.class).setParameter("restaurantId", currentRestaurant.getId()).getResultList());
             foodOrdersTable.setItems(foodOrders);
+            currentRestaurantLabel.setText("Welcome " + currentRestaurant.getRestaurantName() + "!");
 
         }catch (RuntimeException e){
             e.printStackTrace();
@@ -98,7 +106,7 @@ public class RestaurantController {
     }
 
     @FXML
-    public void createOrder(ActionEvent actionEvent) {
+    public void createOrder() {
         if(entityManagerFactory == null || currentRestaurant == null) {
             return;
         }
@@ -125,8 +133,10 @@ public class RestaurantController {
             int customerId = parseCustomerId(customerIdText);
             int driverId = parseDriverId(driverIdText);
             double totalPrice = Double.parseDouble(totalPriceText);
+
+            checkBuissenesLogic(driverId, customerId, totalPrice, deliveryAddressText);
+
             FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText,paymentMethodText,paidCheckBox.isSelected());
-            //foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText,paymentMethodText,paidCheckBox.isSelected());
 
             saveOrder(foodOrder);
             clearOrderForm();
@@ -239,6 +249,26 @@ public class RestaurantController {
         } catch (RuntimeException e){
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR,"Could not update order", "Please try again");
+        }
+
+    }
+
+    private void checkBuissenesLogic(int driverId, int customerId, double price , String address ){
+        if(customerId < 0 ){
+            showAlert(Alert.AlertType.ERROR, "Customer Id cannot be a negative number" , "Customer Id cannot be negative");
+        }
+
+        if(driverId < 0 ){
+            showAlert(Alert.AlertType.ERROR , "Driver Id cannot be a negative number" , "Driver Id cannot be negative");
+        }
+
+        if(price < 0){
+            showAlert(Alert.AlertType.ERROR, "Total price is negative" , "Total price must be greater than 0");
+            return;
+        }
+
+        if(address.length() < 10){
+            showAlert(Alert.AlertType.ERROR, "Delivery address length is too short " , "Delivery address length is too short");
         }
 
     }

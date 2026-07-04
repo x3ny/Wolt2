@@ -2,14 +2,16 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="499.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
-    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="950.0">
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="1050.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
             <TableColumn fx:id="customerIdColumn" prefWidth="120.0" text="CustomerId" />
@@ -20,6 +22,7 @@
             <TableColumn fx:id="totalPriceColumn" prefWidth="70.0" text="Total price" />
             <TableColumn fx:id="paymentMethodColumn" prefWidth="95.0" text="Payment method" />
             <TableColumn fx:id="paidColumn" prefWidth="95.0" text="Paid" />
+            <TableColumn fx:id="dateCreated" prefWidth="95.0" text="Time created" />
         </columns>
     </TableView>
    <TextField fx:id="customerIdField" layoutX="24.0" layoutY="361.0" promptText="Customer ID" />
@@ -29,10 +32,15 @@
    <TextField fx:id="paymentMethodTextField" layoutX="715.0" layoutY="361.0" promptText="Payment Method" />
    <Button fx:id="createOrderButton" layoutX="122.0" layoutY="426.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
    <CheckBox fx:id="paidCheckBox" layoutX="24.0" layoutY="430.0" mnemonicParsing="false" text="Paid" />
-   <Button layoutX="270.0" layoutY="30.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="Cancel" />
-   <Button layoutX="188.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="Delivered" />
-   <Button layoutX="99.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="Preparing" />
-   <Button layoutX="24.0" layoutY="30.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="Accept" />
-   <Button layoutX="790.0" layoutY="30.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
+   <Button layoutX="865.0" layoutY="30.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="CANCELED" />
+   <Button layoutX="766.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="DELIVERED" />
+   <Button layoutX="669.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="PREPARING" />
+   <Button layoutX="585.0" layoutY="30.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="ACCEPTED" />
+   <Button layoutX="952.0" layoutY="30.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
+   <Label fx:id="currentRestaurantLabel" layoutX="24.0" layoutY="30.0" text="Label" style="-fx-font-size: 22px; -fx-font-weight: bold;">
+      <font>
+         <Font size="22.0" />
+      </font>
+   </Label>
 
 </AnchorPane>

@@ -172,7 +172,7 @@ public class LoginApplication extends Application {
 
         Stage stage = (Stage) RegisterButton.getScene().getWindow();
         stage.setTitle("Restaurant panel");
-        stage.setScene(new Scene(root, 1050, 500));
+        stage.setScene(new Scene(root, 1200, 500));
 
 
 
