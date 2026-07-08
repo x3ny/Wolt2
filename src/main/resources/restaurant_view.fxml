@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="499.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
-    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="1050.0">
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="1150.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
             <TableColumn fx:id="customerIdColumn" prefWidth="120.0" text="CustomerId" />
@@ -23,7 +23,7 @@
             <TableColumn fx:id="totalPriceColumn" prefWidth="70.0" text="Total price" />
             <TableColumn fx:id="paymentMethodColumn" prefWidth="95.0" text="Payment method" />
             <TableColumn fx:id="paidColumn" prefWidth="95.0" text="Paid" />
-            <TableColumn fx:id="dateCreated" prefWidth="95.0" text="Time created" />
+            <TableColumn fx:id="dateCreated" prefWidth="150.0" text="Time created" />
         </columns>
     </TableView>
    <TextField fx:id="deliveryAddressTextField" layoutX="375.0" layoutY="361.0" promptText="Delivery Address" />

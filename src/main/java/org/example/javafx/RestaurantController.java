@@ -83,6 +83,8 @@ public class RestaurantController {
         configureUserComboBox(customerIdComboBox);
         configureUserComboBox(driverIdComboBox);
 
+        paymentMethodComboBox.getItems().addAll(PaymentMethod.values());
+
     }
 
     public void loadOrders() {
@@ -117,19 +119,22 @@ public class RestaurantController {
 
         User selectedCustomer = customerIdComboBox.getValue();
         Driver selectedDriver = driverIdComboBox.getValue();
+        PaymentMethod paymentMethod = paymentMethodComboBox.getValue();
 
-        if(selectedCustomer == null || selectedDriver == null) {
-            showAlert(Alert.AlertType.ERROR, "Select Customer and Driver", "Please select Customer and Driver");
+        if(selectedCustomer == null || selectedDriver == null || paymentMethod == null) {
+            showAlert(Alert.AlertType.ERROR, "Select Customer, Driver and Payment Method", "Please select Customer, Driver and Payment Method");
             return;
         }
 
         int customerId = selectedCustomer.getId();
         int driverId = selectedDriver.getId();
         String deliveryAddressText = deliveryAddressTextField.getText().trim();
-        String paymentMethodText = paymentMethodTextField.getText().trim();
         String totalPriceText = totalPriceTextField.getText().trim();
 
-        if(deliveryAddressText.isBlank() || paymentMethodText.isBlank() || totalPriceText.isBlank()){
+
+
+
+        if(deliveryAddressText.isBlank() || totalPriceText.isBlank()){
 
             showAlert(Alert.AlertType.ERROR, "Fill in all the fields" , "Please fill all the fields");
 
@@ -150,7 +155,7 @@ public class RestaurantController {
                 return;
             }
 
-            FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText,paymentMethodText,paidCheckBox.isSelected());
+            FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText, String.valueOf(paymentMethod),paidCheckBox.isSelected());
 
             saveOrder(foodOrder);
             clearOrderForm();
