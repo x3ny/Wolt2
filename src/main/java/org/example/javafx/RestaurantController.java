@@ -30,8 +30,6 @@ public class RestaurantController {
     @FXML
     private TextField totalPriceTextField;
     @FXML
-    private TextField paymentMethodTextField;
-    @FXML
     private Button createOrderButton;
     @FXML
     private CheckBox paidCheckBox;
@@ -80,8 +78,8 @@ public class RestaurantController {
         paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
         paidColumn.setCellValueFactory(new PropertyValueFactory<>("paid"));
         dateCreated.setCellValueFactory(new  PropertyValueFactory<>("dateCreated"));
-        configureUserComboBox(customerIdComboBox);
-        configureUserComboBox(driverIdComboBox);
+        configureUserComboBox(customerIdComboBox, "Customer");
+        configureUserComboBox(driverIdComboBox, "Driver");
 
         paymentMethodComboBox.getItems().addAll(PaymentMethod.values());
 
@@ -204,8 +202,8 @@ public class RestaurantController {
         customerIdComboBox.setValue(null);
         driverIdComboBox.setValue(null);
         deliveryAddressTextField.clear();
-        paymentMethodTextField.clear();
         totalPriceTextField.clear();
+        paymentMethodComboBox.setValue(PaymentMethod.CARD);
         paidCheckBox.setSelected(false);
 
     }
@@ -339,7 +337,7 @@ public class RestaurantController {
     private String formatUserComboBoxText(BasicUser user){
         return  user.getId() + " - " + user.getFirstName() + " - " + user.getLastName() + " - " + user.getEmail();
     }
-    private <T extends BasicUser> void configureUserComboBox(ComboBox<T> comboBox){
+    private <T extends BasicUser> void configureUserComboBox(ComboBox<T> comboBox, String placehodler){
         comboBox.setCellFactory(listView -> new  ListCell<>() {
             @Override
             protected void updateItem(T user, boolean empty) {
@@ -359,7 +357,7 @@ public class RestaurantController {
                 super.updateItem(user, empty);
 
                 if(empty || user == null){
-                    setText(null);
+                    setText(placehodler);
                 }else
                     setText(formatUserComboBoxText(user));
             }

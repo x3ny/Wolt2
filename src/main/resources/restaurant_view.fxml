@@ -26,9 +26,8 @@
             <TableColumn fx:id="dateCreated" prefWidth="150.0" text="Time created" />
         </columns>
     </TableView>
-   <TextField fx:id="deliveryAddressTextField" layoutX="375.0" layoutY="361.0" promptText="Delivery Address" />
+   <TextField fx:id="deliveryAddressTextField" layoutX="721.0" layoutY="361.0" promptText="Delivery Address" />
    <TextField fx:id="totalPriceTextField" layoutX="547.0" layoutY="361.0" promptText="Total Price" />
-   <TextField fx:id="paymentMethodTextField" layoutX="715.0" layoutY="361.0" promptText="Payment Method" />
    <Button fx:id="createOrderButton" layoutX="122.0" layoutY="426.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
    <CheckBox fx:id="paidCheckBox" layoutX="24.0" layoutY="430.0" mnemonicParsing="false" text="Paid" />
    <Button layoutX="865.0" layoutY="30.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="CANCELED" />
@@ -41,8 +40,8 @@
          <Font size="22.0" />
       </font>
    </Label>
-   <ComboBox fx:id="customerIdComboBox" layoutX="375.0" layoutY="413.0" prefWidth="150.0" promptText="Customer" />
-   <ComboBox fx:id="driverIdComboBox" layoutX="546.0" layoutY="413.0" prefWidth="150.0" promptText="Driver" />
-   <ComboBox fx:id="paymentMethodComboBox" layoutX="715.0" layoutY="413.0" prefWidth="150.0" promptText="Payment" />
+   <ComboBox fx:id="customerIdComboBox" layoutX="24.0" layoutY="361.0" prefWidth="150.0" promptText="Customer" />
+   <ComboBox fx:id="driverIdComboBox" layoutX="200.0" layoutY="361.0" prefWidth="150.0" promptText="Driver" />
+   <ComboBox fx:id="paymentMethodComboBox" layoutX="375.0" layoutY="361.0" prefWidth="150.0" promptText="Payment" />
 
 </AnchorPane>
