@@ -1,5 +1,6 @@
 package org.example.javafx;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,9 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.Setter;
-import org.example.Classes.FoodOrder;
-import org.example.Classes.OrderStatus;
-import org.example.Classes.Restaurant;
+import org.example.Classes.*;
 
 import java.time.LocalDateTime;
 
@@ -19,11 +18,13 @@ public class RestaurantController {
     @FXML
     public Label currentRestaurantLabel;
     @FXML
+    private ComboBox <User> customerIdComboBox;
+    @FXML
+    private ComboBox <Driver> driverIdComboBox;
+    @FXML
+    private ComboBox <PaymentMethod> paymentMethodComboBox;
+    @FXML
     private TableColumn <FoodOrder, LocalDateTime> dateCreated;
-    @FXML
-    private TextField customerIdField;
-    @FXML
-    private TextField driverIdField;
     @FXML
     private TextField deliveryAddressTextField;
     @FXML
@@ -64,6 +65,7 @@ public class RestaurantController {
     public void setCurrentRestaurant(Restaurant currentRestaurant) {
         this.currentRestaurant = currentRestaurant;
         loadOrders();
+        loadComboBoxData();
     }
 
     @FXML
@@ -78,6 +80,8 @@ public class RestaurantController {
         paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
         paidColumn.setCellValueFactory(new PropertyValueFactory<>("paid"));
         dateCreated.setCellValueFactory(new  PropertyValueFactory<>("dateCreated"));
+        configureUserComboBox(customerIdComboBox);
+        configureUserComboBox(driverIdComboBox);
 
     }
 
@@ -111,17 +115,21 @@ public class RestaurantController {
             return;
         }
 
-        String customerIdText = customerIdField.getText().trim();
-        String driverIdText = driverIdField.getText().trim();
+        User selectedCustomer = customerIdComboBox.getValue();
+        Driver selectedDriver = driverIdComboBox.getValue();
+
+        if(selectedCustomer == null || selectedDriver == null) {
+            showAlert(Alert.AlertType.ERROR, "Select Customer and Driver", "Please select Customer and Driver");
+            return;
+        }
+
+        int customerId = selectedCustomer.getId();
+        int driverId = selectedDriver.getId();
         String deliveryAddressText = deliveryAddressTextField.getText().trim();
         String paymentMethodText = paymentMethodTextField.getText().trim();
         String totalPriceText = totalPriceTextField.getText().trim();
 
-        if(customerIdText.isBlank()
-            || driverIdText.isBlank()
-            || deliveryAddressText.isBlank()
-            || paymentMethodText.isBlank()
-            || totalPriceText.isBlank()){
+        if(deliveryAddressText.isBlank() || paymentMethodText.isBlank() || totalPriceText.isBlank()){
 
             showAlert(Alert.AlertType.ERROR, "Fill in all the fields" , "Please fill all the fields");
 
@@ -130,21 +138,9 @@ public class RestaurantController {
 
         try {
 
-            int customerId = parseCustomerId(customerIdText);
-            int driverId = parseDriverId(driverIdText);
             double totalPrice = Double.parseDouble(totalPriceText);
 
-            if(!isCustomerIdValid(customerId)){
-                showAlert(Alert.AlertType.ERROR, "Invalid Customer Id" , "Customer Id must be greater than 0");
-                return;
-            }
-
-            if(!isDriverIdValid(driverId)){
-                showAlert(Alert.AlertType.ERROR, "Invalid Driver Id" , "Driver Id must be greater than 0");
-                return;
-            }
-
-            if(!isPriceValid(totalPrice)){
+            if(!isTotalPriceValid(totalPrice)){
                 showAlert(Alert.AlertType.ERROR, "Invalid Total Price" , "Total Price must be greater than 0");
                 return;
             }
@@ -200,8 +196,8 @@ public class RestaurantController {
     }
 
     private void clearOrderForm(){
-        customerIdField.clear();
-        driverIdField.clear();
+        customerIdComboBox.setValue(null);
+        driverIdComboBox.setValue(null);
         deliveryAddressTextField.clear();
         paymentMethodTextField.clear();
         totalPriceTextField.clear();
@@ -270,31 +266,12 @@ public class RestaurantController {
         }
 
     }
-
-    private boolean isCustomerIdValid(int customerId){
-        return customerId > 0;
+    private boolean isTotalPriceValid(double totalPrice){
+        return totalPrice > 0;
     }
-
-    private boolean isDriverIdValid(int driverId){
-        return driverId > 0;
-    }
-
-    private boolean isPriceValid(double price){
-        return price > 0;
-    }
-
     private boolean isAddressValid(String address){
         return address.length() >= 10;
     }
-
-    private int parseCustomerId(String customerIdText){
-        return Integer.parseInt(customerIdText);
-    }
-
-    private int parseDriverId(String driverIdText){
-        return Integer.parseInt(driverIdText);
-    }
-
     private FoodOrder createFoodOrder(int customerId, int driverId, double totalPrice, String deliveryAddress, String paymentMethod, boolean  paid){
             FoodOrder foodOrder = new FoodOrder();
             foodOrder.setCustomerId(customerId);
@@ -307,7 +284,6 @@ public class RestaurantController {
 
             return foodOrder;
     }
-
     public void deleteOrder(ActionEvent actionEvent) {
         FoodOrder selectedOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
 
@@ -347,5 +323,43 @@ public class RestaurantController {
                 throw e;
             }
         }
+    }
+    private void loadComboBoxData(){
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            customerIdComboBox.getItems().setAll(entityManager.createQuery("SELECT u FROM User u", User.class).getResultList());
+
+            driverIdComboBox.getItems().setAll(entityManager.createQuery("SELECT d FROM Driver d", Driver.class).getResultList());
+        }
+    }
+    private String formatUserComboBoxText(BasicUser user){
+        return  user.getId() + " - " + user.getFirstName() + " - " + user.getLastName() + " - " + user.getEmail();
+    }
+    private <T extends BasicUser> void configureUserComboBox(ComboBox<T> comboBox){
+        comboBox.setCellFactory(listView -> new  ListCell<>() {
+            @Override
+            protected void updateItem(T user, boolean empty) {
+                super.updateItem(user, empty);
+
+                if(empty || user == null){
+                    setText(null);
+                } else {
+                    setText(formatUserComboBoxText(user));
+                }
+            }
+        });
+
+        comboBox.setButtonCell(new ListCell<>(){
+            @Override
+            protected void updateItem(T user, boolean empty) {
+                super.updateItem(user, empty);
+
+                if(empty || user == null){
+                    setText(null);
+                }else
+                    setText(formatUserComboBoxText(user));
+            }
+        });
+
+
     }
 }
