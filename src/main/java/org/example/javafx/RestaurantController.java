@@ -1,6 +1,5 @@
 package org.example.javafx;
 
-import jakarta.persistence.Basic;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -209,22 +208,21 @@ public class RestaurantController {
     }
 
     @FXML
-    private void cancelSelectedOrder(ActionEvent actionEvent) {
+    private void cancelSelectedOrder() {
         updateSelectedOrderStatus(OrderStatus.CANCELED);
     }
     @FXML
-    private void markSelectedOrderDelivered(ActionEvent actionEvent) {
+    private void markSelectedOrderDelivered() {
         updateSelectedOrderStatus(OrderStatus.DELIVERED);
     }
     @FXML
-    private void markSelectedOrderPreparing(ActionEvent actionEvent) {
+    private void markSelectedOrderPreparing() {
         updateSelectedOrderStatus(OrderStatus.PREPARING);
     }
     @FXML
-    private void acceptSelectedOrder(ActionEvent actionEvent) {
+    private void acceptSelectedOrder() {
         updateSelectedOrderStatus(OrderStatus.ACCEPTED);
     }
-
     private void updateSelectedOrderStatus(OrderStatus orderStatus) {
 
         FoodOrder selectedOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
@@ -337,7 +335,7 @@ public class RestaurantController {
     private String formatUserComboBoxText(BasicUser user){
         return  user.getId() + " - " + user.getFirstName() + " - " + user.getLastName() + " - " + user.getEmail();
     }
-    private <T extends BasicUser> void configureUserComboBox(ComboBox<T> comboBox, String placehodler){
+    private <T extends BasicUser> void configureUserComboBox(ComboBox<T> comboBox, String placeholder){
         comboBox.setCellFactory(listView -> new  ListCell<>() {
             @Override
             protected void updateItem(T user, boolean empty) {
@@ -357,7 +355,7 @@ public class RestaurantController {
                 super.updateItem(user, empty);
 
                 if(empty || user == null){
-                    setText(placehodler);
+                    setText(placeholder);
                 }else
                     setText(formatUserComboBoxText(user));
             }
