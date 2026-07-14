@@ -3,6 +3,7 @@ package org.example.javafx;
 
 import org.example.validation.OrderValidator;
 import org.junit.jupiter.api.Test;
+import org.example.javafx.RestaurantController;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

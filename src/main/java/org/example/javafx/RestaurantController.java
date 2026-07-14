@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.Setter;
 import org.example.Classes.*;
+import org.example.validation.OrderValidator;
 
 import java.time.LocalDateTime;
 
@@ -52,6 +53,8 @@ public class RestaurantController {
     private TableColumn <FoodOrder, String> paymentMethodColumn;
     @FXML
     private TableColumn <FoodOrder, Boolean> paidColumn;
+
+    OrderValidator orderValidator = new OrderValidator();
 
 
     @Setter
@@ -142,12 +145,12 @@ public class RestaurantController {
 
             double totalPrice = Double.parseDouble(totalPriceText);
 
-            if(!isTotalPriceValid(totalPrice)){
+            if(!orderValidator.isTotalPriceValid(totalPrice)){
                 showAlert(Alert.AlertType.ERROR, "Invalid Total Price" , "Total Price must be greater than 0");
                 return;
             }
 
-            if(!isAddressValid(deliveryAddressText)){
+            if(!orderValidator.isAddressValid(deliveryAddressText)){
                 showAlert(Alert.AlertType.ERROR, "Invalid Delivery Address length" , "Delivery Address length must be at least 10 characters");
                 return;
             }
@@ -267,12 +270,6 @@ public class RestaurantController {
         }
 
     }
-    private boolean isTotalPriceValid(double totalPrice){
-        return totalPrice > 0;
-    }
-    private boolean isAddressValid(String address){
-        return address.length() >= 10;
-    }
     private FoodOrder createFoodOrder(int customerId, int driverId, double totalPrice, String deliveryAddress, String paymentMethod, boolean  paid){
             FoodOrder foodOrder = new FoodOrder();
             foodOrder.setCustomerId(customerId);
@@ -363,4 +360,6 @@ public class RestaurantController {
 
 
     }
+
+
 }
