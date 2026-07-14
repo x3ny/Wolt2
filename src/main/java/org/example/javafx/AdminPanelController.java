@@ -108,7 +108,7 @@ public class AdminPanelController {
 
         restaurantIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         restaurantUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        restaurantNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        restaurantNameColumn.setCellValueFactory(new PropertyValueFactory<>("restaurantName"));
         restaurantPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         restaurantEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         restaurantsAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
