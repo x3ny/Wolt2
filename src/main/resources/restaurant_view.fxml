@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="499.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
+<AnchorPane prefHeight="650.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
     <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="1150.0">
         <columns>
@@ -43,5 +43,36 @@
    <ComboBox fx:id="customerIdComboBox" layoutX="24.0" layoutY="361.0" prefWidth="150.0" promptText="Customer" />
    <ComboBox fx:id="driverIdComboBox" layoutX="200.0" layoutY="361.0" prefWidth="150.0" promptText="Driver" />
    <ComboBox fx:id="paymentMethodComboBox" layoutX="375.0" layoutY="361.0" prefWidth="150.0" promptText="Payment" />
+
+    <TextField fx:id="menuItemNameTextField"
+               layoutX="24.0"
+               layoutY="520.0"
+               prefWidth="180.0"
+               promptText="Item name" />
+
+    <TextField fx:id="menuItemDescriptionTextField"
+               layoutX="220.0"
+               layoutY="520.0"
+               prefWidth="220.0"
+               promptText="Description" />
+
+    <TextField fx:id="menuItemPriceTextField"
+               layoutX="456.0"
+               layoutY="520.0"
+               prefWidth="120.0"
+               promptText="Price" />
+
+    <CheckBox fx:id="menuItemAvailableCheckBox"
+              layoutX="600.0"
+              layoutY="525.0"
+              selected="true"
+              text="Available" />
+
+    <Button fx:id="addMenuItemButton"
+            layoutX="700.0"
+            layoutY="520.0"
+            mnemonicParsing="false"
+            onAction="#createMenuItem"
+            text="Add Menu Item" />
 
 </AnchorPane>

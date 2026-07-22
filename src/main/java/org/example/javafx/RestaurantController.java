@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.Setter;
 import org.example.Classes.*;
+import org.example.Classes.MenuItem;
 import org.example.validation.OrderValidator;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,15 @@ public class RestaurantController {
     public Button deleteOrder;
     @FXML
     public Label currentRestaurantLabel;
+    @FXML
+    public TextField menuItemNameTextField;
+    @FXML
+    public TextField menuItemDescriptionTextField;
+    @FXML
+    public TextField menuItemPriceTextField;
+    @FXML
+    public CheckBox menuItemAvailableCheckBox;
+    public Button addMenuItemButton;
     @FXML
     private ComboBox <User> customerIdComboBox;
     @FXML
@@ -130,9 +140,6 @@ public class RestaurantController {
         int driverId = selectedDriver.getId();
         String deliveryAddressText = deliveryAddressTextField.getText().trim();
         String totalPriceText = totalPriceTextField.getText().trim();
-
-
-
 
         if(deliveryAddressText.isBlank() || totalPriceText.isBlank()){
 
@@ -362,4 +369,62 @@ public class RestaurantController {
     }
 
 
+    @FXML
+    public void createMenuItem(ActionEvent actionEvent) {
+        if(entityManagerFactory == null || currentRestaurant == null) {
+            return;
+        }
+
+        String menuItemNameText = menuItemNameTextField.getText().trim();
+        String menuItemDescriptionText =  menuItemDescriptionTextField.getText().trim();
+        String menuItemPriceText = menuItemPriceTextField.getText().trim();
+
+        if(menuItemPriceText.isBlank() || menuItemNameText.isBlank()){
+            showAlert(Alert.AlertType.ERROR, "Missing fields" , "Name and price are required");
+            return;
+        }
+
+        try{
+            double menuItemPrice = Double.parseDouble(menuItemPriceText);
+
+            if(!orderValidator.isTotalPriceValid(menuItemPrice)){
+                showAlert(Alert.AlertType.ERROR, "Invalid Menu Item Price" , "Total Price must be greater than 0");
+                return;
+            }
+
+            MenuItem menuItem = new MenuItem(
+                    currentRestaurant.getId(),
+                    menuItemNameText,
+                    menuItemDescriptionText,
+                    menuItemPrice,
+                    menuItemAvailableCheckBox.isSelected()
+            );
+
+            saveMenuItem(menuItem);
+
+
+        }catch (NumberFormatException e){
+            showAlert(Alert.AlertType.WARNING, "Invalid number" , "Price must be a valid number");
+            return;
+        }
+
+
+    }
+
+    private void saveMenuItem(MenuItem menuItem) {
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+                entityManager.persist(menuItem);
+                transaction.commit();
+            }catch (RuntimeException e){
+                if(transaction.isActive()){
+                    transaction.rollback();
+                }
+                throw e;
+            }
+        }
+
+    }
 }
