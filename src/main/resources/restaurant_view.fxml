@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="998.0" prefWidth="1174.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
+<AnchorPane prefHeight="998.0" prefWidth="1791.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
     <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="350.0" prefWidth="1082.0">
         <columns>
@@ -50,9 +50,11 @@
 
     <TextField fx:id="menuItemPriceTextField" layoutX="473.0" layoutY="581.0" prefWidth="120.0" promptText="Price" />
 
-    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="613.0" layoutY="585.0" selected="true" text="Available" />
+    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="798.0" layoutY="585.0" selected="true" text="Available" />
 
-    <Button fx:id="addMenuItemButton" layoutX="709.0" layoutY="581.0" mnemonicParsing="false" onAction="#createMenuItem" text="Add Menu Item" />
+    <Button fx:id="addMenuItemButton" layoutX="892.0" layoutY="581.0" mnemonicParsing="false" onAction="#createMenuItem" text="Add Menu Item" />
+
+    <TextField fx:id="quantityTextField" layoutX="622.0" layoutY="581.0" prefHeight="25.0" prefWidth="149.0" promptText="Quantity" />
 
     <TableView fx:id="menuItemsTable" layoutX="24.0" layoutY="659.0" prefHeight="230.0" prefWidth="785.0">
         <columns>
@@ -60,6 +62,16 @@
             <TableColumn fx:id="descriptionColumn" prefWidth="114.0" text="Description" />
             <TableColumn fx:id="priceColumn" prefWidth="141.0" text="Price" />
             <TableColumn fx:id="availableColumn" prefWidth="132.0" text="Available" />
+        </columns>
+    </TableView>
+
+    <TableView fx:id="orderItemsTable" layoutX="1126.0" layoutY="88.0" prefHeight="350.0" prefWidth="372.0">
+        <columns>
+            <TableColumn fx:id="orderItemMenuIdColumn" prefWidth="115.0" text="Menu Item ID" />
+            <TableColumn fx:id="orderItemMenuNameColumn" prefWidth="115.0" text="Menu Item Name" />
+            <TableColumn fx:id="orderItemQuantityColumn" prefWidth="114.0" text="Quantity" />
+            <TableColumn fx:id="orderItemUnitPriceColumn" prefWidth="141.0" text="Unit Price" />
+
         </columns>
     </TableView>
 

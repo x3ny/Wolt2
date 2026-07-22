@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.example.Classes.*;
 import org.example.Classes.MenuItem;
 import org.example.validation.OrderValidator;
+import org.hibernate.query.Order;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +33,18 @@ public class RestaurantController {
     public TableColumn <MenuItem, String> descriptionColumn;
     public TableColumn <MenuItem, Double> priceColumn;
     public TableColumn <MenuItem, Boolean> availableColumn;
+    @FXML
+    public TextField quantityTextField;
+    @FXML
+    public TableView <OrderItem> orderItemsTable;
+    @FXML
+    public TableColumn <OrderItem, Integer> orderItemMenuIdColumn;
+    @FXML
+    public TableColumn <OrderItem, Integer> orderItemQuantityColumn;
+    @FXML
+    public TableColumn <OrderItem, Double> orderItemUnitPriceColumn;
+    @FXML
+    public TableColumn <MenuItem, String> orderItemMenuNameColumn;
     @FXML
     private ComboBox <User> customerIdComboBox;
     @FXML
@@ -71,7 +84,6 @@ public class RestaurantController {
 
     OrderValidator orderValidator = new OrderValidator();
 
-
     @Setter
     private EntityManagerFactory entityManagerFactory;
 
@@ -100,10 +112,53 @@ public class RestaurantController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
+        orderItemMenuIdColumn.setCellValueFactory(new PropertyValueFactory<>("menuItemId"));
+        orderItemMenuNameColumn.setCellValueFactory(new PropertyValueFactory<>("menuItemName"));
+        orderItemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        orderItemUnitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        menuItemsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        foodOrdersTable.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldOrder, selectedOrder) -> {
+                    if (selectedOrder != null) {
+                        loadOrderItems(selectedOrder.getId());
+                    }
+                });
         configureUserComboBox(customerIdComboBox, "Customer");
         configureUserComboBox(driverIdComboBox, "Driver");
 
         paymentMethodComboBox.getItems().addAll(PaymentMethod.values());
+
+    }
+
+    private void loadOrderItems(int id) {
+        try (var entityManager = entityManagerFactory.createEntityManager()) {
+            ObservableList<OrderItem> orderItems =
+                    FXCollections.observableArrayList(
+                            entityManager.createQuery("""
+                          SELECT orderItem
+                          FROM OrderItem orderItem
+                          WHERE orderItem.foodOrderId = :foodOrderId
+                          ORDER BY orderItem.id
+                      """, OrderItem.class)
+                                    .setParameter("foodOrderId", id)
+
+
+
+                                    .getResultList()
+                    );
+
+            orderItemsTable.setItems(orderItems);
+
+            for(OrderItem orderItem : orderItems){
+                MenuItem menuItem = entityManager.find(MenuItem.class, orderItem.getMenuItemId());
+                if(menuItem != null){
+                    orderItem.setMenuItemName(menuItem.getName());
+                }
+            }
+
+        }
+
 
     }
 
@@ -163,6 +218,41 @@ public class RestaurantController {
         Driver selectedDriver = driverIdComboBox.getValue();
         PaymentMethod paymentMethod = paymentMethodComboBox.getValue();
 
+        MenuItem selectedMenuItem = menuItemsTable.getSelectionModel().getSelectedItem();
+
+        if(selectedMenuItem == null){
+            showAlert(Alert.AlertType.ERROR, "Select a menu item", "Please select a menu item!");
+            return;
+        }
+
+        String quantityText = quantityTextField.getText().trim();
+
+        if(quantityText.isBlank()){
+            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity cannot be blank!");
+            return;
+        }
+
+        int quantity;
+
+        try{
+            quantity = Integer.parseInt(quantityText);
+        }catch (NumberFormatException e){
+            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity must be a whole number!");
+            return;
+        }
+
+        if(quantity <= 0){
+            showAlert(Alert.AlertType.ERROR, "Invalid quantity", "Quantity must be greater than 0");
+            return;
+        }
+
+        if(!selectedMenuItem.isAvailable()){
+            showAlert(Alert.AlertType.ERROR, "Unavailable item", "This menu item is currently unavailable !");
+            return;
+        }
+
+        double totalPrice = selectedMenuItem.getPrice() * quantity;
+
         if(selectedCustomer == null || selectedDriver == null || paymentMethod == null) {
             showAlert(Alert.AlertType.ERROR, "Select Customer, Driver and Payment Method", "Please select Customer, Driver and Payment Method");
             return;
@@ -171,9 +261,8 @@ public class RestaurantController {
         int customerId = selectedCustomer.getId();
         int driverId = selectedDriver.getId();
         String deliveryAddressText = deliveryAddressTextField.getText().trim();
-        String totalPriceText = totalPriceTextField.getText().trim();
 
-        if(deliveryAddressText.isBlank() || totalPriceText.isBlank()){
+        if(deliveryAddressText.isBlank()){
 
             showAlert(Alert.AlertType.ERROR, "Fill in all the fields" , "Please fill all the fields");
 
@@ -181,8 +270,6 @@ public class RestaurantController {
         }
 
         try {
-
-            double totalPrice = Double.parseDouble(totalPriceText);
 
             if(!orderValidator.isTotalPriceValid(totalPrice)){
                 showAlert(Alert.AlertType.ERROR, "Invalid Total Price" , "Total Price must be greater than 0");
@@ -195,19 +282,19 @@ public class RestaurantController {
             }
 
             FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText, String.valueOf(paymentMethod),paidCheckBox.isSelected());
-
             saveOrder(foodOrder);
+            OrderItem orderItem = new OrderItem(foodOrder.getId(), selectedMenuItem.getId(), quantity, selectedMenuItem.getPrice());
+            saveOrderItem(orderItem);
+
             clearOrderForm();
             loadOrders();
 
 
-        }catch (NumberFormatException e){
-            showAlert(Alert.AlertType.WARNING, "Invalid number" , "Customer ID, driver ID and total price must be a valid number");
-        }
-        catch (RuntimeException e){
+        }catch (RuntimeException e){
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR,"Could not create order", "please try again.");
         }
+
 
 
 
@@ -450,6 +537,23 @@ public class RestaurantController {
             try{
                 transaction.begin();
                 entityManager.persist(menuItem);
+                transaction.commit();
+            }catch (RuntimeException e){
+                if(transaction.isActive()){
+                    transaction.rollback();
+                }
+                throw e;
+            }
+        }
+
+    }
+
+    private void saveOrderItem(OrderItem orderItem) {
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            var transaction = entityManager.getTransaction();
+            try{
+                transaction.begin();
+                entityManager.persist(orderItem);
                 transaction.commit();
             }catch (RuntimeException e){
                 if(transaction.isActive()){
