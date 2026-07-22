@@ -45,6 +45,7 @@ public class RestaurantController {
     public TableColumn <OrderItem, Double> orderItemUnitPriceColumn;
     @FXML
     public TableColumn <MenuItem, String> orderItemMenuNameColumn;
+    public Label currentRestaurantMenuLabel;
     @FXML
     private ComboBox <User> customerIdComboBox;
     @FXML
@@ -116,7 +117,7 @@ public class RestaurantController {
         orderItemMenuNameColumn.setCellValueFactory(new PropertyValueFactory<>("menuItemName"));
         orderItemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         orderItemUnitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        menuItemsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        menuItemsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         foodOrdersTable.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldOrder, selectedOrder) -> {
@@ -218,10 +219,10 @@ public class RestaurantController {
         Driver selectedDriver = driverIdComboBox.getValue();
         PaymentMethod paymentMethod = paymentMethodComboBox.getValue();
 
-        MenuItem selectedMenuItem = menuItemsTable.getSelectionModel().getSelectedItem();
+        ObservableList<MenuItem> menuItems = menuItemsTable.getSelectionModel().getSelectedItems();
 
-        if(selectedMenuItem == null){
-            showAlert(Alert.AlertType.ERROR, "Select a menu item", "Please select a menu item!");
+        if(menuItems.isEmpty()){
+            showAlert(Alert.AlertType.ERROR, "Select menu items", "Please select at least one menu item!");
             return;
         }
 
@@ -246,12 +247,8 @@ public class RestaurantController {
             return;
         }
 
-        if(!selectedMenuItem.isAvailable()){
-            showAlert(Alert.AlertType.ERROR, "Unavailable item", "This menu item is currently unavailable !");
-            return;
-        }
 
-        double totalPrice = selectedMenuItem.getPrice() * quantity;
+        double totalPrice = menuItems.stream().mapToDouble(menuItem -> menuItem.getPrice() * quantity ).sum();
 
         if(selectedCustomer == null || selectedDriver == null || paymentMethod == null) {
             showAlert(Alert.AlertType.ERROR, "Select Customer, Driver and Payment Method", "Please select Customer, Driver and Payment Method");
@@ -271,11 +268,6 @@ public class RestaurantController {
 
         try {
 
-            if(!orderValidator.isTotalPriceValid(totalPrice)){
-                showAlert(Alert.AlertType.ERROR, "Invalid Total Price" , "Total Price must be greater than 0");
-                return;
-            }
-
             if(!orderValidator.isAddressValid(deliveryAddressText)){
                 showAlert(Alert.AlertType.ERROR, "Invalid Delivery Address length" , "Delivery Address length must be at least 10 characters");
                 return;
@@ -283,9 +275,10 @@ public class RestaurantController {
 
             FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText, String.valueOf(paymentMethod),paidCheckBox.isSelected());
             saveOrder(foodOrder);
-            OrderItem orderItem = new OrderItem(foodOrder.getId(), selectedMenuItem.getId(), quantity, selectedMenuItem.getPrice());
-            saveOrderItem(orderItem);
-
+            for(MenuItem menuItem : menuItems){
+                OrderItem orderItem = new OrderItem(foodOrder.getId(), menuItem.getId(), quantity,menuItem.getPrice());
+                saveOrderItem(orderItem);
+            }
             clearOrderForm();
             loadOrders();
 
@@ -330,7 +323,7 @@ public class RestaurantController {
         customerIdComboBox.setValue(null);
         driverIdComboBox.setValue(null);
         deliveryAddressTextField.clear();
-        totalPriceTextField.clear();
+        //totalPriceTextField.clear();
         paymentMethodComboBox.setValue(PaymentMethod.CARD);
         paidCheckBox.setSelected(false);
 
