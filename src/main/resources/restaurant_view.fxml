@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
+<AnchorPane prefHeight="998.0" prefWidth="1174.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
-    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="230.0" prefWidth="1150.0">
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="350.0" prefWidth="1082.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
             <TableColumn fx:id="customerIdColumn" prefWidth="120.0" text="CustomerId" />
@@ -26,53 +26,41 @@
             <TableColumn fx:id="dateCreated" prefWidth="150.0" text="Time created" />
         </columns>
     </TableView>
-   <TextField fx:id="deliveryAddressTextField" layoutX="721.0" layoutY="361.0" promptText="Delivery Address" />
-   <TextField fx:id="totalPriceTextField" layoutX="547.0" layoutY="361.0" promptText="Total Price" />
-   <Button fx:id="createOrderButton" layoutX="122.0" layoutY="426.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
-   <CheckBox fx:id="paidCheckBox" layoutX="24.0" layoutY="430.0" mnemonicParsing="false" text="Paid" />
-   <Button layoutX="865.0" layoutY="30.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="CANCELED" />
-   <Button layoutX="766.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="DELIVERED" />
-   <Button layoutX="669.0" layoutY="30.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="PREPARING" />
-   <Button layoutX="585.0" layoutY="30.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="ACCEPTED" />
-   <Button layoutX="952.0" layoutY="30.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
+   <TextField fx:id="deliveryAddressTextField" layoutX="721.0" layoutY="484.0" promptText="Delivery Address" />
+   <TextField fx:id="totalPriceTextField" layoutX="547.0" layoutY="484.0" promptText="Total Price" />
+   <Button fx:id="createOrderButton" layoutX="955.0" layoutY="484.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
+   <CheckBox fx:id="paidCheckBox" layoutX="892.0" layoutY="488.0" mnemonicParsing="false" text="Paid" />
+   <Button layoutX="918.0" layoutY="34.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="CANCELED" />
+   <Button layoutX="817.0" layoutY="34.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="DELIVERED" />
+   <Button layoutX="719.0" layoutY="34.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="PREPARING" />
+   <Button layoutX="622.0" layoutY="34.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="ACCEPTED" />
+   <Button layoutX="1021.0" layoutY="34.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
    <Label fx:id="currentRestaurantLabel" layoutX="24.0" layoutY="30.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Label">
       <font>
          <Font size="22.0" />
       </font>
    </Label>
-   <ComboBox fx:id="customerIdComboBox" layoutX="24.0" layoutY="361.0" prefWidth="150.0" promptText="Customer" />
-   <ComboBox fx:id="driverIdComboBox" layoutX="200.0" layoutY="361.0" prefWidth="150.0" promptText="Driver" />
-   <ComboBox fx:id="paymentMethodComboBox" layoutX="375.0" layoutY="361.0" prefWidth="150.0" promptText="Payment" />
+   <ComboBox fx:id="customerIdComboBox" layoutX="24.0" layoutY="484.0" prefWidth="150.0" promptText="Customer" />
+   <ComboBox fx:id="driverIdComboBox" layoutX="200.0" layoutY="484.0" prefWidth="150.0" promptText="Driver" />
+   <ComboBox fx:id="paymentMethodComboBox" layoutX="375.0" layoutY="484.0" prefWidth="150.0" promptText="Payment" />
 
-    <TextField fx:id="menuItemNameTextField"
-               layoutX="24.0"
-               layoutY="520.0"
-               prefWidth="180.0"
-               promptText="Item name" />
+    <TextField fx:id="menuItemNameTextField" layoutX="24.0" layoutY="581.0" prefWidth="180.0" promptText="Item name" />
 
-    <TextField fx:id="menuItemDescriptionTextField"
-               layoutX="220.0"
-               layoutY="520.0"
-               prefWidth="220.0"
-               promptText="Description" />
+    <TextField fx:id="menuItemDescriptionTextField" layoutX="230.0" layoutY="581.0" prefWidth="220.0" promptText="Description" />
 
-    <TextField fx:id="menuItemPriceTextField"
-               layoutX="456.0"
-               layoutY="520.0"
-               prefWidth="120.0"
-               promptText="Price" />
+    <TextField fx:id="menuItemPriceTextField" layoutX="473.0" layoutY="581.0" prefWidth="120.0" promptText="Price" />
 
-    <CheckBox fx:id="menuItemAvailableCheckBox"
-              layoutX="600.0"
-              layoutY="525.0"
-              selected="true"
-              text="Available" />
+    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="613.0" layoutY="585.0" selected="true" text="Available" />
 
-    <Button fx:id="addMenuItemButton"
-            layoutX="700.0"
-            layoutY="520.0"
-            mnemonicParsing="false"
-            onAction="#createMenuItem"
-            text="Add Menu Item" />
+    <Button fx:id="addMenuItemButton" layoutX="709.0" layoutY="581.0" mnemonicParsing="false" onAction="#createMenuItem" text="Add Menu Item" />
+
+    <TableView fx:id="menuItemsTable" layoutX="24.0" layoutY="659.0" prefHeight="230.0" prefWidth="785.0">
+        <columns>
+            <TableColumn fx:id="nameColumn" prefWidth="115.0" text="Name" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="114.0" text="Description" />
+            <TableColumn fx:id="priceColumn" prefWidth="141.0" text="Price" />
+            <TableColumn fx:id="availableColumn" prefWidth="132.0" text="Available" />
+        </columns>
+    </TableView>
 
 </AnchorPane>

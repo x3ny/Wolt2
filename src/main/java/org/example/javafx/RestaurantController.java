@@ -27,6 +27,11 @@ public class RestaurantController {
     @FXML
     public CheckBox menuItemAvailableCheckBox;
     public Button addMenuItemButton;
+    public TableView <MenuItem> menuItemsTable;
+    public TableColumn <MenuItem, String> nameColumn;
+    public TableColumn <MenuItem, String> descriptionColumn;
+    public TableColumn <MenuItem, Double> priceColumn;
+    public TableColumn <MenuItem, Boolean> availableColumn;
     @FXML
     private ComboBox <User> customerIdComboBox;
     @FXML
@@ -76,6 +81,7 @@ public class RestaurantController {
         this.currentRestaurant = currentRestaurant;
         loadOrders();
         loadComboBoxData();
+        loadMenuItems();
     }
 
     @FXML
@@ -90,6 +96,10 @@ public class RestaurantController {
         paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
         paidColumn.setCellValueFactory(new PropertyValueFactory<>("paid"));
         dateCreated.setCellValueFactory(new  PropertyValueFactory<>("dateCreated"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
         configureUserComboBox(customerIdComboBox, "Customer");
         configureUserComboBox(driverIdComboBox, "Driver");
 
@@ -115,6 +125,28 @@ public class RestaurantController {
         """, FoodOrder.class).setParameter("restaurantId", currentRestaurant.getId()).getResultList());
             foodOrdersTable.setItems(foodOrders);
             currentRestaurantLabel.setText("Welcome " + currentRestaurant.getRestaurantName() + "!");
+
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void loadMenuItems(){
+        if (entityManagerFactory == null) {
+            return;
+        }
+        if (currentRestaurant == null) {
+            return;
+        }
+
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            ObservableList<MenuItem> menuItems = FXCollections.observableArrayList(entityManager.createQuery("""
+            SELECT menuItems
+            FROM MenuItem menuItems
+            WHERE menuItems.restaurantId = :restaurantId
+        
+        """, MenuItem.class).setParameter("restaurantId", currentRestaurant.getId()).getResultList());
+            menuItemsTable.setItems(menuItems);
 
         }catch (RuntimeException e){
             e.printStackTrace();
@@ -401,6 +433,7 @@ public class RestaurantController {
             );
 
             saveMenuItem(menuItem);
+            loadMenuItems();
 
 
         }catch (NumberFormatException e){
