@@ -55,7 +55,7 @@
 
     <TextField fx:id="quantityTextField" layoutX="554.0" layoutY="484.0" prefHeight="25.0" prefWidth="128.0" promptText="Quantity" />
 
-    <TableView fx:id="menuItemsTable" layoutX="24.0" layoutY="678.0" prefHeight="230.0" prefWidth="785.0">
+    <TableView fx:id="menuItemsTable" layoutX="24.0" layoutY="678.0" prefHeight="230.0" prefWidth="504.0">
         <columns>
             <TableColumn fx:id="nameColumn" prefWidth="115.0" text="Name" />
             <TableColumn fx:id="descriptionColumn" prefWidth="114.0" text="Description" />
@@ -73,7 +73,25 @@
 
         </columns>
     </TableView>
+
+    <TableView fx:id="cartTable" layoutX="577.0" layoutY="678.0" prefHeight="230.0" prefWidth="520.0">
+        <columns>
+            <TableColumn fx:id="cartItemNameColumn" prefWidth="160.0" text="Item" />
+            <TableColumn fx:id="cartItemUnitPriceColumn" prefWidth="110.0" text="Unit Price" />
+            <TableColumn fx:id="cartItemQuantityColumn" prefWidth="100.0" text="Quantity" />
+            <TableColumn fx:id="cartItemTotalColumn" prefWidth="120.0" text="Line Total" />
+        </columns>
+    </TableView>
+
+
    <Label fx:id="currentRestaurantMenuLabel" layoutX="24.0" layoutY="626.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Menu">
+      <font>
+         <Font size="22.0" />
+      </font>
+   </Label>
+
+    <Button fx:id="addToCartButton" layoutX="1046.0" layoutY="484.0" onAction="#addToCart" text="Add to Cart" />
+   <Label fx:id="currentRestaurantMenuLabel1" layoutX="577.0" layoutY="626.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Order Cart">
       <font>
          <Font size="22.0" />
       </font>

@@ -1,6 +1,7 @@
 package org.example.javafx;
 
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,6 +48,18 @@ public class RestaurantController {
     public TableColumn <MenuItem, String> orderItemMenuNameColumn;
     public Label currentRestaurantMenuLabel;
     @FXML
+    public Button addToCartButton;
+    @FXML
+    public TableView <CartItem> cartTable;
+    @FXML
+    public TableColumn <CartItem, String> cartItemNameColumn;
+    @FXML
+    public TableColumn <CartItem, Double> cartItemUnitPriceColumn;
+    @FXML
+    public TableColumn <CartItem, Integer> cartItemQuantityColumn;
+    @FXML
+    public TableColumn <CartItem, Double> cartItemTotalColumn;
+    @FXML
     private ComboBox <User> customerIdComboBox;
     @FXML
     private ComboBox <Driver> driverIdComboBox;
@@ -83,6 +96,8 @@ public class RestaurantController {
     @FXML
     private TableColumn <FoodOrder, Boolean> paidColumn;
 
+    private final ObservableList<CartItem> cartItems = FXCollections.observableArrayList();
+
     OrderValidator orderValidator = new OrderValidator();
 
     @Setter
@@ -117,7 +132,11 @@ public class RestaurantController {
         orderItemMenuNameColumn.setCellValueFactory(new PropertyValueFactory<>("menuItemName"));
         orderItemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         orderItemUnitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        menuItemsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        cartItemTotalColumn.setCellValueFactory(new PropertyValueFactory<>("lineTotal"));
+        cartItemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        cartItemUnitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        cartItemNameColumn.setCellValueFactory(new PropertyValueFactory<>("menuItemName"));
+        menuItemsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         foodOrdersTable.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldOrder, selectedOrder) -> {
@@ -127,6 +146,7 @@ public class RestaurantController {
                 });
         configureUserComboBox(customerIdComboBox, "Customer");
         configureUserComboBox(driverIdComboBox, "Driver");
+        cartTable.setItems(cartItems);
 
         paymentMethodComboBox.getItems().addAll(PaymentMethod.values());
 
@@ -226,8 +246,6 @@ public class RestaurantController {
             return;
         }
 
-        String quantityText = quantityTextField.getText().trim();
-
         if(quantityText.isBlank()){
             showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity cannot be blank!");
             return;
@@ -323,7 +341,6 @@ public class RestaurantController {
         customerIdComboBox.setValue(null);
         driverIdComboBox.setValue(null);
         deliveryAddressTextField.clear();
-        //totalPriceTextField.clear();
         paymentMethodComboBox.setValue(PaymentMethod.CARD);
         paidCheckBox.setSelected(false);
 
@@ -555,6 +572,52 @@ public class RestaurantController {
                 throw e;
             }
         }
+
+    }
+
+    @FXML
+    public void addToCart(ActionEvent actionEvent) {
+
+        MenuItem selectedMenuItem = menuItemsTable.getSelectionModel().getSelectedItem();
+
+        if (selectedMenuItem == null) {
+            showAlert(Alert.AlertType.ERROR, "Select an item",
+                    "Please select a menu item first");
+            return;
+        }
+
+        if (!selectedMenuItem.isAvailable()) {
+            showAlert(Alert.AlertType.ERROR, "Unavailable item",
+                    "This menu item is currently unavailable");
+            return;
+        }
+
+        String quantityText = quantityTextField.getText().trim();
+
+        if(quantityText.isBlank()){
+            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity cannot be blank!");
+            return;
+        }
+
+        int quantity;
+
+        try{
+            quantity = Integer.parseInt(quantityText);
+        }catch (NumberFormatException e){
+            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity must be a whole number!");
+            return;
+        }
+
+        if(quantity <= 0){
+            showAlert(Alert.AlertType.ERROR, "Invalid quantity", "Quantity must be greater than 0");
+            return;
+        }
+
+        CartItem cartItem = new CartItem(selectedMenuItem, quantity);
+        cartItems.add(cartItem);
+
+
+
 
     }
 }
