@@ -245,29 +245,7 @@ public class RestaurantController {
             return;
         }
 
-        String quantityText = quantityTextField.getText().trim();
-
-        if(quantityText.isBlank()){
-            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity cannot be blank!");
-            return;
-        }
-
-        int quantity;
-
-        try{
-            quantity = Integer.parseInt(quantityText);
-        }catch (NumberFormatException e){
-            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity must be a whole number!");
-            return;
-        }
-
-        if(quantity <= 0){
-            showAlert(Alert.AlertType.ERROR, "Invalid quantity", "Quantity must be greater than 0");
-            return;
-        }
-
-
-        double totalPrice = menuItems.stream().mapToDouble(menuItem -> menuItem.getPrice() * quantity ).sum();
+        double totalPrice = cartItems.stream().mapToDouble(CartItem::getLineTotal).sum();
 
         if(selectedCustomer == null || selectedDriver == null || paymentMethod == null) {
             showAlert(Alert.AlertType.ERROR, "Select Customer, Driver and Payment Method", "Please select Customer, Driver and Payment Method");
@@ -294,10 +272,17 @@ public class RestaurantController {
 
             FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText, String.valueOf(paymentMethod),paidCheckBox.isSelected());
             saveOrder(foodOrder);
-            for(MenuItem menuItem : menuItems){
-                OrderItem orderItem = new OrderItem(foodOrder.getId(), menuItem.getId(), quantity,menuItem.getPrice());
+
+            if(cartItems.isEmpty()){
+                showAlert(Alert.AlertType.ERROR, "Empty cart", "Add at least one item in to the cart first");
+                return;
+            }
+
+            for(CartItem cartItem : cartItems){
+                OrderItem orderItem = new OrderItem(foodOrder.getId(), cartItem.getMenuItem().getId(), cartItem.getQuantity(),cartItem.getMenuItem().getPrice());
                 save(orderItem);
             }
+
             clearOrderForm();
             loadOrders();
 
@@ -561,6 +546,15 @@ public class RestaurantController {
     @FXML
     public void addToCart() {
 
+        int quantity;
+
+        try{
+            quantity = readQuantityFromField();
+        } catch(IllegalArgumentException e){
+            showAlert(Alert.AlertType.ERROR, "Invalid quantity" , e.getMessage());
+            return;
+        }
+
         MenuItem selectedMenuItem = menuItemsTable.getSelectionModel().getSelectedItem();
 
         if (selectedMenuItem == null) {
@@ -572,27 +566,6 @@ public class RestaurantController {
         if (!selectedMenuItem.isAvailable()) {
             showAlert(Alert.AlertType.ERROR, "Unavailable item",
                     "This menu item is currently unavailable");
-            return;
-        }
-
-        String quantityText = quantityTextField.getText().trim();
-
-        if(quantityText.isBlank()){
-            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity cannot be blank!");
-            return;
-        }
-
-        int quantity;
-
-        try{
-            quantity = Integer.parseInt(quantityText);
-        }catch (NumberFormatException e){
-            showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity must be a whole number!");
-            return;
-        }
-
-        if(quantity <= 0){
-            showAlert(Alert.AlertType.ERROR, "Invalid quantity", "Quantity must be greater than 0");
             return;
         }
 
@@ -613,6 +586,29 @@ public class RestaurantController {
         stage.setScene(new Scene(root,750,450));
 
         //RestaurantController controller = loader.getController();
+
+    }
+
+    private int readQuantityFromField(){
+        String quantityText = quantityTextField.getText().trim();
+
+        if(quantityText.isBlank()){
+            throw new IllegalArgumentException("Quantity cannot be empty");
+        }
+
+        int quantity;
+
+        try{
+            quantity =  Integer.parseInt(quantityText);
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("Quantity must be a number");
+        }
+
+        if(quantity <= 0){
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+
+        return quantity;
 
     }
 }
