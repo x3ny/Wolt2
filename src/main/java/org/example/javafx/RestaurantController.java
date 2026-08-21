@@ -1,23 +1,25 @@
 package org.example.javafx;
 
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import lombok.Setter;
 import org.example.Classes.*;
 import org.example.Classes.MenuItem;
 import org.example.validation.OrderValidator;
-import org.hibernate.query.Order;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class RestaurantController {
-    public Button deleteOrder;
     @FXML
     public Label currentRestaurantLabel;
     @FXML
@@ -59,6 +61,7 @@ public class RestaurantController {
     public TableColumn <CartItem, Integer> cartItemQuantityColumn;
     @FXML
     public TableColumn <CartItem, Double> cartItemTotalColumn;
+    public Button editOrderButton;
     @FXML
     private ComboBox <User> customerIdComboBox;
     @FXML
@@ -69,10 +72,6 @@ public class RestaurantController {
     private TableColumn <FoodOrder, LocalDateTime> dateCreated;
     @FXML
     private TextField deliveryAddressTextField;
-    @FXML
-    private TextField totalPriceTextField;
-    @FXML
-    private Button createOrderButton;
     @FXML
     private CheckBox paidCheckBox;
     @FXML
@@ -246,6 +245,8 @@ public class RestaurantController {
             return;
         }
 
+        String quantityText = quantityTextField.getText().trim();
+
         if(quantityText.isBlank()){
             showAlert(Alert.AlertType.ERROR, "Please enter a valid quantity", "Quantity cannot be blank!");
             return;
@@ -295,7 +296,7 @@ public class RestaurantController {
             saveOrder(foodOrder);
             for(MenuItem menuItem : menuItems){
                 OrderItem orderItem = new OrderItem(foodOrder.getId(), menuItem.getId(), quantity,menuItem.getPrice());
-                saveOrderItem(orderItem);
+                save(orderItem);
             }
             clearOrderForm();
             loadOrders();
@@ -418,7 +419,7 @@ public class RestaurantController {
 
             return foodOrder;
     }
-    public void deleteOrder(ActionEvent actionEvent) {
+    public void deleteOrder() {
         FoodOrder selectedOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
 
         if(selectedOrder == null){
@@ -499,7 +500,7 @@ public class RestaurantController {
 
 
     @FXML
-    public void createMenuItem(ActionEvent actionEvent) {
+    public void createMenuItem() {
         if(entityManagerFactory == null || currentRestaurant == null) {
             return;
         }
@@ -529,41 +530,23 @@ public class RestaurantController {
                     menuItemAvailableCheckBox.isSelected()
             );
 
-            saveMenuItem(menuItem);
+            save(menuItem);
             loadMenuItems();
 
 
         }catch (NumberFormatException e){
             showAlert(Alert.AlertType.WARNING, "Invalid number" , "Price must be a valid number");
-            return;
         }
 
 
     }
 
-    private void saveMenuItem(MenuItem menuItem) {
+    private <T> void save(T entity) {
         try(var entityManager = entityManagerFactory.createEntityManager()){
             var transaction = entityManager.getTransaction();
             try{
                 transaction.begin();
-                entityManager.persist(menuItem);
-                transaction.commit();
-            }catch (RuntimeException e){
-                if(transaction.isActive()){
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-
-    }
-
-    private void saveOrderItem(OrderItem orderItem) {
-        try(var entityManager = entityManagerFactory.createEntityManager()){
-            var transaction = entityManager.getTransaction();
-            try{
-                transaction.begin();
-                entityManager.persist(orderItem);
+                entityManager.persist(entity);
                 transaction.commit();
             }catch (RuntimeException e){
                 if(transaction.isActive()){
@@ -576,7 +559,7 @@ public class RestaurantController {
     }
 
     @FXML
-    public void addToCart(ActionEvent actionEvent) {
+    public void addToCart() {
 
         MenuItem selectedMenuItem = menuItemsTable.getSelectionModel().getSelectedItem();
 
@@ -618,6 +601,18 @@ public class RestaurantController {
 
 
 
+
+    }
+
+    public void editOrder() throws IOException {
+        FoodOrder foodOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/edit-order-window.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) foodOrdersTable.getScene().getWindow();
+        stage.setTitle("Edit user");
+        stage.setScene(new Scene(root,750,450));
+
+        //RestaurantController controller = loader.getController();
 
     }
 }
