@@ -590,8 +590,10 @@ public class RestaurantController {
 
         EditOrderController controller = loader.getController();
 
+
         controller.setEntityManagerFactory(entityManagerFactory);
         controller.setOrderToEdit(selectedFoodOrder);
+        controller.setRestaurantToReturn(currentRestaurant);
 
         Stage stage = (Stage) foodOrdersTable.getScene().getWindow();
         stage.setTitle("Edit user");

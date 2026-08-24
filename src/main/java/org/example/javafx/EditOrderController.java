@@ -48,6 +48,8 @@ public class EditOrderController {
     @Setter private EntityManagerFactory entityManagerFactory;
     @Setter private FoodOrder foodOrderToEdit;
 
+    @Setter private Restaurant restaurantToReturn;
+
     private final ObservableList<OrderItem> editedOrderItems =
             FXCollections.observableArrayList();
 
@@ -140,9 +142,14 @@ public class EditOrderController {
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/restaurant_view.fxml"));
+
         Parent root = loader.load();
+
         RestaurantController controller = loader.getController();
         controller.setEntityManagerFactory(entityManagerFactory);
+        controller.setCurrentRestaurant(restaurantToReturn);
+
+
         try (var entityManager = entityManagerFactory.createEntityManager()) {
             Restaurant restaurant = entityManager.find(
                     Restaurant.class, foodOrderToEdit.getRestaurantId());
