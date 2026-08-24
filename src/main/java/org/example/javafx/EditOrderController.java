@@ -107,10 +107,11 @@ public class EditOrderController {
 
     @FXML
     public void SaveEditedOrder(ActionEvent actionEvent) throws IOException {
-        if (foodOrderToEdit == null || driverComboBox.getValue() == null) {
-            showError("Select a driver", "Please select a driver before saving.");
+
+        if(!validateForm()){
             return;
         }
+
 
         try (var entityManager = entityManagerFactory.createEntityManager()) {
             var transaction = entityManager.getTransaction();
@@ -207,5 +208,29 @@ public class EditOrderController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private boolean validateForm(){
+        if (foodOrderToEdit == null || driverComboBox.getValue() == null) {
+            showError("Select a driver", "Please select a driver before saving.");
+            return false;
+        }
+
+        if(OrderAddress.getText().trim().isBlank()){
+            showError("Invalid address", "Please enter a valid address.");
+            return false;
+        }
+
+        if(OrderPaymentMethod.getValue() == null){
+            showError("Select a payment method", "Please select a payment method.");
+            return false;
+        }
+
+        if(OrderStatus.getValue() == null){
+            showError("Select a status", "Please select a status before saving.");
+            return false;
+        }
+
+        return true;
     }
 }
