@@ -245,6 +245,8 @@ public class RegisterController {
         //CREATING DRIVER
 
         if(driverRadioButton.isSelected()){
+            GenericHibernate<Driver> driverHibernate = new GenericHibernate<>(entityManagerFactory, Driver.class);
+
             Driver driver = new Driver();
             driver.setEmail(email);
             driver.setFirstName(firstName);
@@ -255,16 +257,22 @@ public class RegisterController {
             driver.setVehiclePlateNumber(vehiclePlateNumber);
             driver.setVehicleType(vehicleType);
 
-            if(driverToEdit != null && driverFieldsAreSame()){
-                messageLabel.setText("Driver already exists.");
+            if(driverToEdit != null){
+                driver.setId(driverToEdit.getId());
+                driverHibernate.update(driver);
+                clearForm();
+                messageLabel.setText("Driver updated successfully.");
+                return;
+            }
+            else {
+                driverHibernate.create(driver);
+                clearForm();
+                messageLabel.setText("Driver registered successfully.");
                 return;
             }
 
-            GenericHibernate<Driver> driverHibernate = new GenericHibernate<>(entityManagerFactory, Driver.class);
-            driverHibernate.create(driver);
-            clearForm();
-            messageLabel.setText("Driver registered successfully.");
-            return;
+
+
         }
 
         User user = new User();

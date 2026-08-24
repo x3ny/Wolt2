@@ -577,9 +577,12 @@ public class RestaurantController {
 
     }
 
-    // TO DO make this window functional because right now it's just empty 08/21 13:24
-
     public void editOrder() throws IOException {
+
+        try(var entityManager = entityManagerFactory.createEntityManager()){
+            driverIdComboBox.getItems().setAll(
+                    entityManager.createQuery("SELECT u FROM Driver u", Driver.class).getResultList());
+        }
 
         FoodOrder selectedFoodOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/edit-order-window.fxml"));
