@@ -577,15 +577,24 @@ public class RestaurantController {
 
     }
 
+    // TO DO make this window functional because right now it's just empty 08/21 13:24
+
     public void editOrder() throws IOException {
-        FoodOrder foodOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
+
+        FoodOrder selectedFoodOrder = foodOrdersTable.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/edit-order-window.fxml"));
         Parent root = loader.load();
+
+        EditOrderController controller = loader.getController();
+
+        controller.setEntityManagerFactory(entityManagerFactory);
+        controller.setOrderToEdit(selectedFoodOrder);
+
         Stage stage = (Stage) foodOrdersTable.getScene().getWindow();
         stage.setTitle("Edit user");
         stage.setScene(new Scene(root,750,450));
 
-        //RestaurantController controller = loader.getController();
+
 
     }
 
