@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wolt Food Ordering</title>
+</head>
+<body>
+<h2>Restaurants</h2>
+<div th:if="${restaurants.isEmpty()}">
+<p>No restaurants found.</p>
+</div>
+
+<div th:each = "restaurant : ${restaurants}">
+    <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">
+        <h3 th:text = "${restaurant.restaurantName}"> Restaurant name </h3>
+    </a>
+
+
+
+    <p th:text="${restaurant.description}">Description</p>
+    <p th:text="${restaurant.address}">Address</p>
+    <p th:text="${restaurant.rating}"></p>
+
+    <span th:text="${restaurant.open ? 'Open' : 'Closed'}">
+        Status
+    </span>
+
+</div>
+
+<h1>Welcome to Wolt Food Ordering</h1>
+<p>Choose a restaurant and order your favorite food.</p>
+</body>
+</html>

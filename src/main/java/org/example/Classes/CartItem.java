@@ -28,5 +28,4 @@ public class CartItem {
        return menuItem.getPrice();
    }
 
-
 }

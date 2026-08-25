@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.EditOrderController">
+   <children>
+      <TextField fx:id="OrderAddress" layoutX="31.0" layoutY="39.0" promptText="address" />
+      <TextField fx:id="OrderPrice" editable="false" layoutX="226.0" layoutY="39.0" promptText="Total price" />
+      <ComboBox fx:id="OrderStatus" layoutX="31.0" layoutY="87.0" prefWidth="150.0" promptText="Order status" />
+      <ComboBox fx:id="driverComboBox" layoutX="395.0" layoutY="38.0" prefHeight="26.0" prefWidth="109.0" promptText="Driver" />
+      <ComboBox fx:id="OrderPaymentMethod" layoutX="225.0" layoutY="87.0" prefWidth="150.0" promptText="Payment method" />
+      <CheckBox fx:id="IsOrderPaid" layoutX="526.0" layoutY="43.0" mnemonicParsing="false" text="Paid" />
+      <Button fx:id="saveButton" layoutX="31.0" layoutY="141.0" mnemonicParsing="false" onAction="#SaveEditedOrder" text="Save" />
+      <ComboBox fx:id="menuItemComboBox" layoutX="31.0" layoutY="190.0" prefWidth="220.0" promptText="Menu item" />
+      <TextField fx:id="menuItemQuantityTextField" layoutX="266.0" layoutY="190.0" prefWidth="90.0" promptText="Quantity" />
+      <Button layoutX="371.0" layoutY="190.0" mnemonicParsing="false" onAction="#addMenuItem" text="Add item" />
+      <TableView fx:id="orderItemsTable" layoutX="31.0" layoutY="235.0" prefHeight="200.0" prefWidth="504.0">
+        <columns>
+          <TableColumn fx:id="menuItemNameColumn" prefWidth="250.0" text="Menu item" />
+          <TableColumn fx:id="quantityColumn" prefWidth="110.0" text="Quantity" />
+          <TableColumn fx:id="unitPriceColumn" prefWidth="120.0" text="Unit price" />
+        </columns>
+      </TableView>
+      <Button layoutX="371.0" layoutY="445.0" mnemonicParsing="false" onAction="#removeMenuItem" text="Remove selected item" />
+   </children>
 </AnchorPane>

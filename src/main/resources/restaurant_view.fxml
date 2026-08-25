@@ -4,36 +4,39 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="998.0" prefWidth="1791.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
+<ScrollPane fitToWidth="true" prefViewportHeight="900.0" prefViewportWidth="1200.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
-    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="350.0" prefWidth="1082.0">
+<AnchorPane prefHeight="1100.0" prefWidth="1791.0">
+
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="350.0" prefWidth="800.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
-            <TableColumn fx:id="customerIdColumn" prefWidth="120.0" text="CustomerId" />
-            <TableColumn fx:id="restaurantIdColumn" prefWidth="165.0" text="RestaurantId" />
-            <TableColumn fx:id="driverIdColumn" prefWidth="105.0" text="DriverId" />
+            <TableColumn fx:id="customerIdColumn" prefWidth="50.0" text="CustomerId" />
+            <TableColumn fx:id="restaurantIdColumn" prefWidth="50.0" text="RestaurantId" />
+            <TableColumn fx:id="driverIdColumn" prefWidth="50.0" text="DriverId" />
             <TableColumn fx:id="deliveryAddressColumn" prefWidth="105.0" text="Delivery address" />
             <TableColumn fx:id="orderStatusColumn" prefWidth="120.0" text="Order status" />
             <TableColumn fx:id="totalPriceColumn" prefWidth="70.0" text="Total price" />
             <TableColumn fx:id="paymentMethodColumn" prefWidth="95.0" text="Payment method" />
-            <TableColumn fx:id="paidColumn" prefWidth="95.0" text="Paid" />
-            <TableColumn fx:id="dateCreated" prefWidth="150.0" text="Time created" />
+            <TableColumn fx:id="paidColumn" prefWidth="75.0" text="Paid" />
+            <TableColumn fx:id="dateCreated" prefWidth="120.0" text="Time created" />
         </columns>
     </TableView>
    <TextField fx:id="deliveryAddressTextField" layoutX="702.0" layoutY="484.0" promptText="Delivery Address" />
    <Button fx:id="createOrderButton" layoutX="936.0" layoutY="484.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
    <CheckBox fx:id="paidCheckBox" layoutX="873.0" layoutY="488.0" mnemonicParsing="false" text="Paid" />
-   <Button layoutX="918.0" layoutY="34.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="CANCELED" />
-   <Button layoutX="817.0" layoutY="34.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="DELIVERED" />
-   <Button layoutX="719.0" layoutY="34.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="PREPARING" />
-   <Button layoutX="622.0" layoutY="34.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="ACCEPTED" />
-   <Button layoutX="1021.0" layoutY="34.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
+   <Button layoutX="655.0" layoutY="33.0" mnemonicParsing="false" onAction="#cancelSelectedOrder" text="CANCELED" />
+   <Button layoutX="567.0" layoutY="33.0" mnemonicParsing="false" onAction="#markSelectedOrderDelivered" text="DELIVERED" />
+   <Button layoutX="473.0" layoutY="33.0" mnemonicParsing="false" onAction="#markSelectedOrderPreparing" text="PREPARING" />
+   <Button layoutX="388.0" layoutY="34.0" mnemonicParsing="false" onAction="#acceptSelectedOrder" text="ACCEPTED" />
+   <Button layoutX="739.0" layoutY="33.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete Order" />
    <Label fx:id="currentRestaurantLabel" layoutX="24.0" layoutY="30.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Label">
       <font>
          <Font size="22.0" />
@@ -64,7 +67,7 @@
         </columns>
     </TableView>
 
-    <TableView fx:id="orderItemsTable" layoutX="1124.0" layoutY="88.0" prefHeight="350.0" prefWidth="491.0">
+    <TableView fx:id="orderItemsTable" layoutX="852.0" layoutY="88.0" prefHeight="350.0" prefWidth="400.0">
         <columns>
             <TableColumn fx:id="orderItemMenuIdColumn" prefWidth="30.0" text="ID" />
             <TableColumn fx:id="orderItemMenuNameColumn" prefWidth="115.0" text="Menu Item Name" />
@@ -96,5 +99,8 @@
          <Font size="22.0" />
       </font>
    </Label>
+   <Button fx:id="editOrderButton" layoutX="293.0" layoutY="34.0" mnemonicParsing="false" onAction="#editOrder" text="EDIT ORDER" />
 
 </AnchorPane>
+
+</ScrollPane>

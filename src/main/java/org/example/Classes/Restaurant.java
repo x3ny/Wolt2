@@ -19,7 +19,7 @@ public class Restaurant extends BasicUser {
     private String description;
     @Column(nullable = false, length = 255)
     private String address;
-    @Column(nullable = false)
+    @Transient
     private int cuisineId;
     private boolean open;
     private double rating;

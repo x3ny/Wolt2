@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${restaurant.restaurantName}">Restaurant menu</title>
+</head>
+<body>
+
+<a href="/">Back to restaurants</a>
+
+<h1 th:text="${restaurant.restaurantName}">
+    Restaurant name
+</h1>
+
+<p th:text="${restaurant.description}">
+    Restaurant description
+</p>
+
+<h2>Menu</h2>
+
+<div th:if="${menuItems.isEmpty()}">
+    <p>This restaurant has no available menu items.</p>
+</div>
+
+<div th:each="menuItem : ${menuItems}">
+    <h3 th:text="${menuItem.name}">Menu item name</h3>
+    <p th:text="${menuItem.description}">Menu item description</p>
+    <p th:text="${menuItem.price} + ' €'">0.00 €</p>
+</div>
+
+</body>
+</html>
