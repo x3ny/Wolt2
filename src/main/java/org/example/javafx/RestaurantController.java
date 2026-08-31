@@ -632,7 +632,7 @@ public class RestaurantController {
 
     }
 
-    private boolean canChangeStatus(OrderStatus currentStatus, OrderStatus nextStatus){
+    boolean canChangeStatus(OrderStatus currentStatus, OrderStatus nextStatus){
 
         switch (currentStatus){
             case CREATED:
