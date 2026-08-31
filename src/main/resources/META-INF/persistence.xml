@@ -12,6 +12,8 @@
         <class>org.example.Classes.FoodOrder</class>
         <class>org.example.Classes.Restaurant</class>
         <class>org.example.Classes.User</class>
+        <class>org.example.Classes.MenuItem</class>
+        <class>org.example.Classes.OrderItem</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

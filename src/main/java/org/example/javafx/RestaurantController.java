@@ -375,6 +375,12 @@ public class RestaurantController {
                     return;
                 }
 
+                if(!canChangeStatus(orderToUpdate.getStatus(), orderStatus)){
+                    transaction.rollback();
+                    showAlert(Alert.AlertType.ERROR, "Access denied", "Cannot change order status from: " + orderToUpdate.getStatus() + " to: " + orderStatus );
+                    return;
+                }
+
                 orderToUpdate.setStatus(orderStatus);
                 transaction.commit();
                 loadOrders();
@@ -623,6 +629,35 @@ public class RestaurantController {
         }
 
         return quantity;
+
+    }
+
+    private boolean canChangeStatus(OrderStatus currentStatus, OrderStatus nextStatus){
+
+        switch (currentStatus){
+            case CREATED:
+                if(nextStatus == OrderStatus.ACCEPTED || nextStatus == OrderStatus.CANCELED){
+                    return true;
+                }
+            break;
+
+            case ACCEPTED:
+                if(nextStatus == OrderStatus.PREPARING || nextStatus == OrderStatus.CANCELED){
+                    return true;
+                }
+            break;
+
+            case PREPARING:
+                if(nextStatus == OrderStatus.CANCELED || nextStatus == OrderStatus.DELIVERED){
+                    return true;
+                }
+                break;
+
+            case DELIVERED:
+                return false;
+        }
+
+        return false;
 
     }
 }
