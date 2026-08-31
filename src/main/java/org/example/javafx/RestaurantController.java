@@ -18,6 +18,7 @@ import org.example.validation.OrderValidator;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class RestaurantController {
     @FXML
@@ -417,6 +418,17 @@ public class RestaurantController {
             showAlert(Alert.AlertType.WARNING, "Select an order", "Please select an order");
             return;
         }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm deletion");
+        alert.setHeaderText("Delete order" + selectedOrder.getId() + "?");
+        alert.setContentText("Are you sure you want to delete this order?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if(result.isEmpty() || result.get() != ButtonType.OK){
+            return;
+        }
+
         try(var entityManager = entityManagerFactory.createEntityManager()){
             var transaction = entityManager.getTransaction();
             try{
@@ -436,6 +448,7 @@ public class RestaurantController {
                     loadOrders();
                     return;
                 }
+
                 entityManager.remove(orderToDelete);
                 transaction.commit();
                 showAlert(Alert.AlertType.INFORMATION, "Order deleted", "Order deleted successfully");
