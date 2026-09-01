@@ -2,10 +2,12 @@ package org.example.services;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
 import org.example.Classes.CartItem;
 import org.example.Classes.MenuItem;
 
 /** Holds the items selected for one order before checkout. */
+@Getter
 public class Cart {
     private final ObservableList<CartItem> items = FXCollections.observableArrayList();
 
@@ -49,10 +51,6 @@ public class Cart {
 
     public double getTotal() {
         return items.stream().mapToDouble(CartItem::getLineTotal).sum();
-    }
-
-    public ObservableList<CartItem> getItems() {
-        return items;
     }
 
     public void clear() {

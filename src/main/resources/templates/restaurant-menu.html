@@ -26,6 +26,41 @@
     <h3 th:text="${menuItem.name}">Menu item name</h3>
     <p th:text="${menuItem.description}">Menu item description</p>
     <p th:text="${menuItem.price} + ' €'">0.00 €</p>
+
+    <form th:action="@{/cart/add}" method="post">
+        <input type="hidden" name="menuItemId" th:value="${menuItem.id}">
+
+        <label>
+            Quantity:
+            <input type="number" name="quantity" value="1" min="1">
+        </label>
+
+        <button type="submit">Add to cart</button>
+    </form>
+
+
+</div>
+
+<div th:if="${cart != null and !cart.empty}">
+    <h2>Your cart: </h2>
+    <div th:each="item : ${cart.items}">
+        <p>
+            <span th:text="${item.menuItemName}">Item name</span>
+            x
+            <span th:text="${item.quantity}">1</span>
+            =
+            <span th:text="${item.lineTotal}">0</span>
+            €
+        </p>
+
+    </div>
+
+    <p>
+        Total:
+        <span th:text="${cart.total}">0</span>
+        €
+    </p>
+
 </div>
 
 </body>
