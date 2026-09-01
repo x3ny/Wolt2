@@ -27,4 +27,20 @@ class CartTest {
 
         assertThrows(IllegalArgumentException.class, () -> cart.add(pizza, 0));
     }
+
+    @Test
+    void seperateObjectsWithSameIdAreCombined(){
+        Cart cart = new Cart();
+        MenuItem pizza = new MenuItem(1, "Pizza", "", 8.50, true);
+        MenuItem pizza2 = new MenuItem(1, "Pizza", "", 8.50, true);
+
+        pizza.setId(10);
+        pizza2.setId(10);
+
+        cart.add(pizza, 1);
+        cart.add(pizza2, 2);
+
+        assertEquals(1, cart.getItems().size());
+        assertEquals(3, cart.getItems().getFirst().getQuantity());
+    }
 }
