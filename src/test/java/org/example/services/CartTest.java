@@ -43,4 +43,25 @@ class CartTest {
         assertEquals(1, cart.getItems().size());
         assertEquals(3, cart.getItems().getFirst().getQuantity());
     }
+
+    @Test
+    void decreasingQuantitySubtractsOne(){
+        Cart cart = new Cart();
+        MenuItem pizza = new MenuItem(1, "Pizza", "", 8.50, true);
+        cart.add(pizza, 2);
+        cart.decrease(pizza);
+
+        assertEquals(1, cart.getItems().size());
+    }
+
+    @Test
+    void decreasingLastQuantityRemovesItem(){
+        Cart cart = new Cart();
+        MenuItem pizza = new MenuItem(1, "Pizza", "", 8.50, true);
+        cart.add(pizza, 1);
+        cart.decrease(pizza);
+
+        assertEquals(0, cart.getItems().size());
+
+    }
 }
