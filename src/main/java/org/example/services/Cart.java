@@ -32,16 +32,15 @@ public class Cart {
         items.add(new CartItem(menuItem, quantity));
     }
 
-    public void decrease(MenuItem menuItem){
-        for(CartItem item : items){
-            if(item.getQuantity() > 1){
-                item.setQuantity(item.getQuantity() - 1);
+    void decreaseQuantity(MenuItem menuItem) {
+        for(CartItem item : items) {
+            if(item.getQuantity() > 0){
+                item.setQuantity(item.getQuantity() - 1 );
             }
-            else{
-                items.remove(item);
-            }
-            return;
+            else items.remove(item);
         }
+
+
     }
 
     public boolean isEmpty() {
