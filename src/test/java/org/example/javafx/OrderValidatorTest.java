@@ -52,4 +52,19 @@ public class OrderValidatorTest {
         boolean result = validator.isAddressValid(null);
         assertFalse(result);
     }
+
+    @Test
+    void blankAddressIsInvalid(){
+        OrderValidator validator = new OrderValidator();
+        boolean result = validator.isAddressValid("");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void addressLongerThanFiftyCharactersIsInvalid(){
+        OrderValidator validator = new OrderValidator();
+
+        assertFalse(validator.isAddressValidExtra("123456789012345678901234567890123456789012345678901"));
+    }
 }

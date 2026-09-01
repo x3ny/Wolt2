@@ -11,22 +11,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" prefViewportHeight="900.0" prefViewportWidth="1200.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
+<ScrollPane fitToWidth="true" prefHeight="1015.0" prefViewportHeight="1000.0" prefViewportWidth="1200.0" prefWidth="1391.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx.RestaurantController">
 
-<AnchorPane prefHeight="1100.0" prefWidth="1791.0">
+<AnchorPane prefHeight="1100.0" prefWidth="1316.0">
 
-    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="350.0" prefWidth="800.0">
+    <TableView fx:id="foodOrdersTable" layoutX="24.0" layoutY="88.0" prefHeight="350.0" prefWidth="879.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="55.0" text="ID" />
-            <TableColumn fx:id="customerIdColumn" prefWidth="50.0" text="CustomerId" />
-            <TableColumn fx:id="restaurantIdColumn" prefWidth="50.0" text="RestaurantId" />
-            <TableColumn fx:id="driverIdColumn" prefWidth="50.0" text="DriverId" />
-            <TableColumn fx:id="deliveryAddressColumn" prefWidth="105.0" text="Delivery address" />
-            <TableColumn fx:id="orderStatusColumn" prefWidth="120.0" text="Order status" />
-            <TableColumn fx:id="totalPriceColumn" prefWidth="70.0" text="Total price" />
-            <TableColumn fx:id="paymentMethodColumn" prefWidth="95.0" text="Payment method" />
-            <TableColumn fx:id="paidColumn" prefWidth="75.0" text="Paid" />
-            <TableColumn fx:id="dateCreated" prefWidth="120.0" text="Time created" />
+            <TableColumn fx:id="customerIdColumn" prefWidth="100.0" text="CustomerId" />
+            <TableColumn fx:id="restaurantIdColumn" minWidth="0.0" prefWidth="0.0" text="RestaurantId" />
+            <TableColumn fx:id="driverIdColumn" prefWidth="108.0" text="DriverId" />
+            <TableColumn fx:id="deliveryAddressColumn" prefWidth="107.0" text="Delivery address" />
+            <TableColumn fx:id="orderStatusColumn" prefWidth="100.0" text="Order status" />
+            <TableColumn fx:id="totalPriceColumn" prefWidth="93.0" text="Total price" />
+            <TableColumn fx:id="paymentMethodColumn" prefWidth="108.0" text="Payment method" />
+            <TableColumn fx:id="paidColumn" prefWidth="74.0" text="Paid" />
+            <TableColumn fx:id="dateCreated" prefWidth="133.0" text="Time created" />
         </columns>
     </TableView>
    <TextField fx:id="deliveryAddressTextField" layoutX="702.0" layoutY="484.0" promptText="Delivery Address" />
@@ -46,19 +46,19 @@
    <ComboBox fx:id="driverIdComboBox" layoutX="200.0" layoutY="484.0" prefWidth="150.0" promptText="Driver" />
    <ComboBox fx:id="paymentMethodComboBox" layoutX="375.0" layoutY="484.0" prefWidth="150.0" promptText="Payment" />
 
-    <TextField fx:id="menuItemNameTextField" layoutX="24.0" layoutY="581.0" prefWidth="180.0" promptText="Item name" />
+    <TextField fx:id="menuItemNameTextField" layoutX="23.0" layoutY="856.0" prefHeight="25.0" prefWidth="329.0" promptText="Item name" />
 
-    <TextField fx:id="menuItemDescriptionTextField" layoutX="230.0" layoutY="581.0" prefWidth="220.0" promptText="Description" />
+    <TextField fx:id="menuItemDescriptionTextField" layoutX="23.0" layoutY="893.0" prefHeight="25.0" prefWidth="331.0" promptText="Description" />
 
-    <TextField fx:id="menuItemPriceTextField" layoutX="473.0" layoutY="581.0" prefWidth="120.0" promptText="Price" />
+    <TextField fx:id="menuItemPriceTextField" layoutX="24.0" layoutY="934.0" prefWidth="120.0" promptText="Price" />
 
-    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="622.0" layoutY="585.0" selected="true" text="Available" />
+    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="159.0" layoutY="934.0" prefHeight="26.0" prefWidth="88.0" selected="true" text="Available" />
 
-    <Button fx:id="addMenuItemButton" layoutX="716.0" layoutY="581.0" mnemonicParsing="false" onAction="#createMenuItem" text="Add Menu Item" />
+    <Button fx:id="addMenuItemButton" layoutX="419.0" layoutY="849.0" mnemonicParsing="false" onAction="#createMenuItem" prefHeight="40.0" prefWidth="108.0" text="Add Menu Item" />
 
     <TextField fx:id="quantityTextField" layoutX="554.0" layoutY="484.0" prefHeight="25.0" prefWidth="128.0" promptText="Quantity" />
 
-    <TableView fx:id="menuItemsTable" layoutX="24.0" layoutY="678.0" prefHeight="230.0" prefWidth="504.0">
+    <TableView fx:id="menuItemsTable" layoutX="23.0" layoutY="602.0" prefHeight="230.0" prefWidth="504.0">
         <columns>
             <TableColumn fx:id="nameColumn" prefWidth="115.0" text="Name" />
             <TableColumn fx:id="descriptionColumn" prefWidth="114.0" text="Description" />
@@ -67,7 +67,7 @@
         </columns>
     </TableView>
 
-    <TableView fx:id="orderItemsTable" layoutX="852.0" layoutY="88.0" prefHeight="350.0" prefWidth="400.0">
+    <TableView fx:id="orderItemsTable" layoutX="972.0" layoutY="88.0" prefHeight="352.0" prefWidth="396.0">
         <columns>
             <TableColumn fx:id="orderItemMenuIdColumn" prefWidth="30.0" text="ID" />
             <TableColumn fx:id="orderItemMenuNameColumn" prefWidth="115.0" text="Menu Item Name" />
@@ -77,7 +77,7 @@
         </columns>
     </TableView>
 
-    <TableView fx:id="cartTable" layoutX="577.0" layoutY="678.0" prefHeight="230.0" prefWidth="520.0">
+    <TableView fx:id="cartTable" layoutX="642.0" layoutY="602.0" prefHeight="230.0" prefWidth="492.0">
         <columns>
             <TableColumn fx:id="cartItemNameColumn" prefWidth="160.0" text="Item" />
             <TableColumn fx:id="cartItemUnitPriceColumn" prefWidth="110.0" text="Unit Price" />
@@ -87,14 +87,14 @@
     </TableView>
 
 
-   <Label fx:id="currentRestaurantMenuLabel" layoutX="24.0" layoutY="626.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Menu">
+   <Label fx:id="currentRestaurantMenuLabel" layoutX="233.0" layoutY="550.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Menu">
       <font>
          <Font size="22.0" />
       </font>
    </Label>
 
     <Button fx:id="addToCartButton" layoutX="1046.0" layoutY="484.0" onAction="#addToCart" text="Add to Cart" />
-   <Label fx:id="currentRestaurantMenuLabel1" layoutX="577.0" layoutY="626.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Order Cart">
+   <Label fx:id="currentRestaurantMenuLabel1" layoutX="823.0" layoutY="550.0" style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Order Cart">
       <font>
          <Font size="22.0" />
       </font>

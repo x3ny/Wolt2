@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import lombok.Setter;
 import org.example.Classes.*;
 import org.example.Classes.MenuItem;
+import org.example.services.Cart;
 import org.example.validation.OrderValidator;
 
 import java.io.IOException;
@@ -96,7 +97,7 @@ public class RestaurantController {
     @FXML
     private TableColumn <FoodOrder, Boolean> paidColumn;
 
-    private final ObservableList<CartItem> cartItems = FXCollections.observableArrayList();
+    private final Cart cart = new Cart();
 
     OrderValidator orderValidator = new OrderValidator();
 
@@ -146,7 +147,7 @@ public class RestaurantController {
                 });
         configureUserComboBox(customerIdComboBox, "Customer");
         configureUserComboBox(driverIdComboBox, "Driver");
-        cartTable.setItems(cartItems);
+        cartTable.setItems(cart.getItems());
 
         paymentMethodComboBox.getItems().addAll(PaymentMethod.values());
 
@@ -239,14 +240,12 @@ public class RestaurantController {
         Driver selectedDriver = driverIdComboBox.getValue();
         PaymentMethod paymentMethod = paymentMethodComboBox.getValue();
 
-        ObservableList<MenuItem> menuItems = menuItemsTable.getSelectionModel().getSelectedItems();
-
-        if(menuItems.isEmpty()){
-            showAlert(Alert.AlertType.ERROR, "Select menu items", "Please select at least one menu item!");
+        if (cart.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Empty cart", "Add at least one item to the cart first");
             return;
         }
 
-        double totalPrice = cartItems.stream().mapToDouble(CartItem::getLineTotal).sum();
+        double totalPrice = cart.getTotal();
 
         if(selectedCustomer == null || selectedDriver == null || paymentMethod == null) {
             showAlert(Alert.AlertType.ERROR, "Select Customer, Driver and Payment Method", "Please select Customer, Driver and Payment Method");
@@ -271,18 +270,13 @@ public class RestaurantController {
                 return;
             }
 
+            if(!orderValidator.isAddressValidExtra(deliveryAddressText)){
+               showAlert(Alert.AlertType.ERROR, "Invalid delivery address", "Delivery address cannot be empty or longer than 50 characters");
+               return;
+            }
+
             FoodOrder foodOrder = createFoodOrder(customerId,driverId,totalPrice,deliveryAddressText, String.valueOf(paymentMethod),paidCheckBox.isSelected());
-            saveOrder(foodOrder);
-
-            if(cartItems.isEmpty()){
-                showAlert(Alert.AlertType.ERROR, "Empty cart", "Add at least one item in to the cart first");
-                return;
-            }
-
-            for(CartItem cartItem : cartItems){
-                OrderItem orderItem = new OrderItem(foodOrder.getId(), cartItem.getMenuItem().getId(), cartItem.getQuantity(),cartItem.getMenuItem().getPrice());
-                save(orderItem);
-            }
+            saveOrderWithItems(foodOrder);
 
             clearOrderForm();
             loadOrders();
@@ -307,12 +301,19 @@ public class RestaurantController {
 
     }
 
-    private void saveOrder(FoodOrder foodOrder) {
+    private void saveOrderWithItems(FoodOrder foodOrder) {
         try(var entityManager = entityManagerFactory.createEntityManager()){
             var transaction = entityManager.getTransaction();
             try{
                 transaction.begin();
                 entityManager.persist(foodOrder);
+                for (CartItem cartItem : cart.getItems()) {
+                    entityManager.persist(new OrderItem(
+                            foodOrder.getId(),
+                            cartItem.getMenuItem().getId(),
+                            cartItem.getQuantity(),
+                            cartItem.getMenuItem().getPrice()));
+                }
                 transaction.commit();
             }catch (RuntimeException e){
                 if(transaction.isActive()){
@@ -330,6 +331,7 @@ public class RestaurantController {
         deliveryAddressTextField.clear();
         paymentMethodComboBox.setValue(PaymentMethod.CARD);
         paidCheckBox.setSelected(false);
+        cart.clear();
 
     }
 
@@ -588,11 +590,7 @@ public class RestaurantController {
             return;
         }
 
-        CartItem cartItem = new CartItem(selectedMenuItem, quantity);
-        cartItems.add(cartItem);
-
-
-
+        cart.add(selectedMenuItem, quantity);
 
     }
 

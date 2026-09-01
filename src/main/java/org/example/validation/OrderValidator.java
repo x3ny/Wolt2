@@ -12,4 +12,8 @@ public class OrderValidator {
         }
         return false;
     }
+
+    public boolean isAddressValidExtra(String address) {
+        return address != null && !address.isBlank() && address.length() <= 50;
+    }
 }
