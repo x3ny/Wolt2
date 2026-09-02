@@ -49,7 +49,7 @@ class CartTest {
         Cart cart = new Cart();
         MenuItem pizza = new MenuItem(1, "Pizza", "", 8.50, true);
         cart.add(pizza, 2);
-        cart.decrease(pizza);
+        cart.decreaseQuantity(pizza);
 
         assertEquals(1, cart.getItems().size());
     }
@@ -59,7 +59,7 @@ class CartTest {
         Cart cart = new Cart();
         MenuItem pizza = new MenuItem(1, "Pizza", "", 8.50, true);
         cart.add(pizza, 1);
-        cart.decrease(pizza);
+        cart.decreaseQuantity(pizza);
 
         assertEquals(0, cart.getItems().size());
 

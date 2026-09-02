@@ -68,21 +68,20 @@ public class HomeController {
         Cart cart = (Cart) session.getAttribute("cart");
         MenuItem menuItem = entityManager.find(MenuItem.class, menuItemId);
 
+        if(menuItem == null || !menuItem.isAvailable() || quantity <=0){
+            return "redirect:/";
+        }
+
         if(cart == null){
             cart = new Cart();
             session.setAttribute("cart", cart);
         }
 
 
-
-        if(menuItem == null || !menuItem.isAvailable() || quantity <=0){
-            return "redirect:/";
-        }
-
         if(!cart.isEmpty()){
-            int currentRestuarantId = cart.getItems().get(0).getMenuItem().getRestaurantId();
+            int currentRestaurantId = cart.getItems().get(0).getMenuItem().getRestaurantId();
 
-            if(currentRestuarantId != menuItem.getRestaurantId()){
+            if(currentRestaurantId != menuItem.getRestaurantId()){
                 cart.clear();
             }
         }

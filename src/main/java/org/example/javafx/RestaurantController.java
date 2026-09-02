@@ -515,6 +515,8 @@ public class RestaurantController {
         String menuItemDescriptionText =  menuItemDescriptionTextField.getText().trim();
         String menuItemPriceText = menuItemPriceTextField.getText().trim();
 
+        int currentRestaurantId = currentRestaurant.getId();
+
         if(menuItemPriceText.isBlank() || menuItemNameText.isBlank()){
             showAlert(Alert.AlertType.ERROR, "Missing fields" , "Name and price are required");
             return;
@@ -529,7 +531,7 @@ public class RestaurantController {
             }
 
             MenuItem menuItem = new MenuItem(
-                    currentRestaurant.getId(),
+                    currentRestaurantId,
                     menuItemNameText,
                     menuItemDescriptionText,
                     menuItemPrice,
