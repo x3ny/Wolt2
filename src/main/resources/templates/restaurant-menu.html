@@ -53,6 +53,11 @@
             €
         </p>
 
+        <form th:action="@{/cart/decrease}" method="post">
+            <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
+            <button type = "submit">-</button>
+        </form>
+
     </div>
 
     <p>

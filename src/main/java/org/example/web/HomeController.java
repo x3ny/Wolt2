@@ -59,6 +59,15 @@ public class HomeController {
         Cart cart = (Cart) session.getAttribute("cart");
         model.addAttribute("cart", cart);
 
+        if(cart != null && !cart.isEmpty()) {
+            int currentRestaurantId = cart.getItems().getFirst().getMenuItem().getRestaurantId();
+
+            if(currentRestaurantId != id){
+                cart.clear();
+            }
+        }
+
+
         return "restaurant-menu";
     }
 
@@ -66,6 +75,7 @@ public class HomeController {
     public String addCart(@RequestParam("menuItemId") int menuItemId, @RequestParam("quantity") int quantity, HttpSession session ) {
 
         Cart cart = (Cart) session.getAttribute("cart");
+
         MenuItem menuItem = entityManager.find(MenuItem.class, menuItemId);
 
         if(menuItem == null || !menuItem.isAvailable() || quantity <=0){
@@ -92,4 +102,17 @@ public class HomeController {
 
         return "redirect:/restaurants/" + menuItem.getRestaurantId();
     }
+
+    @PostMapping("/cart/decrease")
+    public String decreaseCart(@RequestParam("menuItemId") int menuItemId, HttpSession session) {
+        Cart cart = (Cart) session.getAttribute("cart");
+        MenuItem menuItem = entityManager.find(MenuItem.class, menuItemId);
+        if(menuItem == null || cart == null || cart.isEmpty()){
+            return "redirect:/";
+        }
+        cart.decreaseQuantity(menuItem);
+
+        return "redirect:/restaurants/" + menuItem.getRestaurantId();
+    }
+
 }
