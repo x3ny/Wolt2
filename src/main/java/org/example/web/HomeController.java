@@ -115,4 +115,16 @@ public class HomeController {
         return "redirect:/restaurants/" + menuItem.getRestaurantId();
     }
 
+    @PostMapping("/cart/clear")
+    public String clearCart(@RequestParam("restaurantId") int restaurantId, HttpSession session) {
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart != null){
+            cart.clear();
+        }
+
+        return "redirect:/restaurants/" + restaurantId;
+
+    }
+
 }

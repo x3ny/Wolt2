@@ -69,7 +69,6 @@
         </div>
 
 
-
     </div>
 
     <p>
@@ -77,6 +76,13 @@
         <span th:text="${cart.total}">0</span>
         €
     </p>
+
+    <form th:action="@{/cart/clear}" method="post" style="display: inline">
+        <input type="hidden" name="restaurantId" th:value="${restaurant.id}">
+        <button type = "submit">Clear cart</button>
+    </form>
+
+
 
 </div>
 
