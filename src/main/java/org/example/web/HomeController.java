@@ -55,7 +55,7 @@ public class HomeController {
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("menuItems", menuItems);
 
-        //
+
         Cart cart = (Cart) session.getAttribute("cart");
         model.addAttribute("cart", cart);
 
@@ -124,7 +124,18 @@ public class HomeController {
         }
 
         return "redirect:/restaurants/" + restaurantId;
+    }
 
+    @GetMapping("/checkout")
+    public String checkoutPage(HttpSession session, Model model) {
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart == null || cart.isEmpty()){
+            return "redirect:/";
+        }
+
+        model.addAttribute("cart", cart);
+        return "checkout";
     }
 
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+</head>
+<body>
+
+<h1>Checkout</h1>
+
+<div th:if="${cart != null and !cart.empty}">
+    <h2>Order summary</h2>
+
+    <div th:each="item : ${cart.items}">
+        <p>
+            <span th:text="${item.menuItemName}">Item name</span>
+            x
+            <span th:text="${item.quantity}">1</span>
+            =
+            <span th:text="${item.lineTotal}">0</span>
+            €
+        </p>
+    </div>
+
+    <p>
+        Total:
+        <span th:text="${cart.total}">0</span>
+        €
+    </p>
+</div>
+
+<!--TODO add a mathcing controller for this button-->
+
+<form th:action="@{/checkout/place-order}" method="post">
+    <button type="submit">Place order</button>
+</form>
+
+</body>
+</html>
