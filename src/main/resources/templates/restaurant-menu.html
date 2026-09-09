@@ -46,17 +46,29 @@
     <div th:each="item : ${cart.items}">
         <p>
             <span th:text="${item.menuItemName}">Item name</span>
-            x
-            <span th:text="${item.quantity}">1</span>
             =
             <span th:text="${item.lineTotal}">0</span>
             €
         </p>
 
-        <form th:action="@{/cart/decrease}" method="post">
-            <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
-            <button type = "submit">-</button>
-        </form>
+        <div>
+
+            <form th:action="@{/cart/decrease}" method="post" style="display: inline">
+                <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
+                <button type = "submit">-</button>
+            </form>
+
+            <span th:text="${item.quantity}">1</span>
+
+            <form th:action="@{/cart/add}" method="post" style="display: inline">
+                <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
+                <input type="hidden" name="quantity" value="1">
+                <button type = "submit">+</button>
+            </form>
+
+        </div>
+
+
 
     </div>
 
