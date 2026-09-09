@@ -6,6 +6,10 @@
 </head>
 <body>
 
+<a th:href="@{/restaurants/{id}(id=${cart.items[0].menuItem.restaurantId})}">
+    Back to restaurant
+</a>
+
 <h1>Checkout</h1>
 
 <div th:if="${cart != null and !cart.empty}">
@@ -27,6 +31,8 @@
         <span th:text="${cart.total}">0</span>
         €
     </p>
+
+
 </div>
 
 <!--TODO add a mathcing controller for this button-->
