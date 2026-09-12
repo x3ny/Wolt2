@@ -132,10 +132,24 @@ public class HomeController {
     @GetMapping("/checkout")
     public String checkoutPage(HttpSession session, Model model) {
         Cart cart = (Cart) session.getAttribute("cart");
+        BasicUser loggedInUser = (BasicUser) session.getAttribute("loggedInUser");
+
 
         if(cart == null || cart.isEmpty()){
             return "redirect:/";
         }
+
+        String role = (String) session.getAttribute("role");
+
+        if(!"CUSTOMER".equals(role)){
+            return "redirect:/";
+        }
+
+        if(loggedInUser == null){
+            return "redirect:/login";
+        }
+
+
 
         model.addAttribute("cart", cart);
         return "checkout";
@@ -146,6 +160,7 @@ public class HomeController {
     @PostMapping("/checkout/place-order")
     public String placeOrder(@RequestParam("deliveryAddress") String deliveryAddress, @RequestParam("paymentMethod") String paymentMethod, HttpSession session, Model model) {
         Cart cart = (Cart) session.getAttribute("cart");
+        User loggedInUser  = (User) session.getAttribute("loggedInUser");
 
         if(cart == null || cart.isEmpty()){
             return "redirect:/";
@@ -168,7 +183,7 @@ public class HomeController {
 
         int restaurantId = cart.getItems().getFirst().getMenuItem().getRestaurantId();
 
-        int customerId = 3;
+        int customerId = loggedInUser.getId();
         int driverId = 0;
         boolean paid = paymentMethodName.equals("CARD");
 
