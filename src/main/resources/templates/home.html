@@ -10,6 +10,8 @@
 <p>No restaurants found.</p>
 </div>
 
+<p th:if="${role}" th:text="'Logged in as: ' + ${role}"></p>
+
 <div th:each = "restaurant : ${restaurants}">
     <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">
         <h3 th:text = "${restaurant.restaurantName}"> Restaurant name </h3>

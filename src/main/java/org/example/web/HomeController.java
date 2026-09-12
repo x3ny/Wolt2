@@ -1,5 +1,6 @@
 package org.example.web;
 
+import jakarta.persistence.TypedQuery;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.example.Classes.*;
@@ -23,7 +24,7 @@ public class HomeController {
     private EntityManager entityManager;
 
     @GetMapping("/")
-    public String homePage(Model model) {
+    public String homePage(Model model,HttpSession session) {
         List<Restaurant> restaurants = entityManager.createQuery(
                 "SELECT restaurant FROM Restaurant restaurant " +
                         "ORDER BY restaurant.restaurantName",
@@ -31,6 +32,7 @@ public class HomeController {
         ).getResultList();
 
         model.addAttribute("restaurants", restaurants);
+        model.addAttribute("role", session.getAttribute("role"));
 
         return "home";
     }
@@ -234,6 +236,63 @@ public class HomeController {
 
         return "order";
     }
+
+    @PostMapping("/login")
+    public String login(@RequestParam("username") String  username, @RequestParam("password") String password, HttpSession session, Model model) {
+
+        username = username.trim();
+
+        TypedQuery<User> userQuery = entityManager.createQuery(
+                "SELECT u FROM User u " +
+                        "WHERE u.username = :username " +
+                        "AND u.password = :password",
+                User.class
+        );
+
+        userQuery.setParameter("username", username);
+        userQuery.setParameter("password", password);
+
+        List<User> users = userQuery.getResultList();
+
+        if(!users.isEmpty()){
+            User user = users.getFirst();
+            session.setAttribute("loggedInUser", user);
+            session.setAttribute("role", "CUSTOMER");
+
+            return "redirect:/";
+        }
+
+        TypedQuery<Driver> driverQuery = entityManager.createQuery(
+                "SELECT d FROM Driver d " +
+                        "WHERE d.username = :username " +
+                        "AND d.password = :password",
+                Driver.class
+        );
+
+        driverQuery.setParameter("username", username);
+        driverQuery.setParameter("password", password);
+
+        List<Driver> drivers = driverQuery.getResultList();
+
+        if(!drivers.isEmpty()){
+            Driver driver = drivers.getFirst();
+            session.setAttribute("loggedInUser", driver);
+            session.setAttribute("role", "DRIVER");
+
+            return "redirect:/";
+        }
+
+        model.addAttribute("error", "Invalid username or password.");
+
+        return "login";
+
+    }
+
+    @GetMapping("login")
+    public String loginPage(HttpSession session, Model model) {
+        return  "login";
+    }
+
 
 
 }
