@@ -1,12 +1,13 @@
 package org.example.web;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.Classes.MenuItem;
+import jakarta.transaction.Transactional;
+import org.example.Classes.*;
 import org.example.services.Cart;
+import org.example.services.OrderFactory;
 import org.springframework.ui.Model;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.example.Classes.Restaurant;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -137,5 +138,102 @@ public class HomeController {
         model.addAttribute("cart", cart);
         return "checkout";
     }
+
+
+    @Transactional
+    @PostMapping("/checkout/place-order")
+    public String placeOrder(@RequestParam("deliveryAddress") String deliveryAddress, @RequestParam("paymentMethod") String paymentMethod, HttpSession session, Model model) {
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if(cart == null || cart.isEmpty()){
+            return "redirect:/";
+        }
+
+        String trimmedDeliveryAddress = deliveryAddress.trim();
+        String paymentMethodName = paymentMethod.trim();
+
+        if(trimmedDeliveryAddress.isBlank()){
+            model.addAttribute("cart",cart);
+            model.addAttribute("errorDeliveryAddress", "Delivery address is required.");
+            return "checkout";
+        }
+
+        if(paymentMethodName.isBlank()){
+           model.addAttribute("cart",cart);
+           model.addAttribute("errorPaymentMethod", "Payment method is required.");
+           return "checkout";
+        }
+
+        int restaurantId = cart.getItems().getFirst().getMenuItem().getRestaurantId();
+
+        int customerId = 3;
+        int driverId = 0;
+        boolean paid = paymentMethodName.equals("CARD");
+
+        OrderFactory orderFactory = new OrderFactory();
+
+        FoodOrder foodOrder = orderFactory.createFoodOrder(
+                customerId,
+                driverId,
+                restaurantId,
+                cart.getTotal(),
+                trimmedDeliveryAddress,
+                paymentMethodName,
+                paid
+        );
+
+        entityManager.persist(foodOrder);
+        entityManager.flush();
+
+        for(CartItem cartItem : cart.getItems()){
+            OrderItem orderItem = new OrderItem(
+                    foodOrder.getId(),
+                    cartItem.getMenuItem().getId(),
+                    cartItem.getQuantity(),
+                    cartItem.getUnitPrice()
+            );
+
+            entityManager.persist(orderItem);
+        }
+
+        cart.clear();
+
+
+
+        return "redirect:/orders/" + foodOrder.getId();
+    }
+
+    @GetMapping("/orders/{id}")
+    public String ordersPage(@PathVariable("id") int id, Model model) {
+        FoodOrder foodOrder = entityManager.find(FoodOrder.class, id);
+
+        if(foodOrder == null){
+            return "redirect:/";
+        }
+
+        List<OrderItem> orderItems = entityManager.createQuery(
+                "SELECT orderItem FROM OrderItem orderItem " +
+                        "WHERE orderItem.foodOrderId = :foodOrderId ",
+                OrderItem.class
+        ).setParameter("foodOrderId", id).getResultList();
+
+        for(OrderItem orderItem : orderItems){
+            MenuItem menuItem = entityManager.find(MenuItem.class, orderItem.getMenuItemId());
+
+            if(menuItem != null){
+                orderItem.setMenuItemName(menuItem.getName());
+            }
+        }
+
+        model.addAttribute("foodOrder", foodOrder);
+        model.addAttribute("orderItems", orderItems);
+
+
+
+
+
+        return "order";
+    }
+
 
 }
