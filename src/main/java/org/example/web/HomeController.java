@@ -38,7 +38,7 @@ public class HomeController {
     }
 
     @GetMapping("/restaurants/{id}")
-    public String restaurantMenu(@PathVariable("id") int id,Model model, HttpSession session) {
+    public String restaurantMenu(@PathVariable int id, Model model, HttpSession session) {
         Restaurant restaurant = entityManager.find(Restaurant.class, id);
 
         if(restaurant == null) {
@@ -92,7 +92,7 @@ public class HomeController {
 
 
         if(!cart.isEmpty()){
-            int currentRestaurantId = cart.getItems().get(0).getMenuItem().getRestaurantId();
+            int currentRestaurantId = cart.getItems().getFirst().getMenuItem().getRestaurantId();
 
             if(currentRestaurantId != menuItem.getRestaurantId()){
                 cart.clear();
@@ -142,7 +142,7 @@ public class HomeController {
         String role = (String) session.getAttribute("role");
 
         if(!"CUSTOMER".equals(role)){
-            return "redirect:/";
+            return "redirect:/login";
         }
 
         if(loggedInUser == null){
@@ -160,7 +160,17 @@ public class HomeController {
     @PostMapping("/checkout/place-order")
     public String placeOrder(@RequestParam("deliveryAddress") String deliveryAddress, @RequestParam("paymentMethod") String paymentMethod, HttpSession session, Model model) {
         Cart cart = (Cart) session.getAttribute("cart");
-        User loggedInUser  = (User) session.getAttribute("loggedInUser");
+        BasicUser loggedInUser  = (BasicUser) session.getAttribute("loggedInUser");
+
+
+        String role = (String) session.getAttribute("role");
+
+        if(!"CUSTOMER".equals(role) || !(loggedInUser instanceof User)){
+            return "redirect:/login";
+        }
+
+
+        int customerId = loggedInUser.getId();
 
         if(cart == null || cart.isEmpty()){
             return "redirect:/";
@@ -182,8 +192,6 @@ public class HomeController {
         }
 
         int restaurantId = cart.getItems().getFirst().getMenuItem().getRestaurantId();
-
-        int customerId = loggedInUser.getId();
         int driverId = 0;
         boolean paid = paymentMethodName.equals("CARD");
 
@@ -221,7 +229,7 @@ public class HomeController {
     }
 
     @GetMapping("/orders/{id}")
-    public String ordersPage(@PathVariable("id") int id, Model model) {
+    public String ordersPage(@PathVariable int id, Model model) {
         FoodOrder foodOrder = entityManager.find(FoodOrder.class, id);
 
         if(foodOrder == null){
