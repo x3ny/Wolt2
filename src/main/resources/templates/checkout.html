@@ -12,6 +12,9 @@
 
 <h1>Checkout</h1>
 
+<p th:if="${errorDeliveryAddress != null}" th:text="${errorDeliveryAddress}"></p>
+<p th:if="${errorPaymentMethod != null}" th:text="${errorPaymentMethod}"></p>
+
 <div th:if="${cart != null and !cart.empty}">
     <h2>Order summary</h2>
 
@@ -33,11 +36,25 @@
     </p>
 
 
+
+
 </div>
 
 <!--TODO add a mathcing controller for this button-->
 
 <form th:action="@{/checkout/place-order}" method="post">
+    <label>
+        Delivery address:
+        <input type="text" name="deliveryAddress">
+    </label>
+
+    <label>
+        Payment method:
+        <select name="paymentMethod">
+            <option value="CARD">Card</option>
+            <option value="CASH">Cash</option>
+        </select>
+    </label>
     <button type="submit">Place order</button>
 </form>
 
