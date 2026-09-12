@@ -20,11 +20,15 @@ public class FoodOrder {
     private int id;
     @Column(nullable = false)
     private int customerId;
+
     @Column(nullable = false)
     private int restaurantId;
+
     private int driverId;
+
     @Column(nullable = false, length = 255)
     private String deliveryAddress;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private OrderStatus status;
