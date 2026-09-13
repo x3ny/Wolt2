@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+    <title id="title">Menu item placeholder</title>
+    <desc id="desc">A simple plate illustration for food menu items.</desc>
+    <rect width="640" height="360" fill="#f2f7f4"/>
+    <circle cx="320" cy="190" r="112" fill="#ffffff" stroke="#d6e5dc" stroke-width="10"/>
+    <circle cx="320" cy="190" r="72" fill="#f7d9a8"/>
+    <path d="M268 178c26-38 78-40 108 0 18 24 14 58-8 78H276c-22-20-26-54-8-78z" fill="#2f8f5b"/>
+    <circle cx="284" cy="178" r="13" fill="#f35f4c"/>
+    <circle cx="326" cy="158" r="12" fill="#f35f4c"/>
+    <circle cx="366" cy="184" r="13" fill="#f35f4c"/>
+    <path d="M210 298h220" stroke="#d6e5dc" stroke-width="12" stroke-linecap="round"/>
+</svg>

@@ -28,6 +28,10 @@
 
     <section class="menu-list">
         <div class="card" th:each="menuItem : ${menuItems}">
+            <img class="menu-item-image"
+                 th:src="${menuItem.imageUrl != null and !#strings.isEmpty(menuItem.imageUrl)} ? ${menuItem.imageUrl} : @{/images/menu-placeholder.svg}"
+                 th:alt="${menuItem.name} + ' image'">
+
             <h3 th:text="${menuItem.name}">Menu item name</h3>
             <p th:text="${menuItem.description}">Menu item description</p>
             <p class="price" th:text="${menuItem.price} + ' €'">0.00 €</p>
