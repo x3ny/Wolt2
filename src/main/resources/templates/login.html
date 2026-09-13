@@ -7,25 +7,29 @@
 </head>
 <body>
 
-<h1>Login</h1>
+<main class="page narrow-page">
+    <section class="card">
+        <h1>Login</h1>
 
 <!--TODO add a mathcing controller for this button-->
 
-<p th:if="${error}" th:text="${error}"></p>
+        <p class="error" th:if="${error}" th:text="${error}"></p>
 
-<form th:action="@{/login}" method="post">
-    <label>
-        Username:
-        <input type="text" name="username">
-    </label>
+        <form class="form-card" th:action="@{/login}" method="post">
+            <label>
+                Username:
+                <input type="text" name="username">
+            </label>
 
-    <label>
-        Password:
-        <input type="password" name="password">
+            <label>
+                Password:
+                <input type="password" name="password">
 
-    </label>
-    <button type="submit">Log in</button>
-</form>
+            </label>
+            <button class="button" type="submit">Log in</button>
+        </form>
+    </section>
+</main>
 
 </body>
 </html>

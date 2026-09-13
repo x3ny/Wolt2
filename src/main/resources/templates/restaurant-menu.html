@@ -7,89 +7,88 @@
 </head>
 <body>
 
-<a href="/">Back to restaurants</a>
+<main class="page">
+    <a class="back-link" href="/">Back to restaurants</a>
 
-<h1 th:text="${restaurant.restaurantName}">
-    Restaurant name
-</h1>
+    <header class="page-header">
+        <h1 th:text="${restaurant.restaurantName}">
+            Restaurant name
+        </h1>
 
-<p th:text="${restaurant.description}">
-    Restaurant description
-</p>
+        <p th:text="${restaurant.description}">
+            Restaurant description
+        </p>
+    </header>
 
-<h2>Menu</h2>
+    <h2>Menu</h2>
 
-<div th:if="${menuItems.isEmpty()}">
-    <p>This restaurant has no available menu items.</p>
-</div>
+    <div th:if="${menuItems.isEmpty()}" class="card">
+        <p>This restaurant has no available menu items.</p>
+    </div>
 
-<div th:each="menuItem : ${menuItems}">
-    <h3 th:text="${menuItem.name}">Menu item name</h3>
-    <p th:text="${menuItem.description}">Menu item description</p>
-    <p th:text="${menuItem.price} + ' €'">0.00 €</p>
+    <section class="menu-list">
+        <div class="card" th:each="menuItem : ${menuItems}">
+            <h3 th:text="${menuItem.name}">Menu item name</h3>
+            <p th:text="${menuItem.description}">Menu item description</p>
+            <p class="price" th:text="${menuItem.price} + ' €'">0.00 €</p>
 
-    <form th:action="@{/cart/add}" method="post">
-        <input type="hidden" name="menuItemId" th:value="${menuItem.id}">
+            <form class="inline-form" th:action="@{/cart/add}" method="post">
+                <input type="hidden" name="menuItemId" th:value="${menuItem.id}">
 
-        <label>
-            Quantity:
-            <input type="number" name="quantity" value="1" min="1">
-        </label>
+                <label>
+                    Quantity:
+                    <input type="number" name="quantity" value="1" min="1">
+                </label>
 
-        <button type="submit">Add to cart</button>
-    </form>
+                <button class="button" type="submit">Add to cart</button>
+            </form>
+        </div>
+    </section>
 
+    <section class="card cart-panel" th:if="${cart != null and !cart.empty}">
+        <h2>Your cart</h2>
+        <div class="cart-row" th:each="item : ${cart.items}">
+            <p>
+                <span th:text="${item.menuItemName}">Item name</span>
+                =
+                <span th:text="${item.lineTotal}">0</span>
+                €
+            </p>
 
-</div>
+            <div class="quantity-controls">
+                <form th:action="@{/cart/decrease}" method="post">
+                    <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
+                    <button class="icon-button" type="submit">-</button>
+                </form>
 
-<div th:if="${cart != null and !cart.empty}">
-    <h2>Your cart: </h2>
-    <div th:each="item : ${cart.items}">
-        <p>
-            <span th:text="${item.menuItemName}">Item name</span>
-            =
-            <span th:text="${item.lineTotal}">0</span>
+                <span th:text="${item.quantity}">1</span>
+
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button class="icon-button" type="submit">+</button>
+                </form>
+            </div>
+        </div>
+
+        <p class="total">
+            Total:
+            <span th:text="${cart.total}">0</span>
             €
         </p>
 
-        <div>
-
-            <form th:action="@{/cart/decrease}" method="post" style="display: inline">
-                <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
-                <button type = "submit">-</button>
+        <div class="actions">
+            <form th:action="@{/cart/clear}" method="post">
+                <input type="hidden" name="restaurantId" th:value="${restaurant.id}">
+                <button class="button secondary-button" type="submit">Clear cart</button>
             </form>
 
-            <span th:text="${item.quantity}">1</span>
-
-            <form th:action="@{/cart/add}" method="post" style="display: inline">
-                <input type="hidden" name="menuItemId" th:value="${item.menuItem.id}">
-                <input type="hidden" name="quantity" value="1">
-                <button type = "submit">+</button>
+            <form th:action="@{/checkout}" method="get">
+                <button class="button" type="submit">Checkout</button>
             </form>
-
         </div>
-
-
-    </div>
-
-    <p>
-        Total:
-        <span th:text="${cart.total}">0</span>
-        €
-    </p>
-
-    <form th:action="@{/cart/clear}" method="post" style="display: inline">
-        <input type="hidden" name="restaurantId" th:value="${restaurant.id}">
-        <button type = "submit">Clear cart</button>
-    </form>
-
-    <form th:action="@{/checkout}" method="get">
-        <button type = "submit">Checkout</button>
-    </form>
-
-
-
-</div>
+    </section>
+</main>
 
 </body>
 </html>

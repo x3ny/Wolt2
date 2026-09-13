@@ -1,4 +1,4 @@
-<!--!DOCTYPE html>-->
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -7,42 +7,48 @@
 </head>
 <body>
 
-<h1>Order placed</h1>
+<main class="page narrow-page">
+    <section class="card">
+        <h1>Order placed</h1>
 
-<p>
-    Order ID:
-    <span th:text="${foodOrder.id}"></span>
+        <p>
+            Order ID:
+            <span th:text="${foodOrder.id}"></span>
 
-</p>
+        </p>
 
-<p>
+        <p>
 
-    Delivery address:
-    <span th:text="${foodOrder.deliveryAddress}"></span>
+            Delivery address:
+            <span th:text="${foodOrder.deliveryAddress}"></span>
 
-</p>
+        </p>
 
-<p>
-    Payment method:
-    <span th:text="${foodOrder.paymentMethod}"></span>
-</p>
+        <p>
+            Payment method:
+            <span th:text="${foodOrder.paymentMethod}"></span>
+        </p>
 
-<p>
-    Total:
-    <span th:text="${foodOrder.totalPrice}"></span> €
-</p>
+        <p class="total">
+            Total:
+            <span th:text="${foodOrder.totalPrice}"></span> €
+        </p>
+    </section>
 
-<h2>Items</h2>
+    <section class="card">
+        <h2>Items</h2>
 
-<div th:each="item : ${orderItems}">
-    <p>
-        <span th:text="${item.menuItemName}">Item name</span>
-        x
-        <span th:text="${item.quantity}">1</span>
-        =
-        <span th:text="${item.quantity * item.unitPrice}">0</span>
-        €
-    </p>
-</div>
+        <div class="summary-row" th:each="item : ${orderItems}">
+            <span th:text="${item.menuItemName}">Item name</span>
+            <span>
+                x
+                <span th:text="${item.quantity}">1</span>
+                =
+                <span th:text="${item.quantity * item.unitPrice}">0</span>
+                €
+            </span>
+        </div>
+    </section>
+</main>
 </body>
 </html>

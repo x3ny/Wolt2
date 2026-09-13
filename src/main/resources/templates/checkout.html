@@ -7,57 +7,55 @@
 </head>
 <body>
 
-<a th:href="@{/restaurants/{id}(id=${cart.items[0].menuItem.restaurantId})}">
-    Back to restaurant
-</a>
+<main class="page narrow-page">
+    <a class="back-link" th:href="@{/restaurants/{id}(id=${cart.items[0].menuItem.restaurantId})}">
+        Back to restaurant
+    </a>
 
-<h1>Checkout</h1>
+    <h1>Checkout</h1>
 
-<p th:if="${errorDeliveryAddress != null}" th:text="${errorDeliveryAddress}"></p>
-<p th:if="${errorPaymentMethod != null}" th:text="${errorPaymentMethod}"></p>
+    <p class="error" th:if="${errorDeliveryAddress != null}" th:text="${errorDeliveryAddress}"></p>
+    <p class="error" th:if="${errorPaymentMethod != null}" th:text="${errorPaymentMethod}"></p>
 
-<div th:if="${cart != null and !cart.empty}">
-    <h2>Order summary</h2>
+    <section class="card" th:if="${cart != null and !cart.empty}">
+        <h2>Order summary</h2>
 
-    <div th:each="item : ${cart.items}">
-        <p>
+        <div class="summary-row" th:each="item : ${cart.items}">
             <span th:text="${item.menuItemName}">Item name</span>
-            x
-            <span th:text="${item.quantity}">1</span>
-            =
-            <span th:text="${item.lineTotal}">0</span>
+            <span>
+                x
+                <span th:text="${item.quantity}">1</span>
+                =
+                <span th:text="${item.lineTotal}">0</span>
+                €
+            </span>
+        </div>
+
+        <p class="total">
+            Total:
+            <span th:text="${cart.total}">0</span>
             €
         </p>
-    </div>
-
-    <p>
-        Total:
-        <span th:text="${cart.total}">0</span>
-        €
-    </p>
-
-
-
-
-</div>
+    </section>
 
 <!--TODO add a mathcing controller for this button-->
 
-<form th:action="@{/checkout/place-order}" method="post">
-    <label>
-        Delivery address:
-        <input type="text" name="deliveryAddress">
-    </label>
+    <form class="card form-card" th:action="@{/checkout/place-order}" method="post">
+        <label>
+            Delivery address:
+            <input type="text" name="deliveryAddress">
+        </label>
 
-    <label>
-        Payment method:
-        <select name="paymentMethod">
-            <option value="CARD">Card</option>
-            <option value="CASH">Cash</option>
-        </select>
-    </label>
-    <button type="submit">Place order</button>
-</form>
+        <label>
+            Payment method:
+            <select name="paymentMethod">
+                <option value="CARD">Card</option>
+                <option value="CASH">Cash</option>
+            </select>
+        </label>
+        <button class="button" type="submit">Place order</button>
+    </form>
+</main>
 
 </body>
 </html>
