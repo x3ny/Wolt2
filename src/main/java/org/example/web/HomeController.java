@@ -38,7 +38,7 @@ public class HomeController {
     }
 
     @GetMapping("/restaurants/{id}")
-    public String restaurantMenu(@PathVariable int id, Model model, HttpSession session) {
+    public String restaurantMenu(@PathVariable("id") int id, Model model, HttpSession session) {
         Restaurant restaurant = entityManager.find(Restaurant.class, id);
 
         if(restaurant == null) {
@@ -169,6 +169,10 @@ public class HomeController {
             return "redirect:/login";
         }
 
+        if(deliveryAddress == null || paymentMethod == null){
+            return "checkout";
+        }
+
 
         int customerId = loggedInUser.getId();
 
@@ -178,6 +182,10 @@ public class HomeController {
 
         String trimmedDeliveryAddress = deliveryAddress.trim();
         String paymentMethodName = paymentMethod.trim();
+
+        if(!paymentMethodName.equals("CASH") && !paymentMethodName.equals("CARD")){
+            return "redirect:/";
+        }
 
         if(trimmedDeliveryAddress.isBlank()){
             model.addAttribute("cart",cart);
@@ -229,11 +237,22 @@ public class HomeController {
     }
 
     @GetMapping("/orders/{id}")
-    public String ordersPage(@PathVariable int id, Model model) {
+    public String ordersPage(@PathVariable("id") int id, Model model, HttpSession session) {
+
         FoodOrder foodOrder = entityManager.find(FoodOrder.class, id);
+        BasicUser loggedInUser = (BasicUser) session.getAttribute("loggedInUser");
+        String role = (String) session.getAttribute("role");
+
 
         if(foodOrder == null){
             return "redirect:/";
+        }
+
+        boolean customerOwnsOrder = "CUSTOMER".equals(role) && foodOrder.getCustomerId() == loggedInUser.getId();
+        boolean driverOwnsOrder = "DRIVER".equals(role) && foodOrder.getDriverId() == loggedInUser.getId();
+
+        if(!customerOwnsOrder && !driverOwnsOrder){
+            return "redirect:/login";
         }
 
         List<OrderItem> orderItems = entityManager.createQuery(
