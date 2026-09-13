@@ -6,34 +6,84 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<main class="page">
-    <h1>Restaurants</h1>
+<main class="page wide-page">
+    <header class="app-header">
+        <div>
+            <p class="page-kicker">Wolt Food Ordering</p>
+            <h1 class="page-title">Restaurants</h1>
+            <p class="page-description">Choose a restaurant and order your favorite food.</p>
+        </div>
 
-    <p th:if="${role}" class="user-role" th:text="'Logged in as: ' + ${role}"></p>
+        <p th:if="${role}" class="role-pill" th:text="'Logged in as: ' + ${role}"></p>
+    </header>
 
-    <p>Choose a restaurant and order your favorite food.</p>
+    <nav class="category-nav" aria-label="Restaurant categories">
+        <form th:action="@{/}" method="get">
+            <button class="category-button"
+                    th:classappend="${selectedCategory == null or #strings.isEmpty(selectedCategory)} ? ' active'"
+                    type="submit">
+                All
+            </button>
+        </form>
 
-    <div th:if="${restaurants.isEmpty()}" class="card">
+        <form th:action="@{/}" method="get">
+            <input type="hidden" name="category" value="Pizza">
+            <button class="category-button"
+                    th:classappend="${selectedCategory == 'Pizza'} ? ' active'"
+                    type="submit">
+                Pizza
+            </button>
+        </form>
+
+        <form th:action="@{/}" method="get">
+            <input type="hidden" name="category" value="Burgers">
+            <button class="category-button"
+                    th:classappend="${selectedCategory == 'Burgers'} ? ' active'"
+                    type="submit">
+                Burgers
+            </button>
+        </form>
+
+        <form th:action="@{/}" method="get">
+            <input type="hidden" name="category" value="Sushi">
+            <button class="category-button"
+                    th:classappend="${selectedCategory == 'Sushi'} ? ' active'"
+                    type="submit">
+                Sushi
+            </button>
+        </form>
+    </nav>
+
+    <div th:if="${restaurants.isEmpty()}" class="card empty-state">
         <p>No restaurants found.</p>
     </div>
 
-    <section class="restaurant-list">
-        <div class="card" th:each="restaurant : ${restaurants}">
-            <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">
+    <section class="restaurant-grid">
+        <article class="card restaurant-card" th:each="restaurant : ${restaurants}">
+            <a class="restaurant-link" th:href="@{/restaurants/{id}(id=${restaurant.id})}">
                 <h2 th:text="${restaurant.restaurantName}">Restaurant name</h2>
             </a>
 
-            <p th:text="${restaurant.description}">Description</p>
-            <p th:text="${restaurant.address}">Address</p>
-            <p>
-                Rating:
-                <span th:text="${restaurant.rating}">0</span>
+            <p class="restaurant-description" th:text="${restaurant.description}">Description</p>
+            <p class="muted-text" th:text="${restaurant.address}">Address</p>
+
+            <p class="meta-line">
+                Category:
+                <span th:text="${restaurant.category}">Category</span>
             </p>
 
-            <span class="status" th:text="${restaurant.open ? 'Open' : 'Closed'}">
-                Status
-            </span>
-        </div>
+            <div class="card-footer">
+                <p class="rating">
+                    Rating:
+                    <span th:text="${restaurant.rating}">0</span>
+                </p>
+
+                <span th:text="${restaurant.open ? 'Open' : 'Closed'}"
+                      th:class="${restaurant.open} ? 'status status-open' : 'status status-closed'">
+                    Status
+                </span>
+            </div>
+        </article>
     </section>
 </main>
 </body>

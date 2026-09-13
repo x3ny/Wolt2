@@ -24,15 +24,28 @@ public class HomeController {
     private EntityManager entityManager;
 
     @GetMapping("/")
-    public String homePage(Model model,HttpSession session) {
-        List<Restaurant> restaurants = entityManager.createQuery(
-                "SELECT restaurant FROM Restaurant restaurant " +
-                        "ORDER BY restaurant.restaurantName",
-                Restaurant.class
-        ).getResultList();
+    public String homePage(@RequestParam(name = "category", required = false) String category, Model model,HttpSession session) {
+        List<Restaurant> restaurants;
+
+        if(category == null || category.isBlank()){
+            restaurants = entityManager.createQuery(
+                    "SELECT restaurant FROM Restaurant restaurant " +
+                            "ORDER BY restaurant.restaurantName",
+                    Restaurant.class
+            ).getResultList();
+        }else{
+            restaurants = entityManager.createQuery(
+                    "SELECT restaurant FROM Restaurant restaurant " +
+                            "WHERE restaurant.category = :category " +
+                            "ORDER BY restaurant.restaurantName",
+                    Restaurant.class
+            ).setParameter("category", category).getResultList();
+
+        }
 
         model.addAttribute("restaurants", restaurants);
         model.addAttribute("role", session.getAttribute("role"));
+        model.addAttribute("selectedCategory", category);
 
         return "home";
     }

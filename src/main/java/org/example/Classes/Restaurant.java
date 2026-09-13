@@ -21,6 +21,8 @@ public class Restaurant extends BasicUser {
     private String address;
     @Transient
     private int cuisineId;
+    @Column(length = 100)
+    private String category;
     private boolean open;
     private double rating;
     private LocalDateTime dateCreated;
