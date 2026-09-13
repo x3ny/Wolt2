@@ -162,27 +162,29 @@ h1 {
     display: flex;
     flex-direction: column;
     min-height: 260px;
+    color: inherit;
+    cursor: pointer;
     transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
 .restaurant-card:hover {
+    color: inherit;
     transform: translateY(-2px);
     box-shadow: var(--shadow);
 }
 
-.restaurant-link h2,
 .card h2,
 .card h3 {
     margin-top: 0;
 }
 
-.restaurant-link h2 {
+.restaurant-card h2 {
     margin-bottom: 12px;
     color: var(--text);
     font-size: 22px;
 }
 
-.restaurant-link:hover h2 {
+.restaurant-card:hover h2 {
     color: var(--primary);
 }
 

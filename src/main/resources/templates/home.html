@@ -59,10 +59,9 @@
     </div>
 
     <section class="restaurant-grid">
-        <article class="card restaurant-card" th:each="restaurant : ${restaurants}">
-            <a class="restaurant-link" th:href="@{/restaurants/{id}(id=${restaurant.id})}">
-                <h2 th:text="${restaurant.restaurantName}">Restaurant name</h2>
-            </a>
+        <a class="card restaurant-card" th:each="restaurant : ${restaurants}"
+           th:href="@{/restaurants/{id}(id=${restaurant.id})}">
+            <h2 th:text="${restaurant.restaurantName}">Restaurant name</h2>
 
             <p class="restaurant-description" th:text="${restaurant.description}">Description</p>
             <p class="muted-text" th:text="${restaurant.address}">Address</p>
@@ -83,7 +82,7 @@
                     Status
                 </span>
             </div>
-        </article>
+        </a>
     </section>
 </main>
 </body>
