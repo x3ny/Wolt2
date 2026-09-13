@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+    background-color: #f5f5f5;
+    color: #222;
+    font-family: Arial, sans-serif;
+}
+
+a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.restaurant-list {
+    margin-top: 24px;
+}
+
+.card {
+    margin-bottom: 16px;
+    padding: 16px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.user-role {
+    color: #555;
+    font-size: 14px;
+}
+
+.status {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 8px;
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}

@@ -3,33 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Wolt Food Ordering</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Restaurants</h2>
-<div th:if="${restaurants.isEmpty()}">
-<p>No restaurants found.</p>
-</div>
+<main class="page">
+    <h1>Restaurants</h1>
 
-<p th:if="${role}" th:text="'Logged in as: ' + ${role}"></p>
+    <p th:if="${role}" class="user-role" th:text="'Logged in as: ' + ${role}"></p>
 
-<div th:each = "restaurant : ${restaurants}">
-    <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">
-        <h3 th:text = "${restaurant.restaurantName}"> Restaurant name </h3>
-    </a>
+    <p>Choose a restaurant and order your favorite food.</p>
 
+    <div th:if="${restaurants.isEmpty()}" class="card">
+        <p>No restaurants found.</p>
+    </div>
 
+    <section class="restaurant-list">
+        <div class="card" th:each="restaurant : ${restaurants}">
+            <a th:href="@{/restaurants/{id}(id=${restaurant.id})}">
+                <h2 th:text="${restaurant.restaurantName}">Restaurant name</h2>
+            </a>
 
-    <p th:text="${restaurant.description}">Description</p>
-    <p th:text="${restaurant.address}">Address</p>
-    <p th:text="${restaurant.rating}"></p>
+            <p th:text="${restaurant.description}">Description</p>
+            <p th:text="${restaurant.address}">Address</p>
+            <p>
+                Rating:
+                <span th:text="${restaurant.rating}">0</span>
+            </p>
 
-    <span th:text="${restaurant.open ? 'Open' : 'Closed'}">
-        Status
-    </span>
-
-</div>
-
-<h1>Welcome to Wolt Food Ordering</h1>
-<p>Choose a restaurant and order your favorite food.</p>
+            <span class="status" th:text="${restaurant.open ? 'Open' : 'Closed'}">
+                Status
+            </span>
+        </div>
+    </section>
+</main>
 </body>
 </html>
