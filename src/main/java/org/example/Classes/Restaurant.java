@@ -25,14 +25,10 @@ public class Restaurant extends BasicUser {
     private String category;
     private boolean open;
     private double rating;
+    private String imageUrl;
     private LocalDateTime dateCreated;
 
-    /* Situos fieldus gal veliau bus galima panaudot
-    private String imageUrl;
-    private double deliveryFee;
-    private int estimatedDeliveryMinutes;
-     */
-    public Restaurant(int id, String username, String email, String password, String firstName, String lastName, String phoneNumber, String restaurantName, String description, String address, int cuisineId, boolean open, double rating, LocalDateTime dateCreated) {
+    public Restaurant(int id, String username, String email, String password, String firstName, String lastName, String phoneNumber, String restaurantName, String description, String address, int cuisineId, boolean open, double rating, String imageUrl, LocalDateTime dateCreated) {
         super(id, username, email, password, firstName, lastName, phoneNumber);
         this.restaurantName = restaurantName;
         this.description = description;
@@ -40,6 +36,7 @@ public class Restaurant extends BasicUser {
         this.cuisineId = cuisineId;
         this.open = open;
         this.rating = rating;
+        this.imageUrl = imageUrl;
         this.dateCreated = dateCreated;
     }
 

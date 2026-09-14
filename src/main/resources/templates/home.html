@@ -67,6 +67,8 @@
     <section class="restaurant-grid">
         <a class="card restaurant-card" th:each="restaurant : ${restaurants}"
            th:href="@{/restaurants/{id}(id=${restaurant.id})}">
+            <img th:src="${restaurant.imageUrl != null && !restaurant.imageUrl.isEmpty()} ? ${restaurant.imageUrl} : '/static/images/menu-placeholder.svg'" 
+                 alt="Restaurant image" class="restaurant-image">
             <h2 th:text="${restaurant.restaurantName}">Restaurant name</h2>
 
             <p class="restaurant-description" th:text="${restaurant.description}">Description</p>
