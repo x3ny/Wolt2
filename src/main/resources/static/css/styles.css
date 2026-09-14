@@ -93,6 +93,14 @@ h1 {
     font-weight: 600;
 }
 
+.header-actions,
+.top-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
 .back-link {
     display: inline-block;
     margin-bottom: 18px;
@@ -149,6 +157,12 @@ h1 {
     margin-top: 24px;
 }
 
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
 .card {
     margin-bottom: 16px;
     padding: 18px;
@@ -186,6 +200,44 @@ h1 {
 
 .restaurant-card:hover h2 {
     color: var(--primary);
+}
+
+.order-history-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    color: inherit;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.order-history-card:hover {
+    color: inherit;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.order-history-card h2 {
+    margin: 0 0 8px;
+    color: var(--text);
+    font-size: 22px;
+}
+
+.order-history-card:hover h2 {
+    color: var(--primary);
+}
+
+.order-history-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    text-align: right;
+}
+
+.order-history-meta p {
+    margin: 0;
 }
 
 .restaurant-description {
@@ -388,9 +440,12 @@ input[type="number"] {
     .inline-form,
     .cart-row,
     .summary-row,
-    .card-footer {
+    .card-footer,
+    .order-history-card,
+    .order-history-meta {
         align-items: stretch;
         flex-direction: column;
+        text-align: left;
     }
 
     .button {

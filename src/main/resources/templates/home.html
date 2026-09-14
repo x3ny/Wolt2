@@ -14,7 +14,13 @@
             <p class="page-description">Choose a restaurant and order your favorite food.</p>
         </div>
 
-        <p th:if="${role}" class="role-pill" th:text="'Logged in as: ' + ${role}"></p>
+        <div class="header-actions">
+            <a th:if="${role == 'CUSTOMER'}" class="button secondary-button" th:href="@{/orders}">
+                Order history
+            </a>
+
+            <p th:if="${role}" class="role-pill" th:text="'Logged in as: ' + ${role}"></p>
+        </div>
     </header>
 
     <nav class="category-nav" aria-label="Restaurant categories">

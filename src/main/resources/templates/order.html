@@ -8,6 +8,11 @@
 <body>
 
 <main class="page narrow-page">
+    <div class="top-links">
+        <a class="back-link" th:if="${role == 'CUSTOMER'}" th:href="@{/orders}">Back to order history</a>
+        <a class="back-link" th:href="@{/}">Back to restaurants</a>
+    </div>
+
     <section class="card">
         <h1>Order placed</h1>
 

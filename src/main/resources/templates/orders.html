@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order history</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<main class="page">
+    <a class="back-link" href="/">Back to restaurants</a>
+
+    <header class="page-header">
+        <div>
+            <p class="page-kicker">Your orders</p>
+            <h1>Order history</h1>
+            <p>Review your past orders and open any order for more details.</p>
+        </div>
+    </header>
+
+    <section class="card empty-state" th:if="${orderRows.isEmpty()}">
+        <p>You have not placed any orders yet.</p>
+    </section>
+
+    <section class="order-list" th:if="${!orderRows.isEmpty()}">
+        <a class="card order-history-card"
+           th:each="row : ${orderRows}"
+           th:href="@{/orders/{id}(id=${row.foodOrder.id})}">
+            <div>
+                <p class="page-kicker" th:text="'Order #' + ${row.foodOrder.id}">Order #1</p>
+                <h2 th:text="${row.restaurantName}">Restaurant name</h2>
+                <p class="muted-text" th:text="${row.foodOrder.deliveryAddress}">Delivery address</p>
+            </div>
+
+            <div class="order-history-meta">
+                <span class="status" th:text="${row.foodOrder.status}">CREATED</span>
+
+                <p>
+                    Items:
+                    <span th:text="${row.totalItems}">0</span>
+                </p>
+
+                <p>
+                    Total:
+                    <strong>
+                        <span th:text="${row.foodOrder.totalPrice}">0</span>
+                        €
+                    </strong>
+                </p>
+
+                <p class="muted-text" th:text="${row.foodOrder.dateCreated}">
+                    2026-09-14 12:00
+                </p>
+            </div>
+        </a>
+    </section>
+</main>
+
+</body>
+</html>

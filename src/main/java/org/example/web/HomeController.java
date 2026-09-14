@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -261,6 +262,10 @@ public class HomeController {
             return "redirect:/";
         }
 
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
         boolean customerOwnsOrder = "CUSTOMER".equals(role) && foodOrder.getCustomerId() == loggedInUser.getId();
         boolean driverOwnsOrder = "DRIVER".equals(role) && foodOrder.getDriverId() == loggedInUser.getId();
 
@@ -284,12 +289,56 @@ public class HomeController {
 
         model.addAttribute("foodOrder", foodOrder);
         model.addAttribute("orderItems", orderItems);
+        model.addAttribute("role", role);
 
 
 
 
 
         return "order";
+    }
+
+    @GetMapping("/orders")
+    public String ordersHistoryPage(Model model, HttpSession session) {
+        BasicUser loggedInUser = (BasicUser) session.getAttribute("loggedInUser");
+        String role = (String) session.getAttribute("role");
+
+        if (!"CUSTOMER".equals(role) || !(loggedInUser instanceof User)) {
+            return "redirect:/login";
+        }
+
+        List<FoodOrder> foodOrders = entityManager.createQuery(
+                        "SELECT foodOrder FROM FoodOrder foodOrder " +
+                                "WHERE foodOrder.customerId = :customerId " +
+                                "ORDER BY foodOrder.dateCreated DESC",
+                        FoodOrder.class
+                )
+                .setParameter("customerId", loggedInUser.getId())
+                .getResultList();
+
+        List<OrderHistoryRow> orderRows = new ArrayList<>();
+
+        for (FoodOrder foodOrder : foodOrders) {
+            Restaurant restaurant = entityManager.find(Restaurant.class, foodOrder.getRestaurantId());
+            Number itemCount = (Number) entityManager.createQuery(
+                            "SELECT SUM(orderItem.quantity) FROM OrderItem orderItem " +
+                                    "WHERE orderItem.foodOrderId = :foodOrderId"
+                    )
+                    .setParameter("foodOrderId", foodOrder.getId())
+                    .getSingleResult();
+
+            String restaurantName = restaurant == null ? "Unknown restaurant" : restaurant.getRestaurantName();
+            int totalItems = itemCount == null ? 0 : itemCount.intValue();
+
+            orderRows.add(new OrderHistoryRow(foodOrder, restaurantName, totalItems));
+        }
+
+        model.addAttribute("orderRows", orderRows);
+
+        return "orders";
+    }
+
+    public record OrderHistoryRow(FoodOrder foodOrder, String restaurantName, int totalItems) {
     }
 
     @PostMapping("/login")
