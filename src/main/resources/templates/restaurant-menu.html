@@ -26,6 +26,13 @@
         <p>This restaurant has no available menu items.</p>
     </div>
 
+    <form class="search-bar" th:action="@{/restaurants/{id}(id = ${restaurant.id})}" method="get">
+        <label>
+            <input type="text" name="search" th:value="${search}" placeholder="Search menu..." autocomplete="off">
+        </label>
+        <button class="button" type="submit">Search</button>
+    </form>
+
     <section class="menu-list">
         <div class="card" th:each="menuItem : ${menuItems}">
             <img class="menu-item-image"

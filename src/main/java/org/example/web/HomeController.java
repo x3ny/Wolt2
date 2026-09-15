@@ -78,29 +78,48 @@ public class HomeController {
     }
 
     @GetMapping("/restaurants/{id}")
-    public String restaurantMenu(@PathVariable("id") int id, Model model, HttpSession session) {
+    public String restaurantMenu(@PathVariable("id") int id, @RequestParam(name = "search", required = false) String search, Model model, HttpSession session) {
+
         Restaurant restaurant = entityManager.find(Restaurant.class, id);
+        Cart cart = (Cart) session.getAttribute("cart");
+        List<MenuItem> menuItems;
+
+        boolean hasSearch = search != null && !search.isBlank();
 
         if(restaurant == null) {
             return "redirect:/";
         }
 
-        List<MenuItem> menuItems = entityManager.createQuery(
-                        "SELECT menuItem FROM MenuItem menuItem " +
-                                "WHERE menuItem.restaurantId = :restaurantId " +
-                                "AND menuItem.available = true " +
-                                "ORDER BY menuItem.name",
-                        MenuItem.class
-                )
-                .setParameter("restaurantId", id)
-                .getResultList();
+        if(hasSearch){
+            menuItems = entityManager.createQuery(
+                            "SELECT menuItem FROM MenuItem menuItem " +
+                                    "WHERE (LOWER(menuItem.name) LIKE LOWER(:search) OR (LOWER(menuItem.description) LIKE LOWER(:search))) " +
+                                    "AND menuItem.restaurantId = :restaurantId " +
+                                    "AND menuItem.available = true " +
+                                    "ORDER BY menuItem.name",
+                            MenuItem.class
+                    ).setParameter("search", "%" + search.trim() + "%").setParameter("restaurantId", id)
+                    .getResultList();
+        }else{
+            menuItems = entityManager.createQuery(
+                            "SELECT menuItem FROM MenuItem menuItem " +
+                                    "WHERE menuItem.restaurantId = :restaurantId " +
+                                    "AND menuItem.available = true " +
+                                    "ORDER BY menuItem.name",
+                            MenuItem.class
+                    )
+                    .setParameter("restaurantId", id)
+                    .getResultList();
+        }
+
 
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("menuItems", menuItems);
-
-
-        Cart cart = (Cart) session.getAttribute("cart");
+        model.addAttribute("search", search);
         model.addAttribute("cart", cart);
+
+
+
 
         if(cart != null && !cart.isEmpty()) {
             int currentRestaurantId = cart.getItems().getFirst().getMenuItem().getRestaurantId();
