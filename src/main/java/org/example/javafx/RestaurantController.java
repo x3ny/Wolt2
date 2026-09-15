@@ -31,6 +31,8 @@ public class RestaurantController {
     @FXML
     public TextField menuItemPriceTextField;
     @FXML
+    public TextField menuItemImageUrlTextField;
+    @FXML
     public CheckBox menuItemAvailableCheckBox;
     public Button addMenuItemButton;
     public TableView <MenuItem> menuItemsTable;
@@ -514,6 +516,7 @@ public class RestaurantController {
         String menuItemNameText = menuItemNameTextField.getText().trim();
         String menuItemDescriptionText =  menuItemDescriptionTextField.getText().trim();
         String menuItemPriceText = menuItemPriceTextField.getText().trim();
+        String menuItemImageUrlText = menuItemImageUrlTextField.getText().trim();
 
         int currentRestaurantId = currentRestaurant.getId();
 
@@ -535,6 +538,7 @@ public class RestaurantController {
                     menuItemNameText,
                     menuItemDescriptionText,
                     menuItemPrice,
+                    menuItemImageUrlText.isEmpty() ? null : menuItemImageUrlText,
                     menuItemAvailableCheckBox.isSelected()
             );
 

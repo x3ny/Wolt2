@@ -52,7 +52,9 @@
 
     <TextField fx:id="menuItemPriceTextField" layoutX="24.0" layoutY="934.0" prefWidth="120.0" promptText="Price" />
 
-    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="159.0" layoutY="934.0" prefHeight="26.0" prefWidth="88.0" selected="true" text="Available" />
+    <TextField fx:id="menuItemImageUrlTextField" layoutX="24.0" layoutY="975.0" prefWidth="329.0" promptText="Image URL (optional)" />
+
+    <CheckBox fx:id="menuItemAvailableCheckBox" layoutX="159.0" layoutY="1016.0" prefHeight="26.0" prefWidth="88.0" selected="true" text="Available" />
 
     <Button fx:id="addMenuItemButton" layoutX="419.0" layoutY="849.0" mnemonicParsing="false" onAction="#createMenuItem" prefHeight="40.0" prefWidth="108.0" text="Add Menu Item" />
 
