@@ -146,6 +146,28 @@ h1 {
     border-color: var(--primary);
 }
 
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.search-bar input[type="text"] {
+    flex: 1;
+    padding: 10px 14px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--text);
+}
+
+.search-bar input[type="text"]:focus {
+    outline: 2px solid rgba(8, 127, 91, 0.22);
+    border-color: var(--primary);
+}
+
 .restaurant-grid,
 .menu-list {
     display: grid;

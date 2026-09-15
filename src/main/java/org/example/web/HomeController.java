@@ -25,28 +25,51 @@ public class HomeController {
     private EntityManager entityManager;
 
     @GetMapping("/")
-    public String homePage(@RequestParam(name = "category", required = false) String category, Model model,HttpSession session) {
+    public String homePage(@RequestParam(name = "category", required = false) String category,
+                           @RequestParam(name = "search", required = false) String search,
+                           Model model, HttpSession session) {
         List<Restaurant> restaurants;
 
-        if(category == null || category.isBlank()){
+        boolean hasCategory = category != null && !category.isBlank();
+        boolean hasSearch = search != null && !search.isBlank();
+
+        if(hasCategory && hasSearch){
             restaurants = entityManager.createQuery(
                     "SELECT restaurant FROM Restaurant restaurant " +
+                            "WHERE restaurant.category = :category " +
+                            "AND LOWER(restaurant.restaurantName) LIKE LOWER(:search) " +
                             "ORDER BY restaurant.restaurantName",
                     Restaurant.class
-            ).getResultList();
-        }else{
+            ).setParameter("category", category)
+             .setParameter("search", "%" + search.trim() + "%")
+             .getResultList();
+        }else if(hasCategory){
             restaurants = entityManager.createQuery(
                     "SELECT restaurant FROM Restaurant restaurant " +
                             "WHERE restaurant.category = :category " +
                             "ORDER BY restaurant.restaurantName",
                     Restaurant.class
             ).setParameter("category", category).getResultList();
-
+        }else if(hasSearch){
+            restaurants = entityManager.createQuery(
+                    "SELECT restaurant FROM Restaurant restaurant " +
+                            "WHERE LOWER(restaurant.restaurantName) LIKE LOWER(:search) " +
+                            "ORDER BY restaurant.restaurantName",
+                    Restaurant.class
+            ).setParameter("search", "%" + search.trim() + "%")
+             .getResultList();
+        }else{
+            restaurants = entityManager.createQuery(
+                    "SELECT restaurant FROM Restaurant restaurant " +
+                            "ORDER BY restaurant.restaurantName",
+                    Restaurant.class
+            ).getResultList();
         }
 
         model.addAttribute("restaurants", restaurants);
         model.addAttribute("role", session.getAttribute("role"));
         model.addAttribute("selectedCategory", category);
+        model.addAttribute("search", search);
 
         return "home";
     }
