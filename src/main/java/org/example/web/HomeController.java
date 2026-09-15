@@ -43,6 +43,7 @@ public class HomeController {
             ).setParameter("category", category)
              .setParameter("search", "%" + search.trim() + "%")
              .getResultList();
+
         }else if(hasCategory){
             restaurants = entityManager.createQuery(
                     "SELECT restaurant FROM Restaurant restaurant " +
@@ -50,6 +51,8 @@ public class HomeController {
                             "ORDER BY restaurant.restaurantName",
                     Restaurant.class
             ).setParameter("category", category).getResultList();
+
+
         }else if(hasSearch){
             restaurants = entityManager.createQuery(
                     "SELECT restaurant FROM Restaurant restaurant " +
