@@ -32,6 +32,13 @@
                 <p class="muted-text" th:text="${row.foodOrder.deliveryAddress}">Delivery address</p>
             </div>
 
+            <div class="order-history-thumbnails">
+                <img class="order-history-thumbnail"
+                     th:each="imageUrl : ${row.itemImageUrls}"
+                     th:src="${imageUrl != null and !#strings.isEmpty(imageUrl)} ? ${imageUrl} : @{/images/menu-placeholder.svg}"
+                     th:alt="'Order item image'">
+            </div>
+
             <div class="order-history-meta">
                 <span class="status" th:text="${row.foodOrder.status}">CREATED</span>
 

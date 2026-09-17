@@ -376,10 +376,24 @@ public class HomeController {
                     .setParameter("foodOrderId", foodOrder.getId())
                     .getSingleResult();
 
+            List<String> itemImageUrls = entityManager.createQuery(
+                            "SELECT orderItem FROM OrderItem orderItem " +
+                                    "WHERE orderItem.foodOrderId = :foodOrderId",
+                            OrderItem.class
+                    )
+                    .setParameter("foodOrderId", foodOrder.getId())
+                    .getResultList()
+                    .stream()
+                    .map(orderItem -> {
+                        MenuItem menuItem = entityManager.find(MenuItem.class, orderItem.getMenuItemId());
+                        return menuItem == null ? null : menuItem.getImageUrl();
+                    })
+                    .toList();
+
             String restaurantName = restaurant == null ? "Unknown restaurant" : restaurant.getRestaurantName();
             int totalItems = itemCount == null ? 0 : itemCount.intValue();
 
-            orderRows.add(new OrderHistoryRow(foodOrder, restaurantName, totalItems));
+            orderRows.add(new OrderHistoryRow(foodOrder, restaurantName, totalItems, itemImageUrls));
         }
 
         model.addAttribute("orderRows", orderRows);
@@ -387,7 +401,7 @@ public class HomeController {
         return "orders";
     }
 
-    public record OrderHistoryRow(FoodOrder foodOrder, String restaurantName, int totalItems) {
+    public record OrderHistoryRow(FoodOrder foodOrder, String restaurantName, int totalItems, List<String> itemImageUrls) {
     }
 
     @PostMapping("/login")
