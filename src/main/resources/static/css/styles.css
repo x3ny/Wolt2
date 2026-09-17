@@ -306,6 +306,29 @@ h1 {
     border-radius: 6px;
 }
 
+.card .price {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    margin: 12px 0;
+}
+
+.inline-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.inline-form label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+}
+
 .restaurant-image {
     display: block;
     width: 100%;
@@ -370,6 +393,35 @@ h1 {
     cursor: pointer;
     font: inherit;
     font-weight: 800;
+}
+
+.round-icon-button {
+    width: 44px;
+    height: 44px;
+    background-color: #10b981 !important; /* Vibrant green */
+    color: white !important;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    margin-left: 8px;
+}
+
+.round-icon-button:hover {
+    background-color: #059669 !important; /* Darker green on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.round-icon-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
 }
 
 .inline-form {
