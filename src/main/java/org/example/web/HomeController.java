@@ -74,7 +74,11 @@ public class HomeController {
         model.addAttribute("selectedCategory", category);
         model.addAttribute("search", search);
 
-        return "home";
+        if(session.getAttribute("loggedInUser")!= null){
+            return "home";
+        }
+
+        return "redirect:/login";
     }
 
     @GetMapping("/restaurants/{id}")
@@ -409,6 +413,7 @@ public class HomeController {
             session.setAttribute("role", "CUSTOMER");
 
             return "redirect:/";
+
         }
 
         TypedQuery<Driver> driverQuery = entityManager.createQuery(
