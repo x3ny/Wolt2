@@ -442,9 +442,48 @@ public class HomeController {
 
     }
 
+    @PostMapping("/register")
+    public String register(@RequestParam("username") String  username, @RequestParam("password") String password, @RequestParam("email") String email, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("phoneNumber") String phoneNumber, HttpSession session, Model model){
+
+        //TODO: Reikia pridet visu fieldu authenticationa ir errorus normaliai padaryti ! 2026-09-17 18:32
+
+
+
+        username = username.trim();
+        password = password.trim();
+        email = email.trim();
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        phoneNumber = phoneNumber.trim();
+
+
+
+        User registeredUser = new User();
+        registeredUser.setUsername(username);
+        registeredUser.setPassword(password);
+        registeredUser.setEmail(email);
+        registeredUser.setFirstName(firstName);
+        registeredUser.setLastName(lastName);
+        registeredUser.setPhoneNumber(phoneNumber);
+        registeredUser.setCanViewUsers(false);
+        registeredUser.setCanUpdateUsers(false);
+        registeredUser.setCanDeleteUsers(false);
+        registeredUser.setCanCreateUsers(false);
+
+        entityManager.persist(registeredUser);
+        entityManager.flush();
+
+        return "login";
+    }
+
     @GetMapping("login")
     public String loginPage(HttpSession session, Model model) {
         return  "login";
+    }
+
+    @GetMapping("register")
+    public String registerPage(Model model, HttpSession session) {
+        return "register";
     }
 
 

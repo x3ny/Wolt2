@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Wolt2</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<main class="page narrow-page">
+    <section class="card">
+        <h1>Register</h1>
+
+        <!-- Display validation errors -->
+        <div class="error" th:if="${error}" th:text="${error}"></div>
+        <div class="error" th:if="${usernameError}" th:text="${usernameError}"></div>
+        <div class="error" th:if="${emailError}" th:text="${emailError}"></div>
+        <div class="error" th:if="${passwordError}" th:text="${passwordError}"></div>
+
+        <form class="form-card" th:action="@{/register}" method="post">
+            <label>
+                Username:
+                <input type="text" name="username" required th:value="${username != null} ? ${username} : ''">
+            </label>
+
+            <label>
+                Email:
+                <input type="email" name="email" required th:value="${email != null} ? ${email} : ''">
+            </label>
+
+            <label>
+                Password:
+                <input type="password" name="password" required>
+            </label>
+
+            <label>
+                First Name:
+                <input type="text" name="firstName" required th:value="${firstName != null} ? ${firstName} : ''">
+            </label>
+
+            <label>
+                Last Name:
+                <input type="text" name="lastName" required th:value="${lastName != null} ? ${lastName} : ''">
+            </label>
+
+            <label>
+                Phone Number:
+                <input type="tel" name="phoneNumber" required th:value="${phoneNumber != null} ? ${phoneNumber} : ''">
+            </label>
+
+            <button class="button" type="submit">Register</button>
+        </form>
+
+        <p style="margin-top: 24px; text-align: center;">
+            Already have an account? <a href="/login">Log in here</a>
+        </p>
+    </section>
+</main>
+
+</body>
+</html>
