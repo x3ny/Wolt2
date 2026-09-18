@@ -461,8 +461,6 @@ public class HomeController {
 
         //TODO: Reikia pridet visu fieldu authenticationa ir errorus normaliai padaryti ! 2026-09-17 18:32
 
-
-
         username = username.trim();
         password = password.trim();
         email = email.trim();
@@ -470,7 +468,55 @@ public class HomeController {
         lastName = lastName.trim();
         phoneNumber = phoneNumber.trim();
 
+        if(username.isBlank()){
+            model.addAttribute("errorUsername", "Username is required.");
+            return "register";
+        }
 
+        if(password.isBlank()){
+            model.addAttribute("errorPassword", "Password is required.");
+            return "register";
+        }
+
+        if(email.isBlank()){
+            model.addAttribute("errorEmail", "Email is required.");
+            return "register";
+        }
+
+        if(firstName.isBlank()){
+            model.addAttribute("errorFirstName", "First name is required.");
+            return "register";
+        }
+
+        if(lastName.isBlank()){
+            model.addAttribute("errorLastName", "Last name is required.");
+            return "register";
+        }
+
+        if(phoneNumber.isBlank()){
+            model.addAttribute("errorPhoneNumber", "Phone number is required.");
+            return "register";
+        }
+
+        TypedQuery<User> usernameQuery = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username =:username", User.class
+        );
+        usernameQuery.setParameter("username", username);
+
+        TypedQuery<User> emailQuery = entityManager.createQuery(
+          "SELECT u FROM User u WHERE u.email =:email ", User.class
+        );
+        emailQuery.setParameter("email", email);
+
+        if(!usernameQuery.getResultList().isEmpty()){
+            model.addAttribute("errorUsername", "Username is already taken.");
+            return "register";
+        }
+
+        if(!emailQuery.getResultList().isEmpty()){
+            model.addAttribute("errorEmail", "Email is already registered.");
+            return "register";
+        }
 
         User registeredUser = new User();
         registeredUser.setUsername(username);
