@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import org.example.Classes.*;
 import org.example.services.Cart;
 import org.example.services.OrderFactory;
+import org.example.util.PasswordHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -410,24 +413,30 @@ public class HomeController {
         username = username.trim();
 
         TypedQuery<User> userQuery = entityManager.createQuery(
-                "SELECT u FROM User u " +
-                        "WHERE u.username = :username " +
-                        "AND u.password = :password",
+                "SELECT u FROM User u WHERE u.username = :username",
                 User.class
         );
 
         userQuery.setParameter("username", username);
-        userQuery.setParameter("password", password);
 
         List<User> users = userQuery.getResultList();
 
         if(!users.isEmpty()){
             User user = users.getFirst();
-            session.setAttribute("loggedInUser", user);
-            session.setAttribute("role", "CUSTOMER");
+            PasswordHelper passwordHelper = new PasswordHelper();
 
-            return "redirect:/";
-
+            if(passwordHelper.matches(password, user.getPassword())){
+                session.setAttribute("loggedInUser", user);
+                session.setAttribute("role", "CUSTOMER");
+                return "redirect:/";
+            }
+            else if (password.equals(user.getPassword())) {
+                user.setPassword(passwordHelper.hashPassword(password));
+                entityManager.merge(user);
+                session.setAttribute("loggedInUser", user);
+                session.setAttribute("role", "CUSTOMER");
+                return "redirect:/";
+            }
         }
 
         TypedQuery<Driver> driverQuery = entityManager.createQuery(
@@ -520,7 +529,8 @@ public class HomeController {
 
         User registeredUser = new User();
         registeredUser.setUsername(username);
-        registeredUser.setPassword(password);
+        PasswordHelper passwordHelper = new PasswordHelper();
+        registeredUser.setPassword(passwordHelper.hashPassword(password));
         registeredUser.setEmail(email);
         registeredUser.setFirstName(firstName);
         registeredUser.setLastName(lastName);
